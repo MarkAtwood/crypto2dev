@@ -1,0 +1,206 @@
+# SPDX-License-Identifier: GPL-2.0-only
+# Vagrantfile — crypto2dev multi-distro manual test environment
+#
+# Defines three VMs for testing crypto2dev.ko against different kernel versions:
+#
+#   ubuntu2204  Ubuntu 22.04 (jammy)    kernel 5.15    gcc-11
+#   ubuntu2404  Ubuntu 24.04 (noble)    kernel 6.8     gcc-12
+#   debian12    Debian 12   (bookworm)  kernel 6.1     gcc-12
+#
+# Primary provider:  VirtualBox
+# Alternative:       libvirt (install vagrant-libvirt plugin first)
+#
+# ============================================================================
+# PREREQUISITES
+# ============================================================================
+#
+#   VirtualBox:
+#     vagrant plugin list        # verify no missing plugins required
+#     vagrant up ubuntu2204      # start a specific VM
+#
+#   libvirt:
+#     vagrant plugin install vagrant-libvirt
+#     VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up ubuntu2204
+#
+# ============================================================================
+# USAGE
+# ============================================================================
+#
+#   Start a VM (VirtualBox):
+#     vagrant up ubuntu2204
+#
+#   SSH into a VM:
+#     vagrant ssh ubuntu2204
+#
+#   Shut down a VM:
+#     vagrant halt ubuntu2204
+#
+#   Destroy a VM:
+#     vagrant destroy ubuntu2204
+#
+# ============================================================================
+# BUILDING crypto2dev.ko INSIDE THE VM
+# ============================================================================
+#
+#   STUB MODE (no wolfcrypt.ko — build framework only, no wolfSSL provider):
+#
+#     vagrant ssh ubuntu2204 -c \
+#       'make -C /lib/modules/$(uname -r)/build M=/wolfkm'
+#
+#     The Makefile builds crypto2dev.ko without wolfSSL headers when
+#     WOLFCRYPT_DIR is not set.  crypto2dev_wolfssl.ko will not be built.
+#     This is sufficient to verify the framework compiles on a given kernel.
+#
+#   FULL MODE (with wolfcrypt.ko — requires commercial wolfSSL source):
+#
+#     wolfcrypt.ko must be built separately from the wolfSSL source tree.
+#     It is NOT provisioned here.  Once available on the VM:
+#
+#     vagrant ssh ubuntu2204 -c \
+#       'make -C /lib/modules/$(uname -r)/build M=/wolfkm \
+#         WOLFCRYPT_DIR=~/wolfssl \
+#         KBUILD_EXTRA_SYMBOLS=~/wolfssl/linuxkm/Module.symvers'
+#
+#     Load order (mandatory):
+#       sudo insmod ~/wolfssl/linuxkm/libwolfssl.ko
+#       sudo insmod /wolfkm/crypto2dev.ko
+#       sudo insmod /wolfkm/crypto2dev_wolfssl.ko
+#
+# ============================================================================
+
+VAGRANTFILE_API_VERSION = "2"
+
+# Build-dependency provisioning script — mirrors test-on-aws.sh Phase 1.
+#
+# gcc-11 and gcc-12 are installed on all VMs; the caller selects the
+# appropriate compiler via CC= when invoking make.  gawk is required by
+# the wolfSSL linuxkm Makefile (Ubuntu ships mawk by default).
+# openssl/libssl-dev are required by scripts/sign-file for module signing.
+# linux-headers installs after boot so the running kernel version is used.
+#
+# DEBIAN_FRONTEND=noninteractive prevents apt from prompting during
+# unattended provisioning (e.g. tzdata).
+$provision = <<~SHELL
+  set -euo pipefail
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get update -qq
+  apt-get install -y -qq \
+    build-essential \
+    autoconf \
+    automake \
+    libtool \
+    gcc-11 \
+    gcc-12 \
+    gawk \
+    git \
+    kmod \
+    openssl \
+    libssl-dev \
+    linux-headers-$(uname -r) \
+    2>&1 | tail -5
+  echo "crypto2dev: build dependencies installed (kernel $(uname -r))"
+SHELL
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Disable the default /vagrant synced folder; we use /wolfkm instead.
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Sync the repo root (two levels up from tests/ci/) to /wolfkm on the guest.
+  # VirtualBox uses its built-in shared-folder mechanism.
+  # libvirt falls back to rsync; run `vagrant rsync-auto` to keep it live.
+  config.vm.synced_folder "../../", "/wolfkm"
+
+  # ── ubuntu2204 — Ubuntu 22.04 (jammy), kernel 5.15, gcc-11 ─────────────────
+  #
+  # Primary test target.  Mirrors the default UBUNTU_VERSION=22.04 path in
+  # test-on-aws.sh.  Use CC=gcc-11 when invoking make inside this VM.
+  config.vm.define "ubuntu2204" do |vm|
+    vm.vm.box = "ubuntu/jammy64"
+    vm.vm.hostname = "crypto2dev-ubuntu2204"
+
+    vm.vm.provider "virtualbox" do |vb|
+      vb.name   = "crypto2dev-ubuntu2204"
+      vb.memory = 4096
+      vb.cpus   = 4
+    end
+
+    vm.vm.provider "libvirt" do |lv|
+      lv.memory = 4096
+      lv.cpus   = 4
+    end
+
+    vm.vm.provision "shell", inline: $provision
+  end
+
+  # ── ubuntu2404 — Ubuntu 24.04 (noble), kernel 6.8, gcc-12 ──────────────────
+  #
+  # Secondary test target.  Mirrors the UBUNTU_VERSION=24.04 path in
+  # test-on-aws.sh.  Use CC=gcc-12 when invoking make inside this VM.
+  config.vm.define "ubuntu2404" do |vm|
+    vm.vm.box = "ubuntu/noble64"
+    vm.vm.hostname = "crypto2dev-ubuntu2404"
+
+    vm.vm.provider "virtualbox" do |vb|
+      vb.name   = "crypto2dev-ubuntu2404"
+      vb.memory = 4096
+      vb.cpus   = 4
+    end
+
+    vm.vm.provider "libvirt" do |lv|
+      lv.memory = 4096
+      lv.cpus   = 4
+    end
+
+    vm.vm.provision "shell", inline: $provision
+  end
+
+  # ── debian12 — Debian 12 (bookworm), kernel 6.1, gcc-12 ────────────────────
+  #
+  # Covers a non-Ubuntu Debian-family kernel.  Debian 12 ships gcc-12 as the
+  # default and kernel 6.1.  Use CC=gcc-12 when invoking make inside this VM.
+  #
+  # Note: Debian bookworm may not provide gcc-11 in its default repositories.
+  # The provisioner installs it via apt; if unavailable it will be skipped.
+  # gcc-12 is always present and is the correct compiler for kernel 6.1.
+  config.vm.define "debian12" do |vm|
+    vm.vm.box = "debian/bookworm64"
+    vm.vm.hostname = "crypto2dev-debian12"
+
+    vm.vm.provider "virtualbox" do |vb|
+      vb.name   = "crypto2dev-debian12"
+      vb.memory = 4096
+      vb.cpus   = 4
+    end
+
+    vm.vm.provider "libvirt" do |lv|
+      lv.memory = 4096
+      lv.cpus   = 4
+    end
+
+    # Debian 12 may not carry gcc-11 in main; tolerate its absence.
+    vm.vm.provision "shell", inline: <<~SHELL
+      set -euo pipefail
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update -qq
+      apt-get install -y -qq \
+        build-essential \
+        autoconf \
+        automake \
+        libtool \
+        gcc-12 \
+        gawk \
+        git \
+        kmod \
+        openssl \
+        libssl-dev \
+        linux-headers-$(uname -r) \
+        2>&1 | tail -5
+      # gcc-11 is not in Debian 12 main; install only if available.
+      apt-get install -y -qq gcc-11 2>&1 | tail -2 || \
+        echo "crypto2dev: gcc-11 not available on Debian 12 (expected)"
+      echo "crypto2dev: build dependencies installed (kernel $(uname -r))"
+    SHELL
+  end
+
+end

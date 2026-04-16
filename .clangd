@@ -1,0 +1,36 @@
+---
+# clangd configuration for crypto2dev
+#
+# Kernel module source files (src/, tests/kernel/) need kernel headers.
+# Userspace test files (tests/userspace/) need only the project UAPI headers.
+#
+# For full clangd support on kernel module files, generate compile_commands.json:
+#   make -C /lib/modules/$(uname -r)/build M=$(pwd) WOLFCRYPT_DIR=<path> \
+#        compile_commands.json
+# clangd will prefer compile_commands.json over this file when both are present.
+
+---
+# Kernel module source files
+If:
+  PathMatch: [src/.*\.c, src/.*\.h, tests/kernel/.*\.c]
+CompileFlags:
+  Add:
+    - "-isystem/usr/src/linux-headers-6.17.9-76061709-generic/include"
+    - "-isystem/usr/src/linux-headers-6.17.9-76061709/include"
+    - "-I./include"
+    - "-D__KERNEL__"
+    - "-DMODULE"
+    - "-DKBUILD_MODNAME=\"crypto2dev\""
+  # Suppress errors from kernel-internal headers that are genuinely absent
+  # from the installed headers package (e.g. compiler-version.h, linker magic).
+  Compiler: gcc
+
+---
+# Userspace test files
+If:
+  PathMatch: tests/userspace/.*\.c
+CompileFlags:
+  Add:
+    - "-I./include"
+    - "-I../../include"
+    - "-Iinclude"

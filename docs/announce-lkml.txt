@@ -1,0 +1,633 @@
+From: <your-name@wolfssl.com>
+To: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, dm-devel@redhat.com, netdev@vger.kernel.org
+Subject: [ANNOUNCE] crypto2dev: provider-based userspace crypto interface via /dev/crypto2dev (out-of-tree)
+
+Hi,
+
+I am announcing the first public release of crypto2dev, an out-of-tree Linux
+kernel module that exposes cryptographic operations to userspace via a
+/dev/crypto2dev character device.
+
+crypto2dev is provider-based. The core module (crypto2dev.ko) owns only the
+chardev interface — algorithm selection, session lifecycle, write()/read()
+data flow. The actual cryptographic work is delegated to a provider module.
+Two providers ship with the project:
+
+  crypto2dev_kcapi.ko   uses the existing kernel crypto API (skcipher,
+                        aead, shash) — whatever is registered in
+                        /proc/crypto on the running kernel.
+
+  crypto2dev_wolfssl.ko calls wolfcrypt.ko's exported wolfCrypt symbols
+                        directly, giving userspace a FIPS 140-3 validated
+                        path under wolfCrypt's CMVP certificate #4718.
+
+The provider API is stable and documented. We invite others to write
+additional providers. A provider is a kernel module that implements a
+struct of function-pointer callbacks per algorithm and registers with
+crypto2dev.ko at load time.
+
+Repository: https://github.com/wolfssl/crypto2dev
+License:    GPL-2.0-only
+Tested on:  5.15 (Ubuntu 22.04 LTS), 6.8 (Ubuntu 24.04 LTS)
+
+
+WHY crypto2dev AND NOT cryptodev
+=================================
+
+We would prefer the name cryptodev. It is the natural name for this concept,
+it matches the FreeBSD and OpenBSD device names (/dev/crypto), and the kernel
+community would recognize it immediately.
+
+However, there is an existing out-of-tree project — cryptodev-linux
+(https://github.com/cryptodev-linux/cryptodev-linux) — that holds that
+namespace. It provides a /dev/crypto interface with a FreeBSD-compatible
+ioctl API. We have not yet had a conversation with the cryptodev-linux
+maintainers about whether this project supersedes theirs, should merge with
+it, or should simply coexist under a different name.
+
+Until that conversation happens, we are using crypto2dev to avoid a collision.
+If the cryptodev-linux maintainers are open to discussing a handoff or merger,
+we would welcome that. If anyone on this list has context on the current state
+of that project or knows the right people to talk to, please let us know.
+
+
+THE DESIGN
+==========
+
+crypto2dev consists of three module layers:
+
+  crypto2dev.ko  (this repo — the core)
+    Owns /dev/crypto2dev. Manages per-fd sessions, ioctl dispatch,
+    write()/read() data flow, and provider selection. Does not implement
+    any cryptography. At open() time, selects the active provider; all
+    crypto calls are forwarded to that provider's ops. Exports
+    EXPORT_SYMBOL_GPL registration functions so provider modules can
+    attach and detach at runtime.
+
+  crypto2dev_kcapi.ko  (this repo — Linux kernel crypto provider)
+    Implements the crypto2dev provider ops using the kernel crypto API
+    (crypto_alloc_skcipher, crypto_alloc_aead, crypto_alloc_shash). Uses
+    whatever algorithm implementations are registered in the running
+    kernel — hardware accelerators, software fallbacks, or anything else
+    in /proc/crypto. No external dependencies beyond crypto2dev.ko.
+
+  crypto2dev_wolfssl.ko  (this repo — wolfCrypt provider)
+    Implements the crypto2dev provider ops by calling wolfcrypt.ko's
+    exported wolfCrypt symbols directly — not through the kernel crypto
+    API. Adds a FIPS gate: wolfCrypt_GetStatus_fips() is checked at the
+    entry point of every operation. If wolfCrypt is not FIPS_OPERATIONAL,
+    the call returns -EACCES immediately. Requires wolfcrypt.ko.
+
+  wolfcrypt.ko  (wolfSSL's linuxkm — not in this repo)
+    Required only by crypto2dev_wolfssl.ko, not by crypto2dev.ko or
+    the kcapi provider. Provides all wolfCrypt implementations, FIPS 140-3
+    POST and integrity check (CMVP cert #4718), and registers wolfCrypt's
+    algorithms into the kernel crypto API so dm-crypt, IPsec, AF_ALG, and
+    other kernel consumers pick them up automatically.
+
+Both providers can be loaded simultaneously. First-registered wins per
+algorithm name; an operator can load crypto2dev_wolfssl.ko after
+crypto2dev_kcapi.ko to shadow specific algorithms with FIPS-gated versions.
+
+Load order (wolfCrypt provider):
+  wolfcrypt.ko → crypto2dev.ko → crypto2dev_wolfssl.ko
+
+Load order (kernel crypto provider only):
+  crypto2dev.ko → crypto2dev_kcapi.ko
+
+PROVIDER API
+
+The provider interface is a struct of function pointers per algorithm.
+All callbacks except sess_init, sess_free, update, and finalize are
+optional (NULL = not applicable for this algorithm):
+
+  const char *algo              /* e.g. "cbc(aes)", "sha256" */
+  int  (*fips_gate)(void)       /* NULL = no FIPS gating */
+
+  /* Session lifecycle */
+  int  (*sess_init) (ctx, op, key, keylen)
+  void (*sess_free) (ctx)
+  int  (*sess_reset)(ctx)          /* re-arm session, same key, clear IV */
+
+  /* IV / nonce */
+  int  (*set_iv)   (ctx, iv, ivlen)
+  int  (*gen_iv)   (ctx, iv, ivlen)  /* generate IV using provider DRBG */
+
+  /* AEAD only */
+  int  (*set_aad)  (ctx, aad, aadlen)
+  int  (*set_tag)  (ctx, tag, taglen)  /* AEAD decrypt */
+  int  (*get_tag)  (ctx, tag, *taglen) /* AEAD encrypt */
+
+  /* Streaming data path */
+  int  (*update)   (ctx, in, inlen, out, outbuf_size, *outlen)
+  int  (*finalize) (ctx, out, outbuf_size, *outlen)
+
+  /* Asymmetric operations */
+  int  (*sign)     (key_ctx, hash_algo, digest, digest_len, sig, sig_bufsz, *sig_len)
+  int  (*verify)   (key_ctx, hash_algo, digest, digest_len, sig, sig_len)
+  int  (*agree)    (key_ctx, peer_pubkey, peer_pubkey_len,
+                    salt, salt_len, info, info_len, okm, okm_len)
+
+  /* Key management */
+  int  (*key_import)        (key_ctx, key_type, raw, rawlen)
+  int  (*key_generate)      (key_ctx)
+  int  (*key_export_public) (key_ctx, out, bufsz, *outlen)
+  int  (*key_export_private)(key_ctx, out, bufsz, *outlen)
+  void (*key_free)          (key_ctx)
+
+DATA FLOW: write() AND read()
+
+The data path is a streaming model, not one-shot. Each write(2) call
+dispatches to ops->update(). The provider may produce output immediately
+(stream ciphers, full cipher blocks) or buffer internally and return
+zero output bytes (hash algorithms, GCM, which must see all input before
+producing output). The framework accumulates the provider's output.
+
+read(2) calls ops->finalize() exactly once and then drains the accumulated
+output buffer back to userspace. For hash/MAC this is where the digest
+appears. For AEAD encryption, ciphertext is returned via read() and the
+authentication tag is retrieved separately via CRYPTO2DEV_IOC_GET_TAG.
+
+There is no large inbuf of the complete message sitting in the kernel:
+write() feeds the provider incrementally as data arrives. Providers that
+must buffer (hash, GCM) do so in their own session context.
+
+A session error flag is set if any update() or finalize() call fails.
+A session in error state returns -EIO on all further write/read/ioctl
+until CRYPTO2DEV_IOC_RESET is issued.
+
+IOCTL TABLE (magic byte 0xC2)
+
+  Slot  1  INIT             configure fd for one algorithm
+  Slot  2  SET_IV           set IV/nonce before write()
+  Slot  3  SET_AAD          set AEAD AAD before write()
+  Slot  4  GET_TAG          retrieve AEAD tag after read()
+  Slot  5  SET_TAG          provide AEAD tag before write() (decrypt)
+  Slots 6-7                 reserved
+  Slot  8  GEN_IV           generate IV via provider DRBG, return it
+  Slot  9  STATUS           module FIPS state and algorithm count
+  Slot 10  GET_STATE        per-fd session introspection
+  Slot 11  KEY_IMPORT       import key material; promote fd to KEY fd
+  Slot 12  KEY_GENERATE     generate key pair; promote fd to KEY fd
+  Slot 13  KEY_GET_INFO     query KEY fd metadata
+  Slot 14  KEY_EXPORT_PRIVATE  stage private key for read()
+  Slot 15  (tombstone)      was LIST_ALGOS; removed — use sysfs
+  Slot 16  DO_SIGN          one-shot asymmetric sign
+  Slot 17  DO_VERIFY        one-shot signature verify
+  Slot 18  DO_AGREE         one-shot ECDH + HKDF key agreement
+  Slot 19  RESET            re-arm OPERATION fd for a new message
+  Slot 20  REQUIRE_FIPS     require FIPS provider before INIT
+  Slot 21  FINALIZE         signal end-of-input; calls ops->finalize()
+  Slot 22  DO_KDF           derive key from IKM; promotes UNSET → KEY fd
+
+ALGORITHM ENUMERATION IS VIA SYSFS
+
+Slot 15 (LIST_ALGOS) is tombstoned. Algorithm discovery does not require
+an open session fd. Read:
+
+  /sys/class/misc/crypto2dev/algorithms
+
+One line per registered algorithm, format: algo:provider:has_fips_gate:has_key_ops
+
+  cbc(aes):wolfssl:1:0
+  gcm(aes):wolfssl:1:0
+  sha256:wolfssl:1:0
+  ...
+  cbc(aes):kcapi:0:0
+
+REQUIRE_FIPS (SLOT 20)
+
+CRYPTO2DEV_IOC_REQUIRE_FIPS marks an UNSET fd. Any subsequent INIT on
+that fd fails with -ENOENT if no FIPS provider (is_fips == 1) is currently
+loaded — even if a non-FIPS provider could service the algorithm. This lets
+a security-sensitive caller fail loudly rather than silently fall back to
+an unvalidated implementation when the FIPS module has not been loaded yet.
+
+This ioctl only matters when no FIPS provider is loaded. When a FIPS
+provider is loaded, Layer 1 enforcement (described below) already blocks
+all non-FIPS paths unconditionally.
+
+KEY MANAGEMENT
+
+An fd can be promoted to either an OPERATION fd (via INIT, for symmetric
+ciphers and hash/MAC) or a KEY fd (via KEY_IMPORT or KEY_GENERATE, for
+asymmetric keys). The type is fixed once set.
+
+KEY fds hold asymmetric keys only (RSA, EC, X25519). Symmetric keys
+(AES, HMAC, CMAC) are always supplied inline in INIT via the key[] field.
+The key_fd field in struct crypto2dev_init_op is reserved and must be -1;
+passing key_fd >= 0 returns -EINVAL.
+
+KEY_IMPORT uses a write-before-ioctl pattern. The caller writes the raw
+key bytes to the fd via write(2), then issues CRYPTO2DEV_IOC_KEY_IMPORT.
+The ioctl struct (crypto2dev_key_import_op) carries only metadata: algorithm
+name, provider name, key type, exportable flag, and keylen. The key bytes
+themselves are never in the ioctl struct.
+
+Why: post-quantum and RSA keys are large.
+
+  EC P-256 private key (raw scalar):   32 bytes
+  RSA-2048 private key (PKCS#8 DER):  ~1.2 KB
+  RSA-4096 private key (PKCS#8 DER):  ~2.4 KB
+  ML-DSA-44 private key (raw):         2560 bytes
+  ML-DSA-65 private key (raw):         4032 bytes
+  ML-DSA-87 private key (raw):         4896 bytes
+
+CRYPTO2DEV_KEY_IMPORT_MAXLEN is 8192 — enough for ML-DSA-87 with headroom.
+If the key material were in the ioctl struct, every KEY_IMPORT call —
+including a 32-byte EC key — would require an 8 KB kernel stack frame.
+That violates the 1 KB guideline for kernel ioctl stack usage. The
+write-before-ioctl pattern allocates exactly as many bytes as the key
+requires, from heap.
+
+A secondary benefit: the ioctl struct contains only fixed-width integer
+types and short string fields with no pointer members. It is layout-identical
+on 32-bit and 64-bit userspace. No compat_ioctl handler is needed.
+
+ECDH KEY AGREEMENT: Z NEVER LEAVES THE PROVIDER
+
+CRYPTO2DEV_IOC_DO_AGREE performs ECDH (or X25519) followed immediately by
+HKDF (RFC 5869 / SP 800-56C). The raw Diffie-Hellman shared secret Z is
+computed and consumed entirely within the provider. The provider returns
+only the derived output key material (OKM) in okm[].
+
+The struct crypto2dev_agree_op carries: key_fd (local private key), peer
+public key, HKDF salt (0 = RFC 5869 default), HKDF info string, okm_len
+(requested output bytes), and okm[] (output). The caller never sees Z.
+
+This is required by FIPS 140-3 and SP 800-56A, which prohibit the raw
+shared secret from crossing the validated cryptographic boundary. It is
+also the right API design regardless of FIPS: callers who receive Z
+invariably run it through a KDF anyway, and getting that wrong (wrong hash,
+wrong salt, missing the key confirmation step) is a common mistake.
+
+NO ENUMS, NO FLAG BITS
+
+This is a hard design rule enforced at review. Any patch adding a
+typedef enum, anonymous enum, flags field, or bitmask constant to any
+UAPI or provider header will be rejected.
+
+Algorithm names are strings ("cbc(aes)"). Provider names are strings
+("wolfssl"). New behaviors get new ioctls or new named struct fields —
+never a new bit in a flags word, never a new enum value.
+
+The only integer codes in the UAPI are small, permanently-closed sets:
+op direction (ENCRYPT/DECRYPT/HASH), fd type, key type, FIPS aggregate
+state. Everything else is a string.
+
+Why no enums: adding a new algorithm requires a header change and recompile
+of every caller. A string does not. Out-of-tree providers and existing
+userspace binaries continue to work after new algorithms are registered.
+
+Why no flags: a __u32 flags field starts with one bit and ends with
+thirty-two, each combination untested, each interaction a future bug. The
+combinatorial state space doubles with every new flag. A new ioctl or a
+new named field costs one slot number and gives an unambiguously testable,
+independently documentable behavior.
+
+Providers register one ops struct per algorithm and call
+crypto2dev_register_provider() at module_init. The provider API is
+stable; we will not break it without a deprecation period. An example
+provider (src/providers/example/example_provider.c) is included as a
+starting point for hardware accelerator integrations.
+
+The /dev/crypto2dev interface uses kernel crypto API algorithm names
+(/proc/crypto names such as "cbc(aes)", "gcm(aes)", "sha256"). No integer
+algorithm IDs, no flags fields.
+
+
+KERNEL CRYPTO API: NOT CRYPTO2DEV'S JOB
+========================================
+
+crypto2dev.ko does not register any algorithms into the kernel crypto API.
+It does not compete with existing registrations.
+
+The Linux provider (crypto2dev_kcapi.ko) is a consumer of the kernel
+crypto API, not a registrant. It calls crypto_alloc_skcipher et al. — just
+like any other kernel consumer of already-registered algorithms.
+
+When wolfcrypt.ko is loaded, it registers wolfCrypt's implementations at
+priority 300 (above software fallbacks, below hardware accelerators).
+dm-crypt, IPsec/xfrm, AF_ALG, and other kernel consumers pick them up
+automatically. That path is completely independent of crypto2dev.
+
+crypto2dev is the userspace-direct path only: /dev/crypto2dev for
+applications that want per-session key lifecycle or a write()/read() data
+path without AF_ALG's socket machinery.
+
+
+WHY THIS IS USEFUL: THE FIPS 140-3 CASE
+=========================================
+
+The wolfCrypt provider (crypto2dev_wolfssl.ko + wolfcrypt.ko) is useful
+for a specific class of deployment that currently has no complete solution
+on Linux.
+
+Linux has had CONFIG_CRYPTO_FIPS for years and it is genuinely useful. What it
+does not provide is a CMVP certificate. It sets restrictions and runs self-
+tests, but it is not a validated Cryptographic Module under FIPS 140-3.
+
+Some deployments — federal agencies, contractors operating under FedRAMP, DISA
+STIG environments, healthcare organizations under HIPAA — are required to use
+cryptography from a validated module as defined in FIPS PUB 140-3. "We run the
+kernel in FIPS mode" does not satisfy an auditor asking for a CMVP certificate
+number.
+
+wolfCrypt has FIPS 140-3 validation. wolfcrypt.ko brings that validation into
+the kernel for in-kernel consumers. crypto2dev_wolfssl.ko extends the same
+validated implementation to userspace applications that need a direct
+FIPS-gated interface.
+
+FIPS ENFORCEMENT IS TWO-LAYER
+
+The framework implements two independent, complementary FIPS enforcement
+layers. Both are FIPS 140-3 requirements. Neither is a design preference.
+
+Layer 1 — registry visibility:
+
+The provider registry tracks a FIPS provider count. Once any provider with
+is_fips == 1 registers, all non-FIPS providers become invisible to algorithm
+lookup — they cannot be reached regardless of what the caller requests. A
+caller that explicitly names provider="kcapi" in INIT gets -ENOENT when
+wolfssl is loaded. This prevents routing to unvalidated code paths.
+
+Layer 2 — per-operation FIPS gate:
+
+Each FIPS provider sets a fips_gate callback on its algo_ops. The framework
+calls ops->fips_gate() at the entry point of every crypto operation. For
+wolfssl, this calls wolfCrypt_GetStatus_fips(). If wolfCrypt is not
+FIPS_OPERATIONAL (e.g. a power-on self test failed at boot), the gate returns
+-EACCES and the operation is rejected. This prevents operations when the
+validated module itself is unhealthy.
+
+Layer 1 and Layer 2 serve different failure modes and neither is sufficient
+alone. Layer 1 cannot detect a FIPS module that passed initialization but
+has since failed a periodic self-test. Layer 2 cannot prevent routing to a
+non-FIPS provider before the first gate check fires.
+
+CRYPTO2DEV_IOC_STATUS returns a fips_state field with three values:
+CRYPTO2DEV_FIPS_NO_PROVIDER (0), CRYPTO2DEV_FIPS_OPERATIONAL (1), or
+CRYPTO2DEV_FIPS_NOT_OPERATIONAL (2).
+
+THE OE ECONOMICS
+
+A FIPS 140-3 Operational Environment validation is expensive and slow: 12–24
+months and roughly $50,000–$200,000 per submission, not counting engineering
+time. These costs apply per OE.
+
+Without wolfcrypt.ko + crypto2dev_wolfssl.ko, an organization running
+userspace TLS (via libwolfssl) and kernel crypto (dm-crypt, IPsec) and
+userspace applications via /dev/crypto potentially needs multiple OEs.
+wolfCrypt's single CMVP certificate covers all of these: wolfcrypt.ko for
+in-kernel consumers, crypto2dev_wolfssl.ko for userspace direct access,
+and libwolfssl for userspace TLS — all under one certificate.
+
+YOU GET ALL ALGORITHMS AT ONCE
+
+FIPS validation is binary per module, not per algorithm. wolfCrypt's certificate
+covers AES (CBC, CTR, GCM, CCM, XTS), SHA-2, SHA-3, HMAC, CMAC, RSA, ECDH,
+DRBG — the full suite NIST approves for federal use. When an organization loads
+wolfcrypt.ko and crypto2dev_wolfssl.ko, they get the entire approved suite
+under one certificate.
+
+This is a feature for FIPS deployments, not a limitation. FIPS users are not
+in a position to say "I only want AES-GCM validated." The validation covers
+the module as a whole.
+
+A NOTE ON THE FIPS AUDIENCE
+
+We want to be direct about who uses wolfcrypt.ko + crypto2dev_wolfssl.ko
+and why.
+
+These organizations are operating under legal or contractual mandates that
+require FIPS 140-3 validated cryptography. Those mandates come from government
+procurement contracts, FedRAMP authorization requirements, DISA STIGs, and
+similar external authorities. They did not choose these requirements; they
+inherited them as a condition of doing business.
+
+Their auditor will ask for a CMVP certificate number. That ends the
+conversation. Objections to the FIPS model — however technically thoughtful —
+do not change the requirement.
+
+We are not asking the kernel community to endorse the FIPS process. We are
+noting that a large class of deployments has a non-negotiable requirement,
+that requirement currently has no complete solution on Linux, and
+wolfcrypt.ko + crypto2dev_wolfssl.ko is the solution.
+
+Feedback on the technical implementation is welcome and we will act on it.
+The compliance requirement itself is not up for discussion.
+
+
+WHY OUT-OF-TREE
+===============
+
+crypto2dev.ko and crypto2dev_kcapi.ko have no validated binary
+constraint — they could in principle go in-tree; the Linux provider has no
+dependency beyond the kernel's own crypto API.
+
+The obstacle is wolfcrypt.ko and crypto2dev_wolfssl.ko.
+
+wolfCrypt's FIPS validation covers a specific binary artifact with a specific
+HMAC-SHA256 integrity check over the module image. The CMVP validation is
+bound to that exact binary. Merging the source into the kernel tree and
+rebuilding it — even with no source changes — produces a different binary and
+voids the validation. CMVP certificates are not "build your own" artifacts.
+
+We have chosen to ship all three modules together from one repository for
+simplicity. If the community is interested in taking crypto2dev.ko +
+crypto2dev_kcapi.ko in-tree on their own merits, that conversation is
+worth having.
+
+We are aware that the wolfCrypt provider means DKMS, out-of-band updates,
+and a dependency on a separately packaged wolfcrypt.ko. We ship DKMS
+packaging and a signing workflow for CONFIG_MODULE_SIG_FORCE kernels.
+
+If wolfSSL pursues an in-tree path for wolfCrypt under a separate CMVP
+validation for the kernel-tree-built binary, crypto2dev_wolfssl.ko is the
+natural companion merge.
+
+
+ANTICIPATED CONCERNS
+====================
+
+"Why not just use AF_ALG?"
+
+AF_ALG dispatches through crypto_alloc_* — it gets the highest-priority
+implementation for the requested algorithm name regardless of whether that
+implementation is FIPS-validated. Three things AF_ALG cannot do:
+
+  1. Require a CMVP-certified implementation. An AF_ALG socket for "cbc(aes)"
+     will use whatever has the highest priority. If a hardware accelerator
+     outranks wolfCrypt, it wins — without FIPS validation, without any
+     indication that FIPS was bypassed. CONFIG_CRYPTO_FIPS restricts the
+     approved algorithm list; it does not enforce who answers the call.
+
+  2. Fail when the validated module is absent. If an application opens AF_ALG
+     and wolfcrypt.ko is not running, the kernel's software implementation
+     answers. There is no way to say "reject this operation if the
+     FIPS-certified module is not available."
+
+  3. Detect mid-session FIPS degradation. wolfCrypt_GetStatus_fips() is not
+     called on the AF_ALG path. If wolfCrypt's periodic self-test fails after
+     module load, AF_ALG sessions continue operating, dispatching to whatever
+     the kernel provides. No notification, no failure.
+
+crypto2dev addresses all three:
+
+  REQUIRE_FIPS: causes INIT to return -ENOENT if no FIPS provider is loaded.
+  The operation never starts.
+
+  Layer 1 enforcement: once any provider with is_fips=1 registers, all
+  non-FIPS providers become invisible to algorithm lookup — priority games
+  and explicit provider-name requests both fail.
+
+  Layer 2 gate: every operation calls ops->fips_gate(), which for the wolfCrypt
+  provider is wolfCrypt_GetStatus_fips(). A degraded module returns -EACCES
+  rather than silently routing elsewhere.
+
+The auditor's question is "can you demonstrate that this operation went through
+the CMVP-certified module?" With AF_ALG, the answer is at best "probably." With
+crypto2dev and the wolfCrypt provider, the answer is "yes, by construction, or
+the operation did not complete."
+
+This is not a preference. CMVP auditors do not accept "probably."
+
+
+"Why not register algorithms into the kernel crypto API and let AF_ALG
+handle userspace access?"
+
+wolfcrypt.ko already does this. wolfCrypt's implementations are registered at
+priority 300 and are available to dm-crypt, IPsec/xfrm, AF_ALG, and all other
+kernel consumers. That path is complete and independent of crypto2dev.
+
+crypto2dev is the additional path for the specific use case AF_ALG cannot
+serve: a FIPS-pinned, per-session interface where the application can assert
+"use only certified crypto or fail." Building that on top of AF_ALG would
+require AF_ALG to grow provider-awareness, per-socket FIPS enforcement, and
+hard-failure semantics on certification absence — changes to a subsystem with
+a large stable interface used by millions of systems. That is a significantly
+larger and riskier proposal than a separate chardev that handles exactly the
+FIPS userspace use case.
+
+
+"Why a KEY fd instead of the kernel keyring (keyctl)?"
+
+Two independent reasons:
+
+FIPS gating: the keyring routes crypto operations through the kernel crypto
+API — which returns to the AF_ALG problem. A keyring-dispatched ECDSA sign has
+no guarantee of using the wolfCrypt FIPS boundary. The KEY fd in crypto2dev
+holds the key context directly inside the provider, and the same two-layer FIPS
+gate applies to every sign, verify, and agree operation.
+
+Key size — especially post-quantum: asymmetric keys are large. Embedding key
+material in an ioctl struct would require up to CRYPTO2DEV_KEY_IMPORT_MAXLEN
+(8192 bytes) on the kernel stack for every KEY_IMPORT call, far exceeding the
+~1 KB kernel stack guideline. The write-before-ioctl pattern (write raw key
+bytes to the fd, then call KEY_IMPORT with metadata only) allocates exactly
+what the key requires on the heap:
+
+  EC P-256 private:        32 B
+  RSA-2048 private:     ~1.2 KB  (PKCS#8 DER)
+  RSA-4096 private:     ~2.4 KB  (PKCS#8 DER)
+  ML-DSA-44:            2560 B
+  ML-DSA-65:            4032 B
+  ML-DSA-87:            4896 B   ← current maximum
+
+Post-quantum key sizes will only grow. Raising CRYPTO2DEV_KEY_IMPORT_MAXLEN
+accommodates future PQ schemes with no ABI change and no ioctl struct change.
+
+
+"Why not just use wolfSSL in userspace?"
+
+For direct TLS connections, yes. In-kernel consumers (dm-crypt, IPsec/xfrm,
+NFS Kerberos) cannot call a userspace library — that is what wolfcrypt.ko
+handles. crypto2dev_wolfssl.ko is for userspace applications that want
+FIPS-gated access without linking libwolfssl directly.
+
+
+"What about OpenSSL and NSS?"
+
+A companion project is planned: a userspace OpenSSL 3 provider and a
+userspace NSS provider, both backed by /dev/crypto2dev. With the wolfCrypt
+provider loaded, any application using OpenSSL 3 or NSS APIs — without code
+changes — will route its crypto through wolfCrypt, with FIPS coverage from
+the same wolfCrypt CMVP certificate. crypto2dev is the stable kernel interface
+those providers will sit on top of.
+
+
+"The FIPS gate breaks fallback."
+
+crypto2dev.ko does not register into the kernel crypto API, so there is no
+fallback question for kernel consumers. Kernel consumers (dm-crypt, IPsec)
+are unaffected.
+
+The Linux provider has no FIPS gate — it uses whatever the kernel provides.
+
+The wolfCrypt provider: if wolfCrypt is not FIPS_OPERATIONAL, every
+operation returns -EACCES. There is no silent fallback. An operator who
+deployed the wolfCrypt provider for FIPS coverage should know when FIPS
+status fails.
+
+
+"GPL compatibility."
+
+crypto2dev.ko and both provider modules are GPL-2.0-only. wolfcrypt.ko is
+dual-licensed (GPL + wolfSSL commercial); it exports EXPORT_SYMBOL_GPL.
+crypto2dev_wolfssl.ko consumes those symbols and is GPL. No boundary
+violation. Commercial customers license wolfcrypt.ko under wolfSSL's
+commercial license.
+
+
+"What about the RNG?"
+
+wolfCrypt's DRBG (CTR_DRBG per SP 800-90A) uses get_random_bytes() as its
+entropy source (NRBG per SP 800-90C). The DRBG is the validated component.
+This is the standard construction for FIPS-validated software modules on Linux.
+
+For GEN_IV, the wolfssl provider calls wc_RNG_GenerateBlock — IV generation
+stays inside the FIPS boundary. If gen_iv is NULL (non-FIPS providers), the
+framework falls back to get_random_bytes().
+
+The Linux provider uses whatever RNG the kernel crypto API provides.
+
+
+"What's the test coverage?"
+
+  - NIST CAVP vectors hardcoded in tests/vectors/*.h
+  - Userspace tests for /dev/crypto2dev: round-trips against CAVP vectors
+    for CBC, GCM, SHA-256, HMAC-SHA256; GCM tag-tamper rejection (-EBADMSG);
+    16-thread concurrent stress (each thread owns its own fd)
+  - Tests run against both providers
+  - test_fips_gate.c: confirms wolfCrypt provider returns -EACCES when
+    wolfCrypt is not FIPS_OPERATIONAL
+  - CI on EC2 (Ubuntu 22.04 / 5.15, Ubuntu 24.04 / 6.8)
+
+Independent oracles only — the code under test is never its own oracle.
+
+
+"In-tree path?"
+
+crypto2dev.ko and crypto2dev_kcapi.ko have no validated binary
+constraint and could go in-tree. crypto2dev_wolfssl.ko stays out-of-tree
+with wolfcrypt.ko because wolfCrypt's FIPS validation is bound to a specific
+binary artifact — rebuilding from a kernel tree source drop voids the
+certificate. We ship all three from one repository for simplicity; an
+in-tree split is not ruled out.
+
+
+WHERE TO LOOK
+=============
+
+  Repository:    https://github.com/wolfssl/crypto2dev
+  wolfcrypt.ko:  https://github.com/wolfssl/wolfssl (linuxkm/ subdirectory)
+  FIPS cert:     https://csrc.nist.gov/projects/cryptographic-module-validation-program
+                 (search "wolfCrypt")
+
+Feedback on the chardev API design, algorithm naming, or code correctness is
+welcome. If the interface is wrong it is better to know now.
+
+Thanks,
+<your name>
+wolfSSL, Inc.
