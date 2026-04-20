@@ -1,21 +1,27 @@
 # crypto2dev
 
-A Linux kernel module that gives userspace applications access to FIPS 140-3
-validated cryptography via `/dev/crypto2dev`. Every operation either goes
-through wolfCrypt's CMVP-certified module (cert #4718) or fails — no silent
-fallback, no priority games, no "probably FIPS."
+A Linux kernel module that exposes wolfCrypt cryptography to userspace via
+`/dev/crypto2dev` — a clean file-descriptor interface with explicit provider
+selection, predictable failure semantics, and no silent fallback.
 
-**Target users:** federal agencies, FedRAMP contractors, DoD/DISA STIG
-environments, and healthcare organizations where HIPAA intersects with NIST
-guidance. If a CMVP certificate number is not required, AF_ALG or a userspace
-TLS library is probably simpler.
+When used with a FIPS-validated build of wolfcrypt.ko (CMVP cert #4718), every
+operation either goes through the certified module or fails — no priority games,
+no "probably FIPS." When used with a non-FIPS wolfcrypt.ko, or with the bundled
+`crypto2dev_kcapi.ko` provider, it provides the same interface without the FIPS
+gate.
+
+**Target users:** Any application that needs reliable, provider-pinned kernel
+crypto. The primary deployment case is organizations under FIPS 140-3 mandates
+(federal agencies, FedRAMP contractors, DoD/DISA STIG, HIPAA/NIST environments),
+but the module and the kcapi provider are useful without FIPS requirements too.
 
 **Powered by [wolfSSL](https://www.wolfssl.com/).** wolfCrypt is the most
 widely deployed FIPS-validated cryptography library in embedded and kernel
 environments. It holds FIPS 140-2 validations (certs #2425 and #3389) and
 FIPS 140-3 validation (cert #4718). `wolfcrypt.ko` already serves dm-crypt,
-IPsec/xfrm, and AF_ALG on validated Linux deployments; `crypto2dev` extends
-the same certified boundary to userspace applications.
+IPsec/xfrm, and AF_ALG on Linux systems with and without formal FIPS
+requirements; `crypto2dev` adds a dedicated userspace interface on top of the
+same library.
 
 **Roadmap:** Companion userspace providers for **OpenSSL 3** and **NSS** are
 planned, both backed by `/dev/crypto2dev`. Applications using OpenSSL or NSS
@@ -55,23 +61,19 @@ implementation for the requested algorithm name. Three things it cannot do:
    not on the AF_ALG call path. If wolfCrypt's periodic self-test fails after
    boot, AF_ALG sessions continue silently.
 
-`crypto2dev` addresses all three:
+`crypto2dev` addresses all three when used with a FIPS build of wolfcrypt.ko:
 
 - `CRYPTO2DEV_IOC_REQUIRE_FIPS` makes `INIT` return `-ENOENT` if no FIPS
   provider is loaded — the operation never starts.
-- Once the wolfCrypt provider loads, all non-FIPS providers are unreachable
-  via lookup — no priority games, no fallback.
+- Once a FIPS-capable wolfCrypt provider loads, all non-FIPS providers are
+  unreachable via lookup — no priority games, no fallback.
 - Every operation entry point calls `wolfCrypt_GetStatus_fips()` and returns
   `-EACCES` if the module has degraded.
 
 The auditor's question is "can you demonstrate that this operation went through
 the CMVP-certified module?" With AF_ALG, the answer is "probably." With
-`crypto2dev` and the wolfCrypt provider, the answer is "yes, by construction,
+`crypto2dev` and a FIPS wolfCrypt provider, the answer is "yes, by construction,
 or the operation did not complete."
-
-**FIPS compliance is not a preference or a design goal. It is a non-negotiable
-external requirement for the target deployments. This is the reason this
-project exists.**
 
 ---
 
@@ -87,18 +89,22 @@ project exists.**
         ├─────────────────────────────────────────┐
         ▼                                         ▼
   crypto2dev_wolfssl.ko                  crypto2dev_kcapi.ko
-  (FIPS 140-3 gated)                     (no FIPS gate)
+  (FIPS-gated when wolfcrypt             (no FIPS gate)
+   built with FIPS support)
         │ wolfCrypt exported symbols              │ crypto_alloc_*
         ▼                                         ▼
   wolfcrypt.ko                           kernel crypto API
-  (CMVP cert #4718)                      (/proc/crypto)
+  (FIPS build: CMVP cert #4718;          (/proc/crypto)
+   non-FIPS build: no gate)
 ```
 
 Two providers ship with the project:
 
-- **`crypto2dev_wolfssl.ko`** — calls `wolfcrypt.ko` directly. Two-layer FIPS
-  gate: once loaded, non-validated paths are hard-disabled and every operation
-  checks `wolfCrypt_GetStatus_fips()`. Requires `wolfcrypt.ko` (CMVP cert #4718).
+- **`crypto2dev_wolfssl.ko`** — calls `wolfcrypt.ko` directly. When wolfcrypt.ko
+  is built with FIPS support: two-layer FIPS gate — non-validated paths are
+  hard-disabled and every operation checks `wolfCrypt_GetStatus_fips()` (CMVP
+  cert #4718). When wolfcrypt.ko is a non-FIPS build: no gate, full wolfCrypt
+  functionality, no certification boundary.
 
 - **`crypto2dev_kcapi.ko`** — delegates to the kernel's own crypto API. No
   FIPS gate; no extra dependencies. Useful for testing and deployments that do
@@ -115,15 +121,17 @@ pick them up automatically from there.
 ```bash
 insmod wolfcrypt.ko                  # required if using wolfssl provider
 insmod crypto2dev.ko                 # core — owns /dev/crypto2dev
-insmod crypto2dev_wolfssl.ko         # FIPS provider (optional)
+insmod crypto2dev_wolfssl.ko         # wolfSSL provider (optional; FIPS-gated if wolfcrypt built with FIPS)
 insmod crypto2dev_kcapi.ko           # non-FIPS provider (optional)
 ```
 
 At least one provider must be loaded before any operation succeeds.
 
-Once `crypto2dev_wolfssl.ko` is loaded, `crypto2dev_kcapi.ko` algorithms become
-unreachable via lookup — FIPS enforcement is active. Both modules may coexist;
-the kcapi algorithms remain visible in sysfs for diagnostics only.
+When wolfcrypt.ko is a FIPS build, loading `crypto2dev_wolfssl.ko` activates
+FIPS enforcement: `crypto2dev_kcapi.ko` algorithms become unreachable via
+lookup. Both modules may coexist; the kcapi algorithms remain visible in sysfs
+for diagnostics only. With a non-FIPS wolfcrypt.ko, no lockout occurs — both
+providers are reachable.
 
 ---
 

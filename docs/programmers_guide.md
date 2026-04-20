@@ -4,8 +4,8 @@ This guide covers everything needed to use the `/dev/crypto2dev` character devic
 from userspace C programs. The device is provided by the `crypto2dev.ko` kernel
 module, which routes crypto operations to whichever provider module is loaded.
 Two providers ship with the project: `crypto2dev_kcapi.ko` (uses the kernel
-crypto API) and `crypto2dev_wolfssl.ko` (calls wolfCrypt directly, with a
-FIPS 140-3 gate).
+crypto API) and `crypto2dev_wolfssl.ko` (calls wolfCrypt directly; FIPS 140-3
+gate active when wolfcrypt.ko is a FIPS build, no gate otherwise).
 
 ---
 

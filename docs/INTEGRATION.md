@@ -1,13 +1,13 @@
 # crypto2dev Integration Guide
 
-Target audience: Linux sysadmins and security engineers deploying
-FIPS 140-3 validated crypto on Linux systems.
+Target audience: Linux sysadmins and security engineers deploying crypto2dev
+in any configuration — FIPS-validated deployments and non-FIPS deployments alike.
 
 ---
 
 ## Overview
 
-The wolfSSL FIPS kernel stack is two separate layers with distinct roles.
+The wolfSSL kernel stack is two separate layers with distinct roles.
 Understanding which layer serves which consumer is required before deployment.
 
 **Layer 1 — wolfcrypt.ko (wolfSSL linuxkm module)**
@@ -27,8 +27,9 @@ this repository.
 **Layer 2 — crypto2dev.ko (this repository)**
 
 `crypto2dev.ko` provides the `/dev/crypto2dev` character device. It
-gives userspace programs direct access to FIPS-validated crypto without
-going through OpenSSL, GnuTLS, or the kernel crypto API.
+gives userspace programs direct access to wolfCrypt (or the kernel crypto
+API via the kcapi provider) without going through OpenSSL, GnuTLS, or
+the AF_ALG socket interface.
 
 `crypto2dev.ko` does NOT register into the kernel crypto API. It does
 not affect `dm-crypt`, IPsec, or any other in-kernel consumer.
@@ -36,7 +37,7 @@ not affect `dm-crypt`, IPsec, or any other in-kernel consumer.
 Provider modules attach to the framework at load time:
 
 - `crypto2dev_wolfssl.ko` — calls wolfCrypt directly through wolfcrypt.ko;
-  FIPS 140-3 gate enforced on every operation
+  FIPS 140-3 gate enforced on every operation when wolfcrypt.ko is a FIPS build
 - `crypto2dev_kcapi.ko` — routes through the kernel crypto API; no
   independent FIPS boundary
 
@@ -100,7 +101,7 @@ This produces three module files in the repo root:
 
 ```
 crypto2dev.ko           # framework — always required
-crypto2dev_wolfssl.ko   # wolfSSL FIPS provider
+crypto2dev_wolfssl.ko   # wolfSSL provider (FIPS-gated when wolfcrypt built with FIPS)
 crypto2dev_kcapi.ko     # kernel crypto API provider (non-FIPS)
 ```
 
@@ -117,8 +118,8 @@ sudo insmod /path/to/wolfssl/linuxkm/libwolfssl.ko
 sudo insmod crypto2dev.ko
 
 # Step 3: provider (choose one or both)
-sudo insmod crypto2dev_wolfssl.ko   # FIPS — requires step 1
-sudo insmod crypto2dev_kcapi.ko     # non-FIPS — no extra deps
+sudo insmod crypto2dev_wolfssl.ko   # wolfSSL provider — requires step 1
+sudo insmod crypto2dev_kcapi.ko     # kcapi provider — no extra deps
 ```
 
 After step 2, `/dev/crypto2dev` appears. No algorithms are available
@@ -134,7 +135,7 @@ sudo make modules_install
 
 # Create dependency and ordering config
 sudo tee /etc/modprobe.d/crypto2dev.conf <<'EOF'
-# Load wolfSSL FIPS provider when crypto2dev is loaded
+# Load wolfSSL provider when crypto2dev is loaded
 softdep crypto2dev pre: libwolfssl
 softdep crypto2dev_wolfssl pre: crypto2dev libwolfssl
 EOF

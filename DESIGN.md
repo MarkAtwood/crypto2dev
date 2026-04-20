@@ -2,16 +2,18 @@
 
 ## Overview
 
-`crypto2dev.ko` is a Linux kernel module that exposes wolfCrypt's FIPS-validated
-cryptography to userspace via a chardev at `/dev/crypto2dev`. Every crypto
-operation is delegated to wolfCrypt (via `wolfcrypt.ko`). This module does not
-implement any cryptographic algorithm.
+`crypto2dev.ko` is a Linux kernel module that exposes wolfCrypt cryptography to
+userspace via a chardev at `/dev/crypto2dev`. Every crypto operation is
+delegated to a registered provider. When used with a FIPS build of wolfcrypt.ko,
+operations are FIPS-gated; with a non-FIPS wolfcrypt.ko or the kcapi provider,
+the same interface works without a FIPS boundary. This module does not implement
+any cryptographic algorithm.
 
 **What this module does:**
 - Accepts connections to `/dev/crypto2dev` (one fd per session)
 - Routes ioctls and read/write operations to registered crypto providers
-- Enforces FIPS mode: once a FIPS-validated provider loads, all non-FIPS paths
-  are hard-disabled
+- Enforces FIPS mode when a FIPS provider is loaded: once active, all non-FIPS
+  paths are hard-disabled
 
 **What this module does not do:**
 - Implement any cryptography — all crypto goes through provider callbacks
@@ -117,7 +119,7 @@ src/
     crypto2dev_registry.c       # global provider registry and lookup
 
   providers/
-    wolfssl/                    # FIPS provider: wraps wolfCrypt directly
+    wolfssl/                    # wolfSSL provider: wraps wolfCrypt directly (FIPS-gated when HAVE_FIPS)
       wolfssl_provider.c        # registration (.is_fips = 1)
       wolfssl_provider.h        # wolfssl provider internal header
       wolfssl_aes_cbc.c         # "cbc(aes)"
