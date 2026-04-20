@@ -2,12 +2,17 @@
 
 ## Overview
 
-`crypto2dev.ko` is a Linux kernel module that exposes wolfCrypt cryptography to
-userspace via a chardev at `/dev/crypto2dev`. Every crypto operation is
-delegated to a registered provider. When used with a FIPS build of wolfcrypt.ko,
-operations are FIPS-gated; with a non-FIPS wolfcrypt.ko or the kcapi provider,
-the same interface works without a FIPS boundary. This module does not implement
-any cryptographic algorithm.
+`crypto2dev.ko` is a Linux kernel module that gives userspace a standardized
+file-descriptor interface to kernel-managed cryptography. Every crypto operation
+is delegated to a registered provider module. The provider model is the core
+abstraction: any crypto resource the kernel manages — a validated library, a
+hardware accelerator, an HSM driver — can be surfaced to userspace through a
+`crypto2dev` provider with a consistent API. This module does not implement any
+cryptographic algorithm.
+
+When used with a FIPS build of wolfcrypt.ko, operations are FIPS-gated; with a
+non-FIPS wolfcrypt.ko or the kcapi provider, the same interface works without a
+FIPS boundary.
 
 **What this module does:**
 - Accepts connections to `/dev/crypto2dev` (one fd per session)

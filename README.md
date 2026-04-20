@@ -1,8 +1,15 @@
 # crypto2dev
 
-A Linux kernel module that exposes wolfCrypt cryptography to userspace via
+A Linux kernel module that exposes kernel-managed cryptography to userspace via
 `/dev/crypto2dev` — a clean file-descriptor interface with explicit provider
 selection, predictable failure semantics, and no silent fallback.
+
+The provider model is the core design: `crypto2dev.ko` owns the chardev API and
+session lifecycle; separate provider modules supply the crypto. Two providers
+ship with the project, and third parties can write their own. This makes
+crypto2dev a standardized userspace interface to any crypto resource the kernel
+manages — a validated library, a hardware accelerator, an HSM driver, or the
+kernel crypto API itself.
 
 When used with a FIPS-validated build of wolfcrypt.ko (CMVP cert #4718), every
 operation either goes through the certified module or fails — no priority games,
@@ -11,9 +18,10 @@ no "probably FIPS." When used with a non-FIPS wolfcrypt.ko, or with the bundled
 gate.
 
 **Target users:** Any application that needs reliable, provider-pinned kernel
-crypto. The primary deployment case is organizations under FIPS 140-3 mandates
-(federal agencies, FedRAMP contractors, DoD/DISA STIG, HIPAA/NIST environments),
-but the module and the kcapi provider are useful without FIPS requirements too.
+crypto — FIPS-mandated deployments (federal agencies, FedRAMP, DoD/DISA STIG,
+HIPAA/NIST), deployments with dedicated crypto hardware that needs a clean
+userspace API, and any project that wants explicit provider selection rather than
+AF_ALG's highest-priority dispatch.
 
 **Powered by [wolfSSL](https://www.wolfssl.com/).** wolfCrypt is the most
 widely deployed FIPS-validated cryptography library in embedded and kernel
@@ -86,19 +94,21 @@ or the operation did not complete."
         ▼
   crypto2dev.ko          — chardev interface, session lifecycle, provider dispatch
         │ provider ops vtable
-        ├─────────────────────────────────────────┐
-        ▼                                         ▼
-  crypto2dev_wolfssl.ko                  crypto2dev_kcapi.ko
-  (FIPS-gated when wolfcrypt             (no FIPS gate)
+        ├────────────────────────────┬────────────────────────────┐
+        ▼                            ▼                            ▼
+  crypto2dev_wolfssl.ko     crypto2dev_kcapi.ko          (your provider)
+  (FIPS-gated when wolfcrypt (no FIPS gate)               crypto2dev_myhw.ko
    built with FIPS support)
-        │ wolfCrypt exported symbols              │ crypto_alloc_*
-        ▼                                         ▼
-  wolfcrypt.ko                           kernel crypto API
-  (FIPS build: CMVP cert #4718;          (/proc/crypto)
-   non-FIPS build: no gate)
+        │ wolfCrypt symbols          │ crypto_alloc_*             │ driver API
+        ▼                            ▼                            ▼
+  wolfcrypt.ko               kernel crypto API           hardware driver
+  (FIPS build: CMVP #4718;   (/proc/crypto)              (HSM, accelerator,
+   non-FIPS: no gate)                                      TPM, etc.)
 ```
 
-Two providers ship with the project:
+Two providers ship with the project; third-party providers can be written for
+any crypto resource the kernel manages (hardware accelerators, HSMs, TPM-backed
+operations, vendor crypto drivers):
 
 - **`crypto2dev_wolfssl.ko`** — calls `wolfcrypt.ko` directly. When wolfcrypt.ko
   is built with FIPS support: two-layer FIPS gate — non-validated paths are
@@ -107,8 +117,8 @@ Two providers ship with the project:
   functionality, no certification boundary.
 
 - **`crypto2dev_kcapi.ko`** — delegates to the kernel's own crypto API. No
-  FIPS gate; no extra dependencies. Useful for testing and deployments that do
-  not require CMVP validation.
+  FIPS gate; no extra dependencies. Exposes any algorithm registered in
+  `/proc/crypto`, including hardware-accelerated implementations.
 
 `wolfcrypt.ko` also registers wolfCrypt algorithms into the kernel crypto API
 at priority 300 — independently of crypto2dev. dm-crypt, IPsec/xfrm, and AF_ALG
