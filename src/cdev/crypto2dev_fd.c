@@ -2045,7 +2045,7 @@ static long ioctl_do_kdf(struct crypto2dev_fd_state *state,
 			pr_err_ratelimited("DO_KDF('%.*s'->'%.*s'/%s): FIPS not operational (%d)\n",
 					   (int)CRYPTO2DEV_ALGO_MAXLEN, op.algo,
 					   (int)CRYPTO2DEV_ALGO_MAXLEN, op.out_algo,
-					   actual_provider ? actual_provider : op.provider,
+					   actual_provider ? actual_provider : "<unknown>",
 					   ret);
 			module_put(owner);
 			goto out_inbuf_clear;

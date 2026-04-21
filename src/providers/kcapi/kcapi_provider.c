@@ -17,7 +17,7 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/errno.h>
-#include <linux/utsname.h>
+#include <generated/utsrelease.h>
 
 #include "../../../include/crypto2dev_provider.h"
 #include "kcapi_provider.h"
@@ -57,6 +57,9 @@ static struct crypto2dev_provider kcapi_provider = {
 static int __init kcapi_provider_init(void)
 {
 	int ret;
+
+	/* Suppress -Wunused-variable: kcapi_algo_list is used via kcapi_provider.algos */
+	(void)kcapi_algo_list;
 
 	ret = crypto2dev_register_provider(&kcapi_provider);
 	if (ret) {

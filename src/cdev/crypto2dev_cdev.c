@@ -156,6 +156,9 @@ static DEVICE_ATTR_RO(fips_state);
 
 /* ── init / exit ─────────────────────────────────────────────────────────── */
 
+int  crypto2dev_cdev_init(void);
+void crypto2dev_cdev_exit(void);
+
 int crypto2dev_cdev_init(void)
 {
 	int ret;
