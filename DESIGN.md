@@ -926,6 +926,86 @@ NOT_OPERATIONAL). Everything else is a string.
 the normal file I/O path. This avoids large ioctl structs, works with standard
 POSIX I/O tooling, and lets the kernel handle partial copies naturally.
 
+*Why we have not added a combined scatter/gather ioctl, and when we might.*
+
+The per-operation syscall sequence for AES-GCM is: INIT, SET_IV, [SET_AAD],
+write, read, GET_TAG, FINALIZE, RESET — roughly 7–8 round-trips. A combined
+ioctl could collapse that to one. On modern x86 with KPTI, each syscall costs
+~100–200 ns, so the saving is roughly 1–1.5 µs per operation.
+
+However, the write()+read() pair still performs copy_from_user/copy_to_user.
+For a 16 KB TLS record that is 32 KB of memory bandwidth through the kernel
+boundary. That copy cost dominates the ioctl overhead by more than an order of
+magnitude. Collapsing the metadata ioctls into one does not move the needle for
+bulk TLS record encryption.
+
+The case where a combined ioctl would matter is **small-payload,
+high-ops-per-second** workloads: DTLS datagrams, short AEAD packets, IoT
+messages in the 64–512 byte range. There the per-byte copy cost is negligible
+and the fixed syscall overhead becomes the dominant term. For a 64-byte DTLS
+packet, 7–8 ioctls is a significant fraction of total operation time.
+
+The kernel change is modest: a new ioctl number, a new wire struct in
+`crypto2dev_ioctl.h`, a new handler in `crypto2dev_fd.c`, and a compile-time
+size guard. The port adds a fast-path branch that uses the combined ioctl when
+available and falls back to the existing path otherwise.
+
+The higher-value feature for *bulk* throughput would be zero-copy via pinned
+buffers (userspace maps a buffer, kernel encrypts in-place), which eliminates
+the copy wall entirely. See the zero-copy section below.
+
+**Decision:** no combined ioctl today. Revisit if a concrete DTLS or
+high-rate small-packet workload emerges as a primary target.
+
+*Zero-copy via pinned buffers — design and difficulty.*
+
+Two models exist with very different implementation costs.
+
+**Model A: per-operation pinning.** A new `CRYPTO2DEV_IOC_ZEROCOPY_OP` ioctl
+carries user VAs for input and output. The handler calls
+`pin_user_pages_fast()`, then `vmap()` to produce a flat `byte *`, passes that
+directly to wolfCrypt (provider interface unchanged), then `vunmap()` and
+`unpin_user_pages()` on completion. AAD is small enough to copy inline in the
+ioctl struct. The GCM tag needs its own `tag_ptr` field since it is not in the
+data stream.
+
+Code delta: ~400–500 lines in `crypto2dev_fd.c` and `crypto2dev_ioctl.h`, no
+provider changes.
+
+The problem: `vmap()` + `vunmap()` modify the kernel page tables and trigger
+TLB shootdowns across all CPUs. On an 8-core machine that IPI broadcast costs
+2–5 µs. For a 16 KB TLS record the `copy_from_user` cost is in the same range.
+The win is real only for large buffers (128 KB+) where memory bandwidth
+dominates everything else. Per-operation pinning is moderate work with
+uncertain payoff.
+
+**Model B: pre-registered buffers (io_uring-style).** The user registers
+buffers once; the kernel keeps them pinned and `vmap()`'d for the lifetime of
+the fd. `CRYPTO2DEV_IOC_REGISTER_BUF` returns a `buf_token`; operations
+reference buffers by token rather than user VA. The `vmap`/`vunmap` cost is
+amortized to zero; per-operation overhead is just the wolfCrypt call and the
+ioctl round-trip.
+
+Code delta: ~1,200–1,500 lines. Requires a buffer registry with reference
+counting, lifecycle tied to fd `release()`, locking across register/unregister/
+op paths, and safe cleanup on abnormal fd close. Comparable complexity to
+io_uring's buffer-registration subsystem.
+
+Pre-registered buffers have clear payoff for sustained high-throughput sessions
+where the same buffers are reused across many operations — a TLS proxy, a
+crypto offload daemon, anything that owns its I/O buffers long-term. That
+precondition must be present for the design to justify its complexity.
+
+wolfCrypt is not an obstacle for either model: it takes flat `byte *` pointers,
+and `vmap()` produces exactly that. No changes to the provider interface are
+needed.
+
+**Decision:** no zero-copy API today. Revisit when a concrete workload with
+long-lived buffer ownership (TLS proxy, offload daemon) is the primary target,
+and prefer Model B (pre-registered) over Model A (per-op) since Model A's
+vmap overhead erodes most of the benefit for the record sizes where it would
+be used.
+
 **IV required before write() when set_iv != NULL.** The `iv_set` flag in
 fd_state prevents accidental IV reuse. RESET clears `iv_set`, forcing the
 caller to supply a fresh IV for each message under the same key. GEN_IV uses
