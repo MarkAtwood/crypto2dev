@@ -277,7 +277,6 @@ bd ready                  # find available work (no blockers)
 bd show <id>              # read issue details
 bd update <id> --claim    # claim before starting
 bd close <id>             # mark complete when done
-bd dolt push              # push beads to remote (always at session end)
 ```
 
 - Use `bd` for ALL task tracking. Never use TodoWrite, markdown TODOs, or in-memory lists.

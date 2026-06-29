@@ -483,12 +483,6 @@ bd close <id>         # Complete work
 1. File beads issues for remaining work
 2. Run quality gates (if code changed): `make`, `scripts/verify_registration.sh` (checks wolfcrypt.ko /proc/crypto registrations — prerequisite for crypto2dev tests), tests
 3. Update issue status — close finished work
-4. Sync:
-   ```bash
-   git pull --rebase
-   bd dolt push
-   git status
-   ```
-5. Report to user — state what is ready to commit/push and wait for explicit approval
+4. Report to user — state what is ready to commit/push and wait for explicit approval
 
 **git commit and git push require explicit user approval — never run them without asking.**
