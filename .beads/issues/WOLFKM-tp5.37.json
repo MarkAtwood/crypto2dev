@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-tp5.37",
+  "title": "Crypto misuse: GCM wc_InitRng_ex error path missing wc_AesFree before kfree",
+  "description": "wolfssl_aes_gcm_sess_init: when wc_InitRng_ex fails (line 124-128 in wolfssl_aes_gcm.c), wc_AesFree is called but the function then does kfree(ctx) without memzero_explicit. More importantly: this error path correctly calls wc_AesFree (freeing wolfCrypt's internal Aes allocations), but does NOT call memzero_explicit(ctx, sizeof(*ctx)) before kfree. At this point ctx->aes holds the fully-programmed AES-GCM key schedule (wc_AesGcmSetKey succeeded). The embedded Aes struct in ctx contains the expanded key tables. kfree without memzero_explicit leaves the key schedule in freed kernel heap memory. This is distinct from issue WOLFKM-tp5.16 in specificity: this is the wc_InitRng_ex path which is the most likely to actually fail (entropy unavailable at module load time) and has the highest severity because the full key schedule is in ctx->aes.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:41:41Z",
+  "updated_at": "2026-04-18T03:41:49Z",
+  "closed_at": "2026-04-18T03:41:49Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:41:40Z"
+    }
+  ]
+}

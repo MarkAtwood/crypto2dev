@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-c78.15",
+  "title": "[DECISION] Heap allocation of ikm_buf matches inbuf pattern (not stack)",
+  "description": "include/uapi/crypto2dev_ioctl.h lines 870-892 and src/cdev/crypto2dev_fd.c lines 1785-1789: When ikm_fd != -1, ikm_buf is allocated on the heap (kmalloc) to hold the extracted key material, not embedded in the ioctl struct or on the stack. This matches the existing inbuf pattern (write-before-ioctl for KEY_IMPORT). The allocation is sized exactly to the IKM length (via CRYPTO2DEV_KDF_OKM_MAXLEN as the temp buffer), not a worst-case constant. This prevents stack overflow when extracting large key material. The comment in the header (lines 864-892) explains the rationale: post-quantum keys exceed 4KB, and embedding them in a struct would land on the kernel stack, violating the ~1KB guideline. Using heap allocation for ikm_buf preserves this discipline: only CRYPTO2DEV_KDF_OKM_MAXLEN bytes are allocated (64 bytes), not a worst-case 8KB, even when the extracted key is smaller.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:15:41Z",
+  "updated_at": "2026-04-20T00:27:21Z",
+  "closed_at": "2026-04-20T00:27:21Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-c78",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:15:40Z"
+    }
+  ]
+}

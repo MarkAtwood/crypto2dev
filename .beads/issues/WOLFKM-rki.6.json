@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-rki.6",
+  "title": "Update Makefile/Kbuild for two-module build",
+  "description": "Update build system to produce two modules: crypto2dev.ko and crypto2dev_wolfssl.ko.\n\nobj-m := crypto2dev.o crypto2dev_wolfssl.o\n\ncrypto2dev-objs: main, registry, cdev, fd (no wolfCrypt sources)\ncrypto2dev_wolfssl-objs: all src/providers/wolfssl/*.o\n\nWOLFCRYPT_DIR only needed for crypto2dev_wolfssl build. crypto2dev.ko must build without WOLFCRYPT_DIR.\n\nStub mode (CRYPTO2DEV_HAVE_WOLFCRYPT=0): skip crypto2dev_wolfssl target entirely.\n\nDepends on: wolfssl provider extraction issue",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T15:20:34Z",
+  "updated_at": "2026-04-16T15:37:02Z",
+  "closed_at": "2026-04-16T15:37:02Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-rki",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-16T08:20:33Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-rki.5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-16T08:20:52Z"
+    }
+  ]
+}

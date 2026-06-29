@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.14",
+  "title": "memzero_explicit throughout: correct FIPS 140-3 key zeroization discipline",
+  "description": "src/cdev/crypto2dev_fd.c \u2014 memzero_explicit() is used consistently throughout: inbuf_clear(), outbuf zeroization in fd_release(), ioctl struct zeroization in ioctl_init/do_sign/do_verify/do_agree/do_kdf (on all exit paths including error paths). This is correct: the C compiler is permitted to elide a plain memset() when the buffer goes out of scope if it can prove the value is never read again. memzero_explicit() is a compiler barrier that prevents this optimization. A reviewer might suggest memset() is 'simpler' or 'equivalent' \u2014 it is not. FIPS 140-3 requires CSPs to be zeroized before memory is released; an elided memset() is a compliance failure. This is not a style preference.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:17Z",
+  "updated_at": "2026-04-19T21:31:01Z",
+  "closed_at": "2026-04-19T21:31:01Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:37:17Z"
+    }
+  ]
+}

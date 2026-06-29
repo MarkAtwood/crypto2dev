@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-qnv.3",
+  "title": "ioctl_reset: fd permanently dies with -EIO when sess_reset unsupported",
+  "description": "When \\!ops->sess_reset, ioctl_reset now sets state->error = true before returning -EOPNOTSUPP. This permanently kills the fd: subsequent write() and finalize() calls check state->error and return -EIO, not -EOPNOTSUPP. A user who calls RESET on a provider that doesn't support it has done nothing wrong \u2014 they tested a capability, found it absent, and should be able to close the fd cleanly or continue using it (it was finalized, not errored). After this change, the fd is dead after a failed reset attempt, and every subsequent operation returns -EIO with no explanation. The error from RESET (-EOPNOTSUPP) is correct; setting state->error is wrong. Trigger: call RESET on a finalized fd backed by a provider without sess_reset. Bad behavior: fd becomes -EIO dead when it should just not support reset.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T06:14:20Z",
+  "updated_at": "2026-04-18T06:19:39Z",
+  "closed_at": "2026-04-18T06:19:39Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-qnv",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T23:14:20Z"
+    }
+  ]
+}

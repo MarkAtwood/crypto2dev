@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-3wy",
+  "title": "test_kdf.c PBKDF2-SHA384/SHA512 test cases + DESIGN.md fix",
+  "description": "Add pbkdf2(sha384) and pbkdf2(sha512) test cases to tests/userspace/test_kdf.c. For each variant: (1) known-answer test using vectors from tests/vectors/pbkdf2_sha384.h and pbkdf2_sha512.h, (2) iterations-too-low rejection test (iter=999 -> expect -EINVAL), (3) salt-too-short rejection test (salt_len=15 -> expect -EINVAL). Fix DESIGN.md algorithm coverage table: currently says kcapi=yes for all pbkdf2 variants; change to accurately reflect status after kcapi implementation is done.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T01:03:09Z",
+  "updated_at": "2026-04-20T01:08:48Z",
+  "closed_at": "2026-04-20T01:08:48Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-2vz",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T18:03:13Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-y01",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T18:03:14Z"
+    }
+  ]
+}

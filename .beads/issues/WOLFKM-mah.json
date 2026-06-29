@@ -1,0 +1,22 @@
+{
+  "id": "WOLFKM-mah",
+  "title": "scripts/verify_registration.sh: verify /proc/crypto registrations",
+  "description": "Shell script that parses /proc/crypto and verifies: (1) all expected wolfkm algorithms are present (cbc(aes), ctr(aes), xts(aes), gcm(aes), ccm(aes), sha256, sha384, sha512, sha3-256, sha3-512, hmac(sha256), hmac(sha384), hmac(sha512), cmac(aes), stdrng, rsa, ecdh-nist-p256, ecdh-nist-p384, dh); (2) each has priority 300; (3) each has a wolfkm driver name. Exits 0 if all pass, exits nonzero with diagnostic output if any fail.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:55:26Z",
+  "updated_at": "2026-04-18T05:58:04Z",
+  "closed_at": "2026-04-18T05:58:04Z",
+  "design": "Parse /proc/crypto by splitting on blank lines (each algorithm is a stanza). For each expected algorithm, grep for 'name.*: <algo>' then check that the same stanza contains 'driver.*wolfkm' and 'priority.*300'. Color output: green PASS, red FAIL. Called by tests/ci/test-on-aws.sh as the first integration check after module load.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-bl1",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:11Z"
+    }
+  ]
+}

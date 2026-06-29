@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7sx.1",
+  "title": "Correctness: DO_SIGN and DO_AGREE reject KEY_PAIR keys",
+  "description": "Trigger: KEY_GENERATE produces key_type=KEY_PAIR (fd.c:2192). Caller then issues DO_SIGN or DO_AGREE with that fd as key_fd. ioctl_do_sign (line 1206) and ioctl_do_agree (line 1398) both check key_type \\!= CRYPTO2DEV_KEY_PRIVATE and return -EBADF. The UAPI header says both ops accept 'key_type KEY_PRIVATE or KEY_PAIR'. So any key produced by KEY_GENERATE is permanently unusable for sign or agree. The fix (from pass1) correctly blocks KEY_PUBLIC and KEY_SYMMETRIC but overcorrects by blocking KEY_PAIR. The correct check is: (key_type \\!= KEY_PRIVATE && key_type \\!= KEY_PAIR).",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:12:34Z",
+  "updated_at": "2026-04-20T05:24:12Z",
+  "closed_at": "2026-04-20T05:24:12Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7sx",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T22:12:34Z"
+    }
+  ]
+}

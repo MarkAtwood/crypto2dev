@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-1js.6",
+  "title": "PBKDF2 iteration floor uses strncmp prefix \u2014 fragile coupling",
+  "description": "fd.c:1704: strncmp(op.algo, 'pbkdf2', 6) == 0 encodes PBKDF2 identity in the framework using a string prefix, coupling the framework to a naming convention that is not formally enforced anywhere. The framework is running this check before lookup, so it doesn't know which provider will handle the request \u2014 it's inferring algorithm class from the user-supplied name. Suggested rewrite: add u32 min_iterations to struct crypto2dev_algo_ops (0 = no minimum). After lookup, if ops->min_iterations && op.iterations < ops->min_iterations, return -EINVAL. This moves the policy to the provider where the knowledge lives, and makes the check declarative instead of string-matching.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "chore",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T15:57:50Z",
+  "updated_at": "2026-04-18T17:40:22Z",
+  "closed_at": "2026-04-18T17:40:22Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-1js",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T08:57:50Z"
+    }
+  ]
+}

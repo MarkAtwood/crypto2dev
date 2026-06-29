@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-533.13",
+  "title": "UAPI stability: GET_STATE omits outbuf_pending for KEY fds",
+  "description": "crypto2dev_fd_state_info.outbuf_pending is not populated by ioctl_get_state for CRYPTO2DEV_FDTYPE_KEY fds. After CRYPTO2DEV_IOC_KEY_EXPORT_PRIVATE, state->outbuf contains the private key bytes awaiting drain; userspace has no way to observe the pending byte count without attempting a read(). Diagnostically useful for introspection tools and for callers that need to know whether a prior KEY_EXPORT_PRIVATE placed bytes in the buffer. The field exists in the struct but is left zero for KEY fds.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:29:11Z",
+  "updated_at": "2026-04-20T05:43:20Z",
+  "closed_at": "2026-04-20T05:43:20Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-533",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T22:29:11Z"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-5ws.6",
+  "title": "CORRECT: ctx->authsize updated from taglen after successful setauthsize",
+  "description": "ctx->authsize is assigned from taglen only after crypto_aead_setauthsize succeeds, so it always reflects the transform's actual live authsize. encrypt uses ctx->authsize (not ctx->taglen) to size its dst_buf allocation and to copy the produced tag out. If authsize were stored independently of the setauthsize call, a driver that clamped or rejected the value silently would leave authsize inconsistent with the transform, causing dst_buf to be over- or under-allocated. A reviewer might suggest just storing taglen unconditionally as 'simpler', but that breaks the invariant that ctx->authsize == crypto_aead_authsize(ctx->tfm).",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:27:13Z",
+  "updated_at": "2026-04-20T02:28:26Z",
+  "closed_at": "2026-04-20T02:28:26Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-5ws",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:27:12Z"
+    }
+  ]
+}

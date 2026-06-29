@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-s6t.8",
+  "title": "FIPS operational risk: ctr(aes) or other FIPS-unregistered algo returns -ENOENT with no dmesg explanation",
+  "description": "When FIPS enforcement is active (wolfssl loaded) and a caller requests an algo the FIPS provider does not support (e.g. ctr(aes), which is kcapi-only), the caller receives -ENOENT. The log at registry.c:311 fires only if a non-FIPS provider was in the list and got skipped. If no provider at all handles ctr(aes), the message is only from ioctl_init (line 742): 'not found \u2014 FIPS mode active; ensure a FIPS provider registers this algo'. This is not emitted in key_import or do_kdf paths if they hit the same condition. A support engineer deploying a new algo under FIPS enforcement has no guaranteed dmesg breadcrumb identifying that FIPS mode specifically caused the -ENOENT \u2014 they must cross-reference sysfs. In multi-provider FIPS deployments this becomes a binary search problem.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:21:48Z",
+  "updated_at": "2026-04-20T04:22:58Z",
+  "closed_at": "2026-04-20T04:22:58Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:21:48Z"
+    }
+  ]
+}

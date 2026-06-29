@@ -1,0 +1,33 @@
+{
+  "id": "WOLFKM-rki.5",
+  "title": "Extract wolfSSL provider into src/providers/wolfssl/",
+  "description": "Create crypto2dev_wolfssl.ko: a new kernel module that wraps wolfCrypt calls in the algo_ops vtable and registers them with crypto2dev.ko.\n\nFiles to create:\n- src/providers/wolfssl/wolfssl_provider.c: module_init calls crypto2dev_register_provider(), module_exit calls crypto2dev_unregister_provider()\n- wolfssl_aes_cbc.c, wolfssl_aes_gcm.c, wolfssl_sha.c, wolfssl_hmac.c, wolfssl_cmac.c, wolfssl_rsa.c, wolfssl_ecc.c\n\nEach file implements crypto2dev_algo_ops for its algorithm. fips_gate callback = wolfCrypt_GetStatus_fips check.\n\nAll FIPS checklist rules still apply inside each ops implementation:\n- sess_init: kzalloc ctx, wc_XxxInit, wc_XxxSetKey\n- sess_free: wc_XxxFree, memzero_explicit, kfree\n- update/finalize: mutex, wc_Xxx calls, return code translation\n\nMODULE_SOFTDEP: pre: wolfcrypt crypto2dev\n\nDepends on: provider header issue, registry issue",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T15:20:33Z",
+  "updated_at": "2026-04-16T15:37:02Z",
+  "closed_at": "2026-04-16T15:37:02Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-rki",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-16T08:20:32Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-rki.1",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-16T08:20:51Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-rki.2",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-16T08:20:52Z"
+    }
+  ]
+}

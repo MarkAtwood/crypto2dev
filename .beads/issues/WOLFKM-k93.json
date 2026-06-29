@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-k93",
+  "title": "ecdh-p384: HKDF-SHA384 instead of HKDF-SHA256",
+  "description": "ecdh-p384 agree() currently uses wc_HKDF(WC_SHA256,...) regardless of curve. NIST SP 800-56C Rev 2 Table 2 requires P-384 to use SHA-384 for HKDF. Using SHA-256 with P-384 silently reduces effective security to 128 bits, negating the benefit of P-384. Fix: dispatch on ctx->curve_id in wolfssl_ecdh_agree() \u2014 WC_SHA384 for P-384, WC_SHA256 for P-256. Add known-answer test vector from independent oracle.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T23:35:54Z",
+  "updated_at": "2026-04-19T23:42:21Z",
+  "closed_at": "2026-04-19T23:42:21Z"
+}

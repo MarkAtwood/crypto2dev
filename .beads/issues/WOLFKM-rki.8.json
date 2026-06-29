@@ -1,0 +1,26 @@
+{
+  "id": "WOLFKM-rki.8",
+  "title": "Update tests for provider architecture",
+  "description": "Update tests/ to match the new two-module architecture.\n\n- tests/ci/test-on-aws.sh: load crypto2dev.ko then crypto2dev_wolfssl.ko (in that order)\n- tests/userspace/: no UAPI changes so chardev tests should pass unchanged; verify\n- Stub mode test: verify that with wolfssl provider not loaded, /dev/crypto2dev returns -ENOENT or -ENOSYS for INIT ioctl\n- Update any test scaffolding that references wolfcrypt.ko softdep or module load order\n\nDepends on: build system issue",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T15:20:36Z",
+  "updated_at": "2026-04-16T15:37:02Z",
+  "closed_at": "2026-04-16T15:37:02Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-rki",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-16T08:20:36Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-rki.6",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-16T08:20:54Z"
+    }
+  ]
+}

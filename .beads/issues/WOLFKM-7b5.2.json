@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7b5.2",
+  "title": "Correctness: GEN_IV missing finalized/error guard",
+  "description": "Trigger: call CRYPTO2DEV_IOC_INIT, then CRYPTO2DEV_IOC_FINALIZE, then CRYPTO2DEV_IOC_GEN_IV. ioctl_gen_iv (fd.c ~line 789) checks fd_type but does NOT check state->finalized or state->error, unlike ioctl_set_iv which checks both at line 746. Bad outcome: (1) GEN_IV on a finalized session calls ops->set_iv() on a provider context that has already been through finalize(); provider behavior is undefined on a finalized context. (2) GEN_IV on an error session calls into a potentially corrupt wolfCrypt context; ops->set_iv() may crash or produce garbage. In both cases state->iv_set is set to true, corrupting observable state. Fix: add the same finalized/error guard present in ioctl_set_iv.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:19:24Z",
+  "updated_at": "2026-04-18T05:30:41Z",
+  "closed_at": "2026-04-18T05:30:41Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7b5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T22:19:23Z"
+    }
+  ]
+}

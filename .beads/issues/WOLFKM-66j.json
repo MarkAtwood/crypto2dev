@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-66j",
+  "title": "Implement WOLFKM-3dh hygiene decisions in crypto2dev_ioctl.h",
+  "description": "Apply three decided changes to include/uapi/crypto2dev_ioctl.h: (a) change magic byte to \\xC2, (b) remove tombstone comment on slots 6-7, (c) add comment near exportable fields explaining it is a boolean parameter not a bitmask flag.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T21:40:42Z",
+  "updated_at": "2026-04-17T21:41:54Z",
+  "closed_at": "2026-04-17T21:41:54Z"
+}

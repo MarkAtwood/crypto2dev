@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-6w9",
+  "title": "Framework (fd.c): implement FINALIZE, dynamic outbuf, non-finalizing read()",
+  "description": "Core framework changes in src/cdev/crypto2dev_fd.c:\n\n1. FINALIZE ioctl handler:\n   - Call ops->fips_gate() if set\n   - Call ops->finalize(ctx, outbuf tail, remaining cap, &outlen)\n   - Append finalize output to outbuf\n   - Set finalized=true\n   - Return 0 or error\n\n2. read() changes:\n   - Do NOT call finalize() on read (remove lines 346-367 auto-finalize logic)\n   - Simply drain outbuf_drained..outbuf_len to userspace\n   - Return 0 (EOF) only if finalized=true AND outbuf fully drained\n   - If not finalized and outbuf empty, return 0 (caller tries again after more writes)\n\n3. outbuf allocation:\n   - Remove the upfront 1MB kmalloc in outbuf_ensure()\n   - Replace with dynamic growth: start at 4096, krealloc as update() produces output\n   - Cap at CRYPTO2DEV_OUTBUF_MAX (existing constant) as a hard ceiling\n   - Size for hash operations stays at CRYPTO2DEV_HASH_MAXLEN (64 bytes) \u2014 no change needed\n\n4. write() changes:\n   - After calling ops->update(), append any output to outbuf (dynamic resize if needed)\n   - Keep existing finalized check: write() after FINALIZE returns -EINVAL\n\nThread safety: all changes under existing state->lock.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T20:29:56Z",
+  "updated_at": "2026-04-18T01:17:15Z",
+  "closed_at": "2026-04-18T01:17:15Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-n3j",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T13:31:20Z"
+    }
+  ]
+}

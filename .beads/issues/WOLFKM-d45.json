@@ -1,0 +1,22 @@
+{
+  "id": "WOLFKM-d45",
+  "title": "tests/userspace/test_luks.sh: LUKS full-disk encryption roundtrip",
+  "description": "Shell script testing LUKS (Linux Unified Key Setup) end-to-end with wolfkm as the crypto provider. Steps: create a LUKS2 volume on a loopback device, open it, create ext4, mount, write 100MB of random data, record checksums, unmount, close LUKS, reopen, remount, verify checksums. Tests that dm-crypt's key derivation and block encryption go through wolfkm. Requires cryptsetup, root.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:57:15Z",
+  "updated_at": "2026-04-18T17:18:43Z",
+  "closed_at": "2026-04-18T17:18:43Z",
+  "design": "cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --hash sha256 --iter-time 100 (fast for testing). Use a known passphrase. cryptsetup luksOpen / luksClose. Check /proc/crypto during operation to confirm wolfkm-xts-aes is in use. See DESIGN.md \u00a7test_luks.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-t6k",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:30Z"
+    }
+  ]
+}

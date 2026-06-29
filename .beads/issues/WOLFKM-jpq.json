@@ -1,0 +1,14 @@
+{
+  "id": "WOLFKM-jpq",
+  "title": "tests/ci/qemu_test.sh: multi-kernel QEMU test harness",
+  "description": "QEMU-based test harness for testing wolfkm.ko against multiple kernel versions locally without AWS. Downloads kernel images for 5.15 and 6.8 (or uses pre-built bzImage), boots each in QEMU with a minimal root filesystem (buildroot or debian cloud image), uploads wolfkm.ko and wolfcrypt.ko, runs tests/kernel/run_kernel_tests.sh inside the VM, captures results, exits nonzero on any failure. Complementary to test-on-aws.sh for local development.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:56:02Z",
+  "updated_at": "2026-04-18T22:51:38Z",
+  "closed_at": "2026-04-18T22:51:38Z",
+  "design": "Use QEMU user-mode networking with hostfwd for SSH. Minimal rootfs: either a pre-built Debian cloud image or a buildroot initramfs. Pass wolfkm.ko to the VM via virtio-9p or scp. Kernel versions to test: 5.15.x, 6.1.x, 6.8.x (download from kernel.ubuntu.com or compile). See tests/ci/ directory."
+}

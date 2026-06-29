@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-ms3.11",
+  "title": "Correctness: GEN_IV iv_set=true despite copy_to_user failure",
+  "description": "Location: crypto2dev_fd.c ioctl_gen_iv().\n\nTrigger: ioctl(CRYPTO2DEV_IOC_GEN_IV) \u2014 gen_iv() generates IV, set_iv() installs it in the provider context (state->iv_set = true, line 764), then copy_to_user() fails (bad userspace pointer) at line 768 \u2192 returns -EFAULT.\n\nBad outcome: The session has iv_set=true and the IV is installed in the provider crypto context, but the caller received -EFAULT and does not have the IV value. The caller cannot know what IV was programmed. If the caller retries GEN_IV, a NEW IV is generated and installed (the previous one is lost). If the caller proceeds to encrypt (seeing iv_set=true will succeed), the IV used for encryption was never returned to userspace, making decryption impossible.\n\nFix: only set iv_set=true after copy_to_user succeeds, or clear the IV on copy_to_user failure.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:03:38Z",
+  "updated_at": "2026-04-18T03:21:54Z",
+  "closed_at": "2026-04-18T03:21:54Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ms3",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:03:37Z"
+    }
+  ]
+}

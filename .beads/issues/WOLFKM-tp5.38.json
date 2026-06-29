@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-tp5.38",
+  "title": "ioctl_do_sign: digest[] not zeroized on stack after sign operation",
+  "description": "ioctl_do_sign() copies the entire op struct from userspace (including digest[] and sig[]). After signing, copy_to_user writes the result (including sig[]) back. The digest[] field (up to CRYPTO2DEV_HASH_MAXLEN = 64 bytes) is never zeroized before the function returns. Per FIPS 140-3, intermediate values including digests should be zeroized when no longer needed. The digest remains on the kernel stack until overwritten by subsequent function calls. Same issue in ioctl_do_verify for both digest[] and sig[]. While the digest is not itself a secret key, it is an intermediate cryptographic value. More importantly, the ioctl struct on the stack for DO_SIGN is 64+4+64+64+4+512 = ~712 bytes \u2014 a large stack frame with sensitive data not explicitly zeroized. Trigger: DO_SIGN \u2192 function returns \u2192 digest[], sig[] remain in kernel stack frame until overwritten.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:41:42Z",
+  "updated_at": "2026-04-18T04:04:04Z",
+  "closed_at": "2026-04-18T04:04:04Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:41:42Z"
+    }
+  ]
+}

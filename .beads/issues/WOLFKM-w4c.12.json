@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-w4c.12",
+  "title": "Framework has no zeroization backstop for provider ctx",
+  "description": "At fd_release, the framework calls ops->sess_free(ctx) / key_free(ctx) and trusts the provider to call memzero_explicit before kfree. The framework has no backstop: state->ctx is a void* of unknown size, so the framework cannot independently zeroize it. inbuf and outbuf are framework-owned and zeroized independently; ctx is not.\n\nAll 11 current providers comply with the contract (crypto2dev_provider.h line 133-135 / 450-453). The risk is future providers that omit memzero_explicit \u2014 there is no runtime detection and no second line of defense.\n\nFix: add size_t ctx_size to struct crypto2dev_algo_ops. Rename sess_free to sess_cleanup (frees internal allocations only, does NOT kfree ctx). Framework then does memzero_explicit(ctx, ops->ctx_size) + kfree(ctx) after sess_cleanup returns. Order is mandatory: sess_cleanup must run first so internal heap pointers (e.g. GCM ctx->aad, ctx->inbuf) are freed before the top-level ctx is overwritten. Same change for key_free -> key_cleanup + key_ctx_size.\n\nSame analysis applies to key_ctx.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:14:40Z",
+  "updated_at": "2026-04-20T15:16:29Z",
+  "closed_at": "2026-04-20T15:16:29Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-w4c",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-20T08:14:40Z"
+    }
+  ]
+}

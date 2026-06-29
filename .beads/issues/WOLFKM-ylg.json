@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-ylg",
+  "title": "docs/INTEGRATION.md: how kernel consumers use crypto2dev",
+  "description": "User-facing documentation explaining how to integrate wolfkm into a Linux system. Sections: (1) Prerequisites (wolfcrypt.ko, kernel version, module signing); (2) Installation (insmod order, modprobe.d config); (3) Verification (scripts/verify_registration.sh, /proc/crypto); (4) dm-crypt/LUKS (cryptsetup cipher string, crypttab example); (5) IPsec/xfrm (strongSwan/iproute2 config snippet); (6) /dev/wolfcrypt userspace API (wolfkm_status, wolfkm_benchmark); (7) Disabling built-in crypto (when/why, scripts/disable_builtin_crypto.sh); (8) Troubleshooting (common dmesg errors and fixes).",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:57:29Z",
+  "updated_at": "2026-04-18T22:44:11Z",
+  "closed_at": "2026-04-18T22:44:11Z",
+  "design": "Target audience: Linux sysadmins and security engineers deploying FIPS-validated crypto. Assume kernel knowledge but not wolfSSL knowledge. Include concrete commands, expected dmesg output, and /proc/crypto snippets. Cross-reference human_tasks/ for items requiring CMVP/legal action.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-kgh",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:32Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-lnm",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:31Z"
+    }
+  ]
+}

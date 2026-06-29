@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-533.1",
+  "title": "Crypto misuse: SHA sess_init leaks wc hash state on init failure",
+  "description": "In wolfssl_sha.c sha_sess_init(), when wc_InitSha*() returns non-zero (line 164-168), the error path calls kfree(ctx) without calling the corresponding wc_Sha*Free() and without memzero_explicit(). wolfCrypt hash init may partially allocate internal state (e.g. SHA3 uses an inner struct that may have heap-allocated fields on some platforms). Trigger: wc_InitSha3_256/384/512 returns non-zero \u2192 wc_Sha3_*_Free never called \u2192 potential internal state leak, violates init/free pairing (check 2b) and FIPS 140-3 zeroization policy (check 2a).",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:28:02Z",
+  "updated_at": "2026-04-20T05:40:11Z",
+  "closed_at": "2026-04-20T05:40:11Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-533",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T22:28:01Z"
+    }
+  ]
+}

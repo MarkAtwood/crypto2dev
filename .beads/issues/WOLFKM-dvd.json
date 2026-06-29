@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-dvd",
+  "title": "crypto2dev_reg.h: FIPS gate inline, shared constants, stub guards",
+  "description": "Header included by all six registration files. Provides: (1) wolfkm_fips_gate() inline function that calls wolfCrypt_GetStatus_fips() and returns -EACCES if not FIPS_OPERATIONAL; (2) WOLFKM_PRIORITY 300 constant; (3) #ifdef WOLFKM_HAVE_WOLFCRYPT guard macros for stub mode; (4) #include chain for wolfkm_compat.h and all wolfCrypt crypto headers needed by registration files.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:53:20Z",
+  "updated_at": "2026-04-18T01:08:01Z",
+  "closed_at": "2026-04-18T01:08:01Z",
+  "design": "wolfkm_fips_gate() must be static inline so it gets inlined at every call site with zero overhead on the hot path. Under WOLFKM_HAVE_WOLFCRYPT=0 the gate always returns 0 (stub mode \u2014 FIPS check is meaningless without wolfCrypt). See DESIGN.md \u00a7FIPS Gate.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-5j8",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:03Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-bl1",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:02Z"
+    }
+  ]
+}

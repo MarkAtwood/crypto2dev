@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-ins",
+  "title": "crypto2dev_main.c: module_init, module_exit, FIPS gate",
+  "description": "The main module entry point orchestrates startup and shutdown in strict order, and is the first place wolfCrypt FIPS state is checked. module_init must: (1) call wolfCrypt_GetStatus_fips() and return -ENODEV if not OPERATIONAL, (2) call wolfkm_register_all(), (3) call wolfkm_cdev_init(), (4) pr_info with version, FIPS status, algorithm count. module_exit must call wolfkm_cdev_exit() then wolfkm_unregister_all(). Without wolfCrypt headers (WOLFKM_HAVE_WOLFCRYPT=0), stub mode emits pr_warn('wolfkm: STUB MODE \u2014 not for production').",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "feature",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:53:05Z",
+  "updated_at": "2026-04-18T01:08:02Z",
+  "closed_at": "2026-04-18T01:08:02Z",
+  "design": "MODULE_LICENSE(GPL v2), MODULE_AUTHOR(wolfSSL Inc.), MODULE_SOFTDEP(pre: wolfcrypt). Module param debug_level int default 0. Forward-declare wolfkm_register_all(), wolfkm_unregister_all(), wolfkm_cdev_init(), wolfkm_cdev_exit() so this file compiles with empty stubs elsewhere. See DESIGN.md \u00a7Module Initialization.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-bl1",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:58:46Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-dvd",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:03Z"
+    }
+  ]
+}

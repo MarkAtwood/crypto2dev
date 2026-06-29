@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-e5j",
+  "title": "fix: ioctl_key_export_private returns raw wolfCrypt error not kernel errno on FIPS gate",
+  "description": "ioctl_key_export_private uses ret=state->key_ops->fips_gate() then goto out, propagating the wolfCrypt error code directly to userspace instead of mapping to -EACCES. This violates the return-code discipline in CLAUDE.md. All other FIPS gate failure paths in crypto2dev_fd.c explicitly set ret=-EACCES. Found during WOLFKM-6vs review.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:12:50Z",
+  "updated_at": "2026-04-20T03:16:51Z",
+  "closed_at": "2026-04-20T03:16:51Z"
+}

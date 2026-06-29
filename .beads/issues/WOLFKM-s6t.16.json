@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-s6t.16",
+  "title": "Crypto misuse: GCM streaming encrypt produces ciphertext before tag \u2014 plaintext oracle if session abandoned",
+  "description": "wolfssl GCM update() callback calls wc_AesGcmEncryptUpdate() and returns ciphertext to caller on each write(). kcapi AEAD buffers all input until finalize() and produces ciphertext+tag atomically.\n\nwolfCrypt analysis (aes.c):\n- wc_AesGcmEncryptUpdate() calls AesGcmCryptUpdate_C() which is a CTR-mode XOR loop \u2014 encrypts every input byte immediately and writes to out buffer. No plaintext buffering. (lines 12416-12475)\n- Sub-block carryover: partial AES block keystream is cached in aes->streamData for next call \u2014 this is keystream caching, NOT plaintext buffering.\n- wc_AesGcmEncryptFinal() produces ONLY the authentication tag (GHASH finalization). No ciphertext. (lines 12487-12532)\n\nConsequence: caller receives real, correctly-encrypted ciphertext on each write() \u2014 but the authentication tag is not available until FINALIZE. A caller who calls write() N times and abandons the session (no FINALIZE) receives N chunks of unauthenticated ciphertext. The ciphertext is not garbage \u2014 it is the correct CTR-mode encryption \u2014 which makes this more dangerous: the caller may process it without noticing the missing tag.\n\nkcapi provider does not have this problem: it buffers all plaintext internally and produces ciphertext+tag together at finalize().\n\nThe two providers have incompatible security models at the UAPI level. Callers cannot safely switch providers without changing session flow.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:22:16Z",
+  "updated_at": "2026-04-20T04:23:31Z",
+  "closed_at": "2026-04-20T04:23:31Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:22:15Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.19",
+  "title": "write-before-ioctl for key import: correct heap allocation discipline",
+  "description": "include/uapi/crypto2dev_ioctl.h + src/cdev/crypto2dev_fd.c \u2014 key bytes are not embedded in the ioctl struct. The caller writes raw key bytes to the fd via write(2) into inbuf (heap-allocated to exact key size), then calls KEY_IMPORT which carries only metadata (algo, key_type, keylen, exportable). This is correct for two independent reasons: (1) RSA-4096 PKCS#8 is ~2.4 KB and ML-DSA-87 is 4896 bytes \u2014 embedding in an ioctl struct would require a struct large enough for the worst case (currently 8192 bytes), placed on the kernel stack on every KEY_IMPORT call including tiny EC key imports, violating the ~1 KB stack frame guideline; (2) inbuf is allocated exactly to the key size, zeroized and freed after import. A reviewer might suggest embedding keys inline for 'simplicity' \u2014 this would cause stack overflow on PQ key imports and violate kernel stack discipline.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:37Z",
+  "updated_at": "2026-04-19T21:31:13Z",
+  "closed_at": "2026-04-19T21:31:13Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:37:37Z"
+    }
+  ]
+}

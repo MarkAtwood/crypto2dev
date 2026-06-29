@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-ms3.12",
+  "title": "Crypto misuse: failed sess_reset leaves iv_set=true with undefined crypto state",
+  "description": "In src/cdev/crypto2dev_fd.c ioctl_reset() (~line 1218): if ops->sess_reset() returns non-zero (error), the function returns that error and skips the state cleanup block. iv_set, finalized, error are NOT cleared. For wolfssl AES-CBC: wolfssl_aes_cbc_sess_reset() can fail after calling wc_AesFree() but before successfully calling wc_AesSetKey(). The AES struct is freed/uninitialized. iv_set remains true in fd_state. A subsequent write() passes the iv_set check and calls update() which calls wc_AesCbcEncrypt() on an uninitialized Aes struct \u2192 undefined behavior. Fix: on sess_reset failure, set state->error=true so subsequent writes return -EIO rather than proceeding with corrupt state.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:03:42Z",
+  "updated_at": "2026-04-18T03:13:10Z",
+  "closed_at": "2026-04-18T03:13:10Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ms3",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:03:42Z"
+    }
+  ]
+}

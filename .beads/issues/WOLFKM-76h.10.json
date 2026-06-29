@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-76h.10",
+  "title": "CORRECT: wolfCrypt FIPS gate uses \\!= FIPS_OPERATIONAL (fail-closed for all non-operational states)",
+  "description": "wolfssl_provider.c:30: condition is status \\!= FIPS_OPERATIONAL, not status == FIPS_FAILED. This means FIPS_DEGRADED_E, FIPS_FAILED_E, and any unknown future status codes all return -EACCES. Why it is right: fail-closed is the only safe default for a FIPS boundary. An equality check (== FIPS_FAILED) would accept DEGRADED as operational, which is wrong \u2014 a degraded module is not operational for FIPS 140-3 purposes. A future wolfCrypt might add a new status value; the \\!= pattern rejects it correctly. What a reviewer might suggest: 'use a switch with explicit cases \u2014 \\!= is surprising.' That would be wrong: a switch requires explicit future maintenance to remain fail-closed; \\!= is self-extending.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:06:13Z",
+  "updated_at": "2026-04-20T03:14:35Z",
+  "closed_at": "2026-04-20T03:14:35Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-76h",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:06:13Z"
+    }
+  ]
+}

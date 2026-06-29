@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-3yg.5",
+  "title": "SEC1: SHA3 function naming inconsistency noted",
+  "description": "SHA3 functions have naming inconsistency vs SHA2: wc_Sha3_256_Update vs wc_Sha256Update. wolfCrypt has done SHA3 function renames in past versions. Good news: all six switch statements in wolfssl_sha.c have explicit case statements for each SHA3 variant, and all have default cases. Breakage from a rename would be COMPILE-TIME VISIBLE (undefined reference). This is acceptable for solo maintenance. Documented for awareness.",
+  "status": "closed",
+  "priority": 4,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:45:54Z",
+  "updated_at": "2026-04-20T00:48:41Z",
+  "closed_at": "2026-04-20T00:48:41Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-3yg",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:45:54Z"
+    }
+  ]
+}

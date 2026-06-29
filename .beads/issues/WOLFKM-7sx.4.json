@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7sx.4",
+  "title": "Observability: generic fips_gate messages omit return code",
+  "description": "14 fips_gate failure log sites (write, read, set_iv, gen_iv, set_aad, get_tag, set_tag, finalize, reset, sign, verify, agree, key_info, key_get_info) emit 'FIPS not operational' without the numeric return code. KEY_IMPORT/DO_KDF/KEY_GENERATE/KEY_EXPORT_PRIVATE were fixed in pass-1 but the generic pattern across all session ioctls was not. When fips_gate() returns a non-standard code (e.g. from a POST failure vs. degraded state), a support engineer cannot distinguish which failure mode triggered from dmesg alone.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:13:26Z",
+  "updated_at": "2026-04-20T05:24:17Z",
+  "closed_at": "2026-04-20T05:24:17Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7sx",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T22:13:26Z"
+    }
+  ]
+}

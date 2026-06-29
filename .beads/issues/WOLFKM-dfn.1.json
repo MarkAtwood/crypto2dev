@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-dfn.1",
+  "title": "NULL ops->sess_init dereference on init",
+  "description": "Provider registers with NULL sess_init. User calls CRYPTO2DEV_IOC_INIT. crypto2dev_lookup_algo() returns ops. No NULL check before ops->sess_init() dereference at src/cdev/crypto2dev_fd.c:627. Outcome: NULL function pointer dereference, kernel panic.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:03:01Z",
+  "updated_at": "2026-04-18T00:53:06Z",
+  "closed_at": "2026-04-18T00:53:06Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dfn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T17:03:01Z"
+    }
+  ]
+}

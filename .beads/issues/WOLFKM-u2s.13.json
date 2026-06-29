@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-u2s.13",
+  "title": "crypto2dev_status: adding _reserved[24] is silent ABI break for CRYPTO2DEV_IOC_STATUS ioctl number",
+  "description": "include/uapi/crypto2dev_ioctl.h, struct crypto2dev_status:\n\n    struct crypto2dev_status {\n        __u32 fips_state;\n        __u32 num_algorithms;\n        char  version[32];\n        __u8  _reserved[24]; /* reserved; must be zero */\n    };\n\nAdding _reserved[24] changed sizeof(struct crypto2dev_status) from 40 to 64 bytes.\n\nCRYPTO2DEV_IOC_STATUS is defined as:\n    _IOR(CRYPTO2DEV_IOC_MAGIC, 9, struct crypto2dev_status)\n\nThe _IOR/_IOW/_IOWR macros encode sizeof() in bits [29:16] of the ioctl command number.\nOld ioctl number encoded size 40; new number encodes size 64.\n\nThese are different ioctl command numbers. The kernel ioctl dispatcher matches the\nfull command number. Any binary compiled against the old header will send the old\ncommand number; the kernel (compiled against the new header) will not recognize it\nand return -ENOTTY.\n\nSeverity: silent breakage for any out-of-tree code or pre-compiled binaries\nthat include this header. No warning is emitted \u2014 the old ioctl simply fails.\n\nThe 'correct' way to extend an ioctl struct without breaking ABI is either:\n  (a) Don't add fields \u2014 define version-checking conventions and document exact\n      struct size in the header comment so binaries detect mismatches.\n  (b) Use _IOC_NONE + manual size passing, accepting the loss of size checking.\n  (c) Assign a new ioctl number for the extended struct.\n\nAt this stage (pre-release), changing the struct size is acceptable IF the\nversion number is bumped (it was changed to '1.1.0' in ioctl_status()) AND\nIF the ioctl number change is explicitly documented as a deliberate ABI\nversion break in the header.\n\nThe current _reserved[24] addition has NO accompanying ABI version comment\nexplaining that CRYPTO2DEV_IOC_STATUS now encodes size 64 instead of 40.\n\nAction required: either revert _reserved[24], or add a prominent comment\ndocumenting the ioctl number change and the compatibility break.\n\nFiles: include/uapi/crypto2dev_ioctl.h (struct crypto2dev_status, line 350)\n       src/cdev/crypto2dev_fd.c (ioctl_status, line 1492 \u2014 version string '1.1.0')",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:34:18Z",
+  "updated_at": "2026-04-19T21:43:54Z",
+  "closed_at": "2026-04-19T21:43:54Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-u2s",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T14:34:18Z"
+    }
+  ]
+}

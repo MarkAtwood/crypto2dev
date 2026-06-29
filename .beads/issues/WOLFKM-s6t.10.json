@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-s6t.10",
+  "title": "Crypto misuse: CBC key bytes stored as plaintext copy in ctx",
+  "description": "wolfssl_aes_cbc_ctx stores a plaintext copy of the raw key bytes in key_bytes[32] alongside the wolfCrypt Aes struct which also holds the expanded key schedule. This creates two copies of the key in memory: the wolfCrypt key schedule (zeroized by wc_AesFree) and the raw key bytes (zeroized by memzero_explicit in sess_free). The raw copy exists for sess_reset, which re-calls wc_AesSetKey. Consequence: if a memory disclosure occurs between sess_init and sess_free, the raw AES key is directly readable as a contiguous 32-byte field at a known offset within wolfssl_aes_cbc_ctx. The wolfCrypt Aes struct's key schedule is less directly readable. GCM does NOT store a plaintext key copy (no reset re-keying needed). CBC is inconsistent with GCM and stores unnecessary additional key material exposure. Trigger: any memory disclosure (e.g. kernel heap spray, side channel) during an active CBC session window. Crypto consequence: raw AES key bytes readable in addition to the expanded key schedule.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:21:53Z",
+  "updated_at": "2026-04-20T04:23:28Z",
+  "closed_at": "2026-04-20T04:23:28Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:21:53Z"
+    }
+  ]
+}

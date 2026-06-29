@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-6ty.15",
+  "title": "[DECISION] DigestInfo DER prefix hardcoded, not constructed at runtime",
+  "description": "wolfssl_rsa.c hardcodes digestinfo_sha256/384/512_prefix as static const u8 arrays. Alternative would be runtime DER construction using asn_public.h helpers. Hardcoded is better: the prefix for each hash is fixed (RFC 8017 \u00a79.2), compile-time verifiable, and avoids any DER construction error path. The test vectors in rsa.h verify end-to-end correctness. Correct choice.",
+  "status": "closed",
+  "priority": 4,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:10:14Z",
+  "updated_at": "2026-04-18T22:23:28Z",
+  "closed_at": "2026-04-18T22:23:28Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-6ty",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T15:10:14Z"
+    }
+  ]
+}

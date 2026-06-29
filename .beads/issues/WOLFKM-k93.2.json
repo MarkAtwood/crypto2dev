@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-k93.2",
+  "title": "test_asym: add ecdh-p384 HKDF-SHA384 known-answer test",
+  "description": "Add a test case in tests/userspace/test_asym.c (or tests/kernel/test_kpp.c) that verifies ecdh-p384 agree() produces the expected HKDF-SHA384 OKM against the known-answer vector in ecdh_p384.h. Mirror the existing ecdh-p256 HKDF-SHA256 test structure.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T23:36:51Z",
+  "updated_at": "2026-04-19T23:40:48Z",
+  "closed_at": "2026-04-19T23:40:48Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-k93",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T16:36:50Z"
+    }
+  ]
+}

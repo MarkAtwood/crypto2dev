@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-39w",
+  "title": "DO_SIGN/DO_VERIFY: update hash_algo to digest-algo-id semantics",
+  "description": "Remove pre-hash path documentation from provider.h and ioctl.h. hash_algo is now the digest algorithm identifier (names the hash used to produce digest[]), not a request to hash. digest[] always contains a pre-computed digest.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:13:28Z",
+  "updated_at": "2026-04-17T22:14:13Z",
+  "closed_at": "2026-04-17T22:14:13Z"
+}

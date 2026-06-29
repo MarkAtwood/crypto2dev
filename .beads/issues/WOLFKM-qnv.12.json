@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-qnv.12",
+  "title": "is_fips=0 for wolfssl provider in stub mode",
+  "description": "wolfssl_provider.is_fips is conditionally 0 in stub mode (#ifndef CRYPTO2DEV_HAVE_WOLFCRYPT) and 1 in real mode. A contributor might simplify this to always 1 since 'wolfssl is the FIPS provider'. Defense: stub mode provides no real cryptography \u2014 the stub encrypt does memcpy and the stub hash returns zeros. If stub mode registered as FIPS (is_fips=1), it would increment fips_provider_count and cause all algorithm lookups to be restricted to 'FIPS providers', which would make the stub test environment behave differently from the real FIPS environment (stub would appear to be FIPS-exclusive). The conditional ensures stub builds don't pollute FIPS provider state.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T06:15:20Z",
+  "updated_at": "2026-04-18T06:19:55Z",
+  "closed_at": "2026-04-18T06:19:55Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-qnv",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T23:15:20Z"
+    }
+  ]
+}

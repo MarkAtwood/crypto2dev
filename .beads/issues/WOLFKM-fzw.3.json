@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-fzw.3",
+  "title": "test vectors: SHA3-384 and SHA3-512 known-answer vectors",
+  "description": "Extend tests/vectors/sha3.h with SHA3-384 and SHA3-512 known-answer vectors.\n\n**What:** Add sha3_384_vector and sha3_512_vector struct types and arrays with 4 vectors each, verified against OpenSSL.\n\n**Oracle:** OpenSSL dgst -sha3-384 / -sha3-512 (NIST FIPS 202 reference implementation)\n\n**Verified vectors for SHA3-384 (all confirmed by running openssl dgst -sha3-384):**\n1. Empty string: 0c63a75b845e4f7d01107d852e4c2485c51a50aaaa94fc61995e71bbee983a2ac3713831264adb47fb6bd1e058d5f004\n2. \"abc\" (3 bytes): ec01498288516fc926459f58e2c6ad8df9b473cb0fc08c2596da7cf0e49be4b298d88cea927ac7f539f1edf228376d25\n3. 112-byte FIPS message \"abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu\": 79407d3b5916b59c3e30b09822974791c313fb9ecc849e406f23592d04f625dc8c709b98b43b3852b337216179aa7fc7\n4. 0xA3 x 200 bytes (NIST FIPS 202 \u00a7A.1 canonical): 1881de2ca7e41ef95dc4732b8f5f002b189cc1e42b74168ed1732649ce1dbcdd76197a31fd55ee989f2d7050dd473e8f\n\n**Verified vectors for SHA3-512 (all confirmed by running openssl dgst -sha3-512):**\n1. Empty string: a69f73cca23a9ac5c8b567dc185a756e97c982164fe25859e0d1dcc1475c80a615b2123af1f5f94c11e3e9402c3ac558f500199d95b6d3e301758586281dcd26\n2. \"abc\" (3 bytes): b751850b1a57168a5693cd924b6b096e08f621827444f70d884f5d0240d2712e10e116e9192af3c91a7ec57647e3934057340b4cf408d5a56592f8274eec53f0\n3. 112-byte FIPS message: afebb2ef542e6579c50cad06d2e578f9f8dd6881d7dc824d26360feebf18a4fa73e3261122948efcfd492e74e82e2189ed0fb440d187f382270cb455f21dd185\n4. 0xA3 x 200 bytes: e76dfad22084a8b1467fcf2ffa58361bec7628edf5f3fdc0e4805dc48caeeca81b7c13c30adf52a3659584739a2df46be589c51ca1a4a8416df6545a1ce8ba00\n\n**Algorithm:**\n1. Add struct sha3_384_vector { const unsigned char *input; unsigned int input_len; const unsigned char digest[48]; const char *source; }\n2. Add static const struct sha3_384_vector sha3_384_vectors[] with 4 entries; each with generation command in comment\n3. Add #define SHA3_384_VECTOR_COUNT (sizeof/sizeof)\n4. Same pattern for sha3_512_vector with digest[64]\n5. Add SHA3_512_VECTOR_COUNT macro\n\nFollow the exact indentation and comment style of the existing sha3_256_vector section.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:35:56Z",
+  "updated_at": "2026-04-20T00:42:36Z",
+  "closed_at": "2026-04-20T00:42:36Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-fzw",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:35:56Z"
+    }
+  ]
+}

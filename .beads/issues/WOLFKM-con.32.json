@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.32",
+  "title": "Concurrency stress: open/ioctl/close vs rmmod",
+  "description": "Write a stress test fixture that runs N threads continuously doing open/INIT/write/finalize/close on /dev/crypto2dev while a separate thread repeatedly rmmod/insmod the wolfssl and kcapi provider modules. Run for at least 60 seconds under lockdep. The close/ioctl and provider-rmmod/session races were concluded safe by static analysis (fget/fput discipline, try_module_get), but the Linux module unload path between module_exit() and module fully gone has historically had edge cases. Acceptance: zero oopses, zero lockdep splats, zero KASAN splats over a 60-second run with 8 concurrent threads and continuous rmmod/insmod cycling.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:44:43Z",
+  "updated_at": "2026-04-19T00:06:30Z",
+  "closed_at": "2026-04-19T00:06:30Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:44:42Z"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "WOLFKM-98u",
+  "title": "docs/KERNEL_COMPAT.md: kernel version compatibility notes",
+  "description": "Document the kernel version compatibility matrix for wolfkm: which versions are tested, which wolfkm_compat.h shims cover which version differences, any known issues per distro/version, and the process for adding support for new kernel versions. Covers 5.10 through 6.x. Cross-references wolfkm_compat.h sections.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:56:17Z",
+  "updated_at": "2026-04-18T22:44:11Z",
+  "closed_at": "2026-04-18T22:44:11Z",
+  "design": "Sections: Supported Versions table (version, distro, kernel-version, status), API Changes Handled (what changed, which kernel version, which compat shim), Known Issues (per-version quirks), Adding a New Kernel Version (procedure). Built from the notes accumulated while writing wolfkm_compat.h.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-5j8",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:32Z"
+    }
+  ]
+}

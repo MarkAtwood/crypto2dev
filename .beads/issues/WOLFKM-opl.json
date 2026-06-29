@@ -1,0 +1,33 @@
+{
+  "id": "WOLFKM-opl",
+  "title": "userspace tests for asymmetric chardev ops (RSA, ECDH, ECDSA)",
+  "description": "Write userspace test programs exercising DO_SIGN, DO_VERIFY, DO_AGREE via /dev/crypto2dev for the new asymmetric providers.\n\n## Why this exists\nThe kernel test modules (test_akcipher.c, test_kpp.c) test wolfcrypt.ko's kernel crypto API registrations. These tests exercise the /dev/crypto2dev chardev path using the same KAT vectors.\n\n## Tests to write\n  tests/userspace/test_rsa_chardev.c or test_rsa.c:\n    - open /dev/crypto2dev\n    - write PKCS#8 private key bytes (from tests/vectors/rsa.h rsa2048_priv_der)\n    - KEY_IMPORT ioctl (algo='rsa-2048', key_type=PRIVATE)\n    - DO_SIGN with rsa2048_test_digest \u2192 compare to rsa2048_test_sig\n    - KEY_IMPORT public key \u2192 DO_VERIFY \u2192 expect 0\n    - Tampered sig \u2192 DO_VERIFY \u2192 expect -EBADMSG\n\n  tests/userspace/test_ecdh_chardev.c or test_ecdh.c:\n    - KEY_IMPORT A_priv (ecdh_a_priv_der from tests/vectors/ecdh.h)\n    - DO_AGREE with B_pub (ecdh_b_raw_pub), no salt/info \u2192 compare OKM prefix (HKDF deterministic)\n    - Note: HKDF output is deterministic for fixed inputs, so KAT is possible\n\n  tests/userspace/test_ecdsa_chardev.c or test_ecdsa.c:\n    - KEY_IMPORT private \u2192 DO_SIGN \u2192 KEY_IMPORT public \u2192 DO_VERIFY \u2192 0\n    - DO_VERIFY with tampered sig \u2192 -EBADMSG\n    - DO_VERIFY with NIST FIPS 186-4 known ECDSA-P256 vector \u2192 0\n\n## Infrastructure\n  All three tests should follow the pattern of tests/userspace/test_chardev.c\n  Check for STUB MODE warning in /proc/crypto2dev or dmesg before running\n  Return non-zero exit code on any failure (for CI script detection)\n\n## Vectors\n  RSA: already in tests/vectors/rsa.h\n  ECDH: already in tests/vectors/ecdh.h and ecdh_p384.h\n  ECDSA: need NIST FIPS 186-4 P-256 sign/verify known-answer vector (generate with OpenSSL or use NIST ACVP vectors)",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T18:38:04Z",
+  "updated_at": "2026-04-18T19:11:57Z",
+  "closed_at": "2026-04-18T19:11:57Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-1bw",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T11:38:11Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-a1c",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T11:38:13Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-epa",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T11:38:12Z"
+    }
+  ]
+}

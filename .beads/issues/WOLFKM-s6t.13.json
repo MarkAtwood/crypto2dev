@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-s6t.13",
+  "title": "Crypto misuse: kcapi AEAD sess_init ctx kfree without memzero_explicit on setauthsize error",
+  "description": "In kcapi_aead_sess_init (kcapi_aead.c), the error path after crypto_aead_setauthsize fails goes to err_free_tfm which calls crypto_free_aead(tfm) and then falls through to err_free_ctx which calls kfree(ctx) without memzero_explicit. At this point ctx->op contains the op direction and ctx->authsize is partially set. Although no raw key bytes live in ctx itself (the key went into tfm which is freed), any future allocation at the same address will find the op and authsize fields. More critically: if crypto_aead_setkey succeeds but setauthsize fails, the key has already been installed in tfm. tfm is freed via crypto_free_aead. The ctx struct itself is freed without memzero. ctx does not contain the raw key, so impact is low, but the pattern violates the project's uniform zeroization discipline and could silently become dangerous if ctx fields are extended to include key material.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:22:03Z",
+  "updated_at": "2026-04-20T03:42:03Z",
+  "closed_at": "2026-04-20T03:42:03Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:22:03Z"
+    }
+  ]
+}

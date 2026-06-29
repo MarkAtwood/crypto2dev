@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-dfn.12",
+  "title": "UAPI: _pad[4] in crypto2dev_init_op not validated as zero",
+  "description": "crypto2dev_init_op._pad[4] is documented 'must be zero' in the UAPI header but ioctl_init (src/cdev/crypto2dev_fd.c) does not check or reject nonzero values. Future ABI extension relying on _pad to signal new semantics will have ambiguous meaning if old callers set those bytes to garbage. Fix: add explicit check and return -EINVAL if any _pad byte is nonzero.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:03:49Z",
+  "updated_at": "2026-04-18T00:55:51Z",
+  "closed_at": "2026-04-18T00:55:51Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dfn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T17:03:49Z"
+    }
+  ]
+}

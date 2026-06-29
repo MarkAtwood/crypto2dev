@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-t6k",
+  "title": "crypto2dev_skcipher.c: register cbc(aes), ctr(aes), xts(aes)",
+  "description": "Register three AES skcipher algorithms into the kernel crypto API using wolfCrypt as the implementation. Each algorithm: .cra_name is the composed name consumers request (e.g. 'cbc(aes)'), .cra_driver_name is 'wolfkm-cbc-aes', .cra_priority is 300. Context struct wolfkm_aes_ctx wraps wolfCrypt Aes struct. Callbacks: .setkey calls wolfkm_fips_gate() then wc_AesSetKey(); .encrypt/.decrypt call wolfkm_fips_gate() then wolfCrypt scatter-capable API; .exit calls wc_AesFree() then memzero_explicit(). Register all three as a batch via crypto_register_skciphers().",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "feature",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:53:37Z",
+  "updated_at": "2026-04-18T01:08:03Z",
+  "closed_at": "2026-04-18T01:08:03Z",
+  "design": "Before writing any code: read /proc/crypto on a vanilla kernel to confirm exact .cra_name strings. Do NOT use 'aes-cbc-wolfkm' \u2014 use 'cbc(aes)'. Do NOT linearize scatterlists into bounce buffers; use wolfCrypt's streaming scatter API. FIPS gate is the FIRST line of every callback. .exit must use memzero_explicit() not memset() (compiler may elide memset). See DESIGN.md \u00a7skcipher.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dvd",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:04Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-tp5.8",
+  "title": "ioctl_init: algo empty check after forced null-termination is off-by-one",
+  "description": "In ioctl_init(), the code does: op.algo[CRYPTO2DEV_ALGO_MAXLEN - 1] = '\\0' then checks 'if (op.algo[0] == 0) return -EINVAL'. This is correct. However: if the user passes an algo string that is exactly CRYPTO2DEV_ALGO_MAXLEN bytes with no null terminator (all 64 bytes are non-null), after the forced null-termination, op.algo[63] is overwritten with '\\0'. The effective algo string is truncated to 63 chars. This truncation happens silently \u2014 the algo_lookup will then look for the truncated name. If the intended algo name was exactly 64 chars (no terminator), the user gets -ENOENT instead of -EINVAL. This is a minor AX issue: the UAPI says algo is 'null-terminated' so a 64-byte non-null string is malformed input. However, the error returned (-ENOENT from lookup vs -EINVAL for bad input) is misleading. Same issue exists in ioctl_key_import and ioctl_key_generate. Trigger: pass algo[63]='x' with all 64 bytes non-null \u2192 gets silently truncated to 63 chars \u2192 -ENOENT rather than -EINVAL. Not a safety issue but a UAPI contract violation.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:39:55Z",
+  "updated_at": "2026-04-18T04:07:47Z",
+  "closed_at": "2026-04-18T04:07:47Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:39:54Z"
+    }
+  ]
+}

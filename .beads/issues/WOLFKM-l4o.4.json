@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-l4o.4",
+  "title": "Implement sess_reset in kcapi providers",
+  "description": "kcapi_skcipher.c: sess_reset frees and re-allocates the skcipher request context; the crypto_skcipher tfm (with key already set) can be reused \u2014 just clear iv, ivlen, inbuf_len. kcapi_hash.c: sess_reset clears inbuf_len (no re-alloc needed, just reset the length counter). kcapi_aead.c: sess_reset clears inbuf_len, aad, tag, taglen, processed. All three update ops struct with .sess_reset.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:11Z",
+  "updated_at": "2026-04-17T18:28:16Z",
+  "closed_at": "2026-04-17T18:28:16Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-l4o",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:11Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-l4o.1",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:35Z"
+    }
+  ]
+}

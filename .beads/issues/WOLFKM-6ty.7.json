@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-6ty.7",
+  "title": "wolfssl_ec_key.h: static inline function bodies in shared header",
+  "description": "wolfssl_ec_key.h defines wolfssl_ec_ctx, wolfssl_ec_xlat_err, wolfssl_ec_key_import, wolfssl_ec_key_generate, wolfssl_ec_key_export_public, wolfssl_ec_key_export_private, and wolfssl_ec_key_free as static or static inline. Both wolfssl_ecdh.c and wolfssl_ecdsa.c include it, producing duplicate copies in each TU. Any third consumer (e.g. ml-dsa, x25519) adds another copy. Text bloat aside, wolfssl_ec_xlat_err logs pr_err_ratelimited \u2014 each TU has its own rate-limit bucket, so the rate limit won't work as intended. Fix: move all non-trivial bodies to wolfssl_ec_key.c, keep only the struct definition and extern declarations in the header.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:09:27Z",
+  "updated_at": "2026-04-18T22:22:30Z",
+  "closed_at": "2026-04-18T22:22:30Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-6ty",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T15:09:27Z"
+    }
+  ]
+}

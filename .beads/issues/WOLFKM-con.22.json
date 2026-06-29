@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.22",
+  "title": "init_op.key_fd comment says reserved/must-be-1 but code uses it",
+  "description": "In include/uapi/crypto2dev_ioctl.h, the key_fd field comment in struct crypto2dev_init_op (line 149) reads: 'reserved; must be -1 (KEY fds: asymmetric only)'. The ioctl description above it (lines 129-133) correctly documents that key_fd can be set to a KEY fd holding CRYPTO2DEV_KEY_SYMMETRIC to supply the session key. These two statements directly contradict each other. A user reading only the struct-level field comment will never attempt to use the KEY fd path, or will be misled about asymmetric vs symmetric semantics. Bad outcome: API misuse and potential confusion \u2014 users may pass asymmetric KEY fds expecting rejection based on the comment rather than the actual SYMMETRIC key path.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:49Z",
+  "updated_at": "2026-04-19T21:24:02Z",
+  "closed_at": "2026-04-19T21:24:02Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:37:49Z"
+    }
+  ]
+}

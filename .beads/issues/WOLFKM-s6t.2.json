@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-s6t.2",
+  "title": "Observability: set_aad/get_tag/set_tag/key_export_public silent on callback failure",
+  "description": "set_aad, get_tag, set_tag (crypto2dev_fd.c lines ~977, 1014, 1063) and key_export_public in read() (~line 533) have no pr_err on callback failure. A support engineer seeing -EINVAL or -EIO from SET_AAD/GET_TAG/SET_TAG or from read() on a KEY fd cannot determine from dmesg what the provider returned or why \u2014 the only log is the kernel errno returned to userspace with no context.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:21:22Z",
+  "updated_at": "2026-04-20T04:28:53Z",
+  "closed_at": "2026-04-20T04:28:53Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:21:21Z"
+    }
+  ]
+}

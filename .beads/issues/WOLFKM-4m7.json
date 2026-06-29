@@ -1,0 +1,22 @@
+{
+  "id": "WOLFKM-4m7",
+  "title": "tests/userspace/test_ipsec.sh: IPsec xfrm tunnel with AES-GCM",
+  "description": "Shell script that creates two network namespaces connected by a veth pair, establishes an IPsec/xfrm tunnel using AES-GCM-128 (the FIPS-approved AEAD for IPsec), sends traffic through the tunnel, and verifies it arrives intact. Confirms wolfkm's gcm(aes) is used for tunnel encryption. Requires root and ip/iproute2.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:57:20Z",
+  "updated_at": "2026-04-18T17:18:43Z",
+  "closed_at": "2026-04-18T17:18:43Z",
+  "design": "Two netns: ns_left and ns_right. veth pair: veth0/veth1. xfrm state: ip xfrm state add with proto esp, enc aes-gcm-128, reqid 1. xfrm policy: ip xfrm policy add. Ping and netcat transfer. Check /proc/crypto for wolfkm-gcm-aes during tunnel operation. See DESIGN.md \u00a7test_ipsec. Clean up with ip netns del.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-vit",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:31Z"
+    }
+  ]
+}

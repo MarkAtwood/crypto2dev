@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-7b5.25",
+  "title": "Defend: pad field zero-check on all ioctl structs prevents future ABI ambiguity",
+  "description": "crypto2dev_fd.c \u2014 every ioctl handler that accepts a struct with a _pad field calls memchr_inv(op._pad, 0, sizeof(op._pad)) and returns -EINVAL if any pad byte is nonzero. A reviewer might suggest 'just ignore pad bytes, callers shouldn't be setting them'. This is wrong for stable ABI design: if a future kernel version assigns meaning to a pad byte (say, to enable a new behavior), old userspace that passes garbage in that field would silently get the new behavior enabled. By requiring pad bytes to be zero now, we ensure that any future assignment of those bytes is an opt-in: old binaries (which zero their structs) get the default; new binaries that set the byte get the new behavior. This is the same discipline used by io_uring and other modern kernel ABIs.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:20:56Z",
+  "updated_at": "2026-04-18T17:35:59Z",
+  "closed_at": "2026-04-18T17:35:59Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7b5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T22:20:55Z"
+    }
+  ]
+}

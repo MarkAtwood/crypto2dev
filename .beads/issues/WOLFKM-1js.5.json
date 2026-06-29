@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-1js.5",
+  "title": "HKDF iterations field not rejected when non-zero \u2014 silent mismatch",
+  "description": "fd.c:1704 enforces iterations >= 1000 only when algo starts with 'pbkdf2'. For HKDF algos, a non-zero iterations value is silently ignored. UAPI doc says 'Ignored for HKDF (set to 0)' \u2014 this is documentation advice, not enforcement. A user who accidentally passes iterations=500 with hkdf(sha256) thinking they are getting a 500-round KDF will get plain HKDF with no error and no warning. Maintenance consequence: this will generate user confusion issues ('I set iterations=500 and it succeeded') and the answer is non-obvious. Fix: reject iterations \\!= 0 for HKDF algos with -EINVAL, or emit pr_warn_once. Simple check: strncmp(op.algo, 'hkdf', 4) == 0 && op.iterations \\!= 0.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T15:57:41Z",
+  "updated_at": "2026-04-18T17:06:52Z",
+  "closed_at": "2026-04-18T17:06:52Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-1js",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T08:57:41Z"
+    }
+  ]
+}

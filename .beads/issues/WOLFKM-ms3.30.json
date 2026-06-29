@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-ms3.30",
+  "title": "is_fips flag single-pass lookup \u2014 simpler and race-free",
+  "description": "The is_fips field on struct crypto2dev_provider drives a module-level atomic counter (fips_provider_count). During lookup, fips_mode is read once under read_lock and applied uniformly to the entire traversal. This is simpler and more correct than a two-pass approach (first collect FIPS providers, then search them) which would require dropping and re-acquiring the lock between passes or a larger critical section. A reviewer might suggest checking p->is_fips inline per-provider rather than reading the counter upfront \u2014 that would be equivalent but less clear. The current approach is right: one snapshot, one traversal, no second pass.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:04:33Z",
+  "updated_at": "2026-04-18T03:27:18Z",
+  "closed_at": "2026-04-18T03:27:18Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ms3",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:04:33Z"
+    }
+  ]
+}

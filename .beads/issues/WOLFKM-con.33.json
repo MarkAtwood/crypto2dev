@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.33",
+  "title": "pahole struct layout ground-truth verification",
+  "description": "Run 'pahole crypto2dev.ko' (or 'pahole -C <struct_name> crypto2dev.ko' for each UAPI struct) on the built module and verify zero holes in all 14 UAPI structs in crypto2dev_ioctl.h. The UAPI audit verified layout manually by inspection; pahole is ground truth from the actual compiler output. Also run on both 64-bit and 32-bit builds if a 32-bit build target is available, since u32/u64 adjacency padding differs. Acceptance: pahole reports 0 holes in all UAPI structs on 64-bit. If a 32-bit build is available, same check. Any hole found is filed as a UAPI stability bug.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:44:47Z",
+  "updated_at": "2026-04-19T00:06:19Z",
+  "closed_at": "2026-04-19T00:06:19Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:44:47Z"
+    }
+  ]
+}

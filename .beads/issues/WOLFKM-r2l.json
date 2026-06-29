@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-r2l",
+  "title": "crypto2dev_akcipher.c: register RSA sign/verify/encrypt/decrypt",
+  "description": "Register RSA as a kernel akcipher algorithm. Implement: .set_pub_key (DER-encoded, call wc_RsaPublicKeyDecode), .set_priv_key (DER-encoded, call wc_RsaPrivateKeyDecode), .encrypt (wc_RsaPublicEncrypt), .decrypt (wc_RsaPrivateDecrypt), .sign (wc_RsaSSL_Sign), .verify (wc_RsaSSL_Verify), .max_size (return key size in bytes). Context struct holds wolfCrypt RsaKey and WC_RNG. RsaKey must be initialized with wc_InitRsaKey before use and freed with wc_FreeRsaKey on exit (memzero_explicit the context).",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "feature",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:53:46Z",
+  "updated_at": "2026-04-18T01:08:02Z",
+  "closed_at": "2026-04-18T01:08:02Z",
+  "design": "RSA operations require a WC_RNG for blinding \u2014 initialize once in .init, free in .exit. FIPS minimum key size is 2048 bits \u2014 return -EINVAL for smaller keys and document this in a comment. DER key format: the kernel akcipher API passes raw DER bytes. Output buffer for .max_size must be the modulus length in bytes. See DESIGN.md \u00a7akcipher.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dvd",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:05Z"
+    }
+  ]
+}

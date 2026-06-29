@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-4l7.6",
+  "title": "PBKDF2 minimum iterations enforced at both registration and ioctl layers",
+  "description": "PBKDF2 minimum iteration count (CRYPTO2DEV_KDF_MIN_ITERATIONS = 1000, per SP 800-132 \u00a75.2) is checked at two independent layers: (1) at provider registration time \u2014 registry validates p->min_iterations >= CRYPTO2DEV_KDF_MIN_ITERATIONS and emits pr_warn if violated (crypto2dev_registry.c); (2) at ioctl_do_kdf dispatch time \u2014 the framework rejects op.iterations < CRYPTO2DEV_KDF_MIN_ITERATIONS regardless of provider claims. A reviewer might remove the registration check as redundant since the ioctl check catches violations. That would allow a misconfigured provider to advertise min_iterations=100 without any early warning, with no indication in the ring buffer until actual PBKDF2 operations are attempted. Defense-in-depth: catch provider misconfiguration at load time, not first use.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T11:47:01Z",
+  "updated_at": "2026-04-20T11:51:31Z",
+  "closed_at": "2026-04-20T11:51:31Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-4l7",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-20T04:47:01Z"
+    }
+  ]
+}

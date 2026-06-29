@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-qnv.7",
+  "title": "ioctl_key_import: success path falls through out_inbuf_clear label",
+  "description": "After successful key_import, inbuf_clear is called inline (line 1552), state fields are set, ret=0, then execution falls through out_inbuf_clear: which calls inbuf_clear again. The comment at that label says 'on all error paths' but it runs on success too. The double call is harmless (inbuf is NULL after first clear; inbuf_clear checks this), but the label name and comment are misleading and a future maintainer adding logic before out_inbuf_clear: could introduce a bug. Suggested rewrite: add 'goto out;' before out_inbuf_clear: so the success path only calls inbuf_clear once, inline. This makes the label comment correct.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "chore",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T06:14:49Z",
+  "updated_at": "2026-04-18T06:19:44Z",
+  "closed_at": "2026-04-18T06:19:44Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-qnv",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T23:14:49Z"
+    }
+  ]
+}

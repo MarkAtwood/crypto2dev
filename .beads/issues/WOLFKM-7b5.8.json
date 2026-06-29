@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7b5.8",
+  "title": "Correctness: KEY_IMPORT early error paths do not zeroize inbuf",
+  "description": "Trigger: write() sensitive key bytes to an fd, then call CRYPTO2DEV_IOC_KEY_IMPORT with bad parameters (e.g. algo empty, keylen == 0, invalid key_type, nonzero _pad, or inbuf_len != op.keylen). ioctl_key_import (fd.c ~lines 1462-1490) has multiple early-return paths before and immediately after acquiring the lock that return -EINVAL without calling inbuf_clear(). Bad outcome: the sensitive key bytes accumulated in state->inbuf remain in kernel heap until fd close(). On the happy path and on the post-key_import error path, inbuf_clear() is called (line 1515). The pre-validation error paths and the inbuf_len mismatch path (line 1489 goto out) are not covered. This is a FIPS 140-3 zeroization violation. Fix: call inbuf_clear() on all error return paths from ioctl_key_import, including the early ones before mutex_lock.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:19:40Z",
+  "updated_at": "2026-04-18T05:30:36Z",
+  "closed_at": "2026-04-18T05:30:36Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7b5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T22:19:40Z"
+    }
+  ]
+}

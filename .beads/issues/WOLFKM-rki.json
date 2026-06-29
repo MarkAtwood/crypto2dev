@@ -1,0 +1,12 @@
+{
+  "id": "WOLFKM-rki",
+  "title": "Provider architecture: break wolfSSL hard dependency",
+  "description": "crypto2dev.ko is hard-wired to wolfcrypt.ko. Every wolfCrypt type (Aes, wc_Sha256, RsaKey, etc.) is baked into crypto2dev_fd_state. We need a clean provider abstraction so that multiple crypto backends can register algorithms at load time, and crypto2dev.ko contains zero crypto code of its own.\\n\\nScope:\\n- New include/crypto2dev_provider.h with algo_ops vtable and provider registration API\\n- crypto2dev.ko becomes pure framework: chardev + registry + dispatch, no wolfCrypt symbols\\n- crypto2dev_wolfssl.ko becomes a new loadable provider module\\n- Stub mode = don't load wolfssl provider module at all\\n- Algo dispatch: first-registered wins\\n\\nAcceptance criteria:\\n- crypto2dev.ko has zero wolfcrypt.ko symbol dependencies\\n- A second provider module can be loaded alongside wolfssl provider\\n- All existing tests pass against wolfssl provider",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "feature",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T15:19:48Z",
+  "updated_at": "2026-04-16T15:37:03Z",
+  "closed_at": "2026-04-16T15:37:03Z"
+}

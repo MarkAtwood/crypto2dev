@@ -1,0 +1,23 @@
+{
+  "id": "WOLFKM-5j8",
+  "title": "crypto2dev_compat.h: kernel 5.10\u20136.x compatibility shims",
+  "description": "The kernel crypto API changed in several places between 5.10 and 6.x. This header provides version-gated shims so the registration code does not litter #ifdefs. Must handle at minimum: crypto_skcipher_alg struct layout changes, CRYPTO_ALG_* flag differences, scatterwalk API changes between versions, and any mutex/refcount API changes. Shims go in wolfkm_compat.h (included by all src/ files via wolfkm_reg.h).",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:53:12Z",
+  "updated_at": "2026-04-18T01:02:29Z",
+  "closed_at": "2026-04-18T01:02:29Z",
+  "notes": "Target kernels: 5.10 (RHEL 8 backport), 5.15 (Ubuntu 22.04, Debian 12), 6.1 (Debian 13), 6.6 (Ubuntu 24.04 HWE), 6.8 (Ubuntu 24.04). RHEL 9 (5.14) is also a target.",
+  "design": "Use #include <linux/version.h> and LINUX_VERSION_CODE / KERNEL_VERSION() macros. Pattern: #if LINUX_VERSION_CODE < KERNEL_VERSION(x,y,z) ... #else ... #endif. Consult /proc/version on target kernels. Document each shim with the kernel version it covers and why.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-bl1",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:02Z"
+    }
+  ]
+}

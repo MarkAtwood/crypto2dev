@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-l4o.3",
+  "title": "Implement sess_reset in wolfssl cipher providers (AES-CBC, AES-GCM)",
+  "description": "wolfssl_aes_cbc.c: sess_reset calls wc_AesFree then wc_AesInit+wc_AesSetKey \u2014 requires adding u8 stored_key[32] and u32 stored_keylen to wolfssl_aes_cbc_ctx and populating in sess_init. Clear inbuf (krealloc to 0 or just reset inbuf_len). wolfssl_aes_gcm.c: same pattern \u2014 add stored_key/stored_keylen, reset with wc_AesFree+wc_AesInit+wc_AesGcmSetKey. Also clear AAD, tag, ivlen, processed, inbuf state. sess_free must zeroize stored_key. Both update ops struct with .sess_reset.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:04Z",
+  "updated_at": "2026-04-17T18:28:16Z",
+  "closed_at": "2026-04-17T18:28:16Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-l4o",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:04Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-l4o.1",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:33Z"
+    }
+  ]
+}

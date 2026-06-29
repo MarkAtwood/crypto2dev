@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-533",
+  "title": "Audit: crypto2dev 2026-04-19",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:25:52Z",
+  "updated_at": "2026-04-20T05:49:32Z",
+  "closed_at": "2026-04-20T05:49:32Z",
+  "notes": "UAPI stability risk: LOW \u2014 struct layouts are padding-clean, all reserved fields validated in write-direction ioctls, string null-termination consistent across all handlers, tombstoned slots return -ENOTTY correctly; two minor GET_STATE diagnostic gaps found (outbuf_pending not reported for KEY fds, inbuf_pending not reported for UNSET fds)\nConfidence: FIPS gate coverage: 97% (16 provider files exhaustively checked, zero violations \u2014 residual risk is callbacks added in future without following the pattern; one idiom question 533.18 needs live fips.h to close). Key material leak risk: 10% (two real leaks found SHA/keygen-inbuf; CBC zero-IV adds a reuse path; remaining risk is a path not exercised in static review). UAPI stability: LOW (structs padding-clean, all reserved fields validated, tombstones correct; two GET_STATE diagnostic gaps). Gaps: cannot verify wolfssl_fips_gate correctness without real wolfcrypt.ko fips.h; no lockdep run to catch lock ordering; no dynamic test coverage data showing all error paths exercised. Would raise confidence with: (1) lockdep run under KVM with all providers loaded, (2) CMVP lab verification of fips_gate idiom, (3) sparse/smatch static analysis pass."
+}

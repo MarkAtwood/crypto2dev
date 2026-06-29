@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7b5.7",
+  "title": "Observability: unhandled wolfCrypt error codes silently become -EIO",
+  "description": "All four xlat_err functions (wolfssl_cbc_xlat_err, wolfssl_gcm_xlat_err, wolfssl_hmac_xlat_err, wolfssl_sha_xlat_err, wolfssl_cmac_xlat_err) send unrecognized wc_err codes to pr_debug_ratelimited then return -EIO. In production, pr_debug is not emitted unless dyndbg is explicitly enabled. A support engineer handed a -EIO return and no ring buffer message cannot determine which wolfCrypt error occurred \u2014 the raw error code is permanently lost. The debug log should be pr_err_ratelimited, or the wc_err must be included in the caller-level log. Affected default: branches in wolfssl_aes_cbc.c:66, wolfssl_aes_gcm.c:78, wolfssl_hmac.c:43, wolfssl_sha.c:69, wolfssl_cmac.c:43.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:19:37Z",
+  "updated_at": "2026-04-18T05:39:24Z",
+  "closed_at": "2026-04-18T05:39:24Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7b5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T22:19:36Z"
+    }
+  ]
+}

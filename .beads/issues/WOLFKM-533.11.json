@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-533.11",
+  "title": "Observability: ioctl_init -EBUSY path emits no log",
+  "description": "When ioctl_init is called on an already-initialized fd (fd_type != FDTYPE_UNSET), it returns -EBUSY (line 742) with no log message. A support engineer cannot tell from the ring buffer that a double-INIT was attempted, what algo was requested, or what the fd was already initialized as. This is a common application bug that currently produces a silent kernel-side failure.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:29:00Z",
+  "updated_at": "2026-04-20T05:48:39Z",
+  "closed_at": "2026-04-20T05:48:39Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-533",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T22:28:59Z"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "WOLFKM-dud.1",
+  "title": "Review: WARN_ON does not abort \u2014 tag_len==0 silently skips tag verification in test_aead.c",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:31:46Z",
+  "updated_at": "2026-04-20T02:37:45Z",
+  "closed_at": "2026-04-20T02:37:45Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dud",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:31:45Z"
+    }
+  ]
+}

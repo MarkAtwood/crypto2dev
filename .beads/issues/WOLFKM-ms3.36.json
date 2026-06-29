@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-ms3.36",
+  "title": "iv_set enforcement prevents IV reuse across RESET",
+  "description": "write() and ioctl_finalize() both check 'state->ops->set_iv && \\!state->iv_set' and return -EINVAL if the IV has not been set for an IV-requiring algorithm. ioctl_reset() clears iv_set=false when re-arming the session. This means every new operation after RESET must explicitly supply a fresh IV via SET_IV or GEN_IV \u2014 accidental IV reuse across operations is structurally prevented. A reviewer might suggest removing the check to allow callers to reuse the IV (e.g. for streaming AES-CTR) \u2014 do not do this without a careful API extension. IV reuse in CBC is catastrophically insecure; the correct approach is a new ioctl or a per-algo exception with documented semantics, not removing the gate.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:04:48Z",
+  "updated_at": "2026-04-18T03:27:11Z",
+  "closed_at": "2026-04-18T03:27:11Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ms3",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:04:47Z"
+    }
+  ]
+}

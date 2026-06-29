@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7b5.18",
+  "title": "Observability: kcapi_aead encrypt/decrypt failures emit no log",
+  "description": "kcapi_aead_encrypt (kcapi_aead.c:198-263) and kcapi_aead_decrypt (kcapi_aead.c:265-335) can fail via crypto_alloc_aead returning PTR_ERR (handled in sess_init), but the actual crypto_aead_encrypt/decrypt failures at lines :244 and :316 fall through to out_free_req and return ret with no log message. crypto_wait_req returning non-zero (e.g. -EBADMSG on auth tag mismatch, or a driver error) produces no ring buffer entry. A support engineer cannot distinguish a driver failure from an auth-tag mismatch from an IV problem without a debugger. The wolfssl GCM path does log at the provider level (pr_err_ratelimited for wc_AesGcmDecrypt); the kcapi path produces nothing.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:20:08Z",
+  "updated_at": "2026-04-18T05:32:54Z",
+  "closed_at": "2026-04-18T05:32:54Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7b5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T22:20:07Z"
+    }
+  ]
+}

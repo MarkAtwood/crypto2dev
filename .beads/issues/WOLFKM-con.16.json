@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.16",
+  "title": "finalize() reserves only 64 B; batching AEAD providers silently fail",
+  "description": "Trigger: any GCM or batching cipher provider that accumulates all data in update() with outlen=0 and flushes everything in finalize(). ioctl_finalize() calls outbuf_grow(state, CRYPTO2DEV_HASH_MAXLEN=64) reserving only 64 bytes, then hard-errors if produced > 64. The provider API explicitly permits finalize() to produce the full ciphertext (GCM: encrypted payload). Bad outcome: for any payload > 64 bytes with a batching GCM provider, -EOVERFLOW or -EIO is returned and state->error is set, making the session permanently dead.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:26Z",
+  "updated_at": "2026-04-19T21:23:43Z",
+  "closed_at": "2026-04-19T21:23:43Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:37:26Z"
+    }
+  ]
+}

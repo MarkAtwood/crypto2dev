@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-6ty.5",
+  "title": "wolfssl_ec_key_import: SPKI DER import does not validate curve matches ctx",
+  "description": "In wolfssl_ec_key_import, when key_type is PUBLIC and raw[0]==0x30 (SPKI DER), the code calls wc_EccPublicKeyDecode without verifying the decoded curve matches ctx->curve_id. A P-384 SPKI DER can be imported into an ecdh-p256 or ecdsa-p256 context. Subsequent operations will use P-256 parameters (scalar_len=32, pubkey_len=65) against a P-384 key, producing incorrect results or wolfCrypt errors at operation time with confusing diagnostics. Fix: after wc_EccPublicKeyDecode, call wc_ecc_get_curve_id() on the decoded key and verify it equals ctx->curve_id.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:09:14Z",
+  "updated_at": "2026-04-18T22:17:42Z",
+  "closed_at": "2026-04-18T22:17:42Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-6ty",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T15:09:13Z"
+    }
+  ]
+}

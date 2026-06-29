@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-tp5.24",
+  "title": "fips_aggregate() calls gate functions outside spinlock \u2014 correct for PREEMPT_RT",
+  "description": "Why it is right: crypto2dev_fips_aggregate() snapshots gate function pointers and module refs under the read lock, then releases the lock and calls the gates. wolfssl's fips_gate() emits pr_err_ratelimited() which acquires a ratelimit spinlock. Calling that while already holding provider_lock (a spinlock) would be a lock ordering violation on PREEMPT_RT kernels where spinlocks are sleeping. The pattern \u2014 snapshot refs under lock, call outside \u2014 is the correct kernel idiom. What a reviewer might incorrectly suggest: 'simplify by calling the gate functions while holding the read lock.' That change would silently introduce a lock inversion bug that only manifests on PREEMPT_RT (Ubuntu RT kernels, RHEL RT). The module_put() cleanup loop on early-return-from-failure path also correctly releases refs for all uncalled gates.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:40:58Z",
+  "updated_at": "2026-04-18T04:09:36Z",
+  "closed_at": "2026-04-18T04:09:36Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:40:58Z"
+    }
+  ]
+}

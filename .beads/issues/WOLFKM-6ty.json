@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-6ty",
+  "title": "Review: RSA, ECDH, ECDSA wolfssl providers; build fixes",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:05:07Z",
+  "updated_at": "2026-04-18T22:23:33Z",
+  "closed_at": "2026-04-18T22:23:33Z",
+  "notes": "Confidence calibration (2026-04-18): High confidence (~90%) on WOLFKM-6ty.1 (wolfssl_rsa_xlat_err(-22) \u2192 -EIO), WOLFKM-6ty.3 (memcmp not constant-time), WOLFKM-6ty.4 (SHA-1 digest accepted by FIPS-gated ECDSA). High confidence (~85%) on WOLFKM-6ty.2 (wrong errno type), WOLFKM-6ty.5 (curve mismatch not caught), WOLFKM-6ty.7 (static bodies in header). Medium confidence (~70%) on WOLFKM-6ty.6 (okm_len bound \u2014 depends on whether ioctl_do_agree validates this before calling provider; did not read full ioctl_do_agree in this review). Medium confidence (~75%) on WOLFKM-6ty.9 (rsa-4096 accepting 2048-bit key \u2014 need to confirm FIPS requires algo-name-exact size enforcement). Files NOT read in this review: full ioctl_do_agree handler, wolfssl_aes_gcm.c, wolfssl_hmac.c, tests/vectors/rsa.h."
+}

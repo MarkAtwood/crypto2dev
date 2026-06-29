@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7d6.2",
+  "title": "Expand GCM nonce reuse documentation with concrete consequences",
+  "description": "In docs/programmers_guide.md Gotchas section: expand the nonce reuse entry to explicitly state that GCM nonce reuse under the same key allows full recovery of the GHASH authentication key, making all past and future ciphertexts under that key forgeable and potentially decryptable. Recommend GEN_IV for encrypt sessions \u2014 it is random and cannot reuse. For decrypt sessions SET_IV is required (the sender chose the nonce). Add a note that the interface does not enforce nonce uniqueness and that enforcement is the caller's responsibility.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:43Z",
+  "updated_at": "2026-04-18T22:39:55Z",
+  "closed_at": "2026-04-18T22:39:55Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7d6",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:43Z"
+    }
+  ]
+}

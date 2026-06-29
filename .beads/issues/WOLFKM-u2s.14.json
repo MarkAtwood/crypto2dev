@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-u2s.14",
+  "title": "ioctl_do_kdf: copy_from_user failure path leaks IKM in inbuf without zeroizing",
+  "description": "In ioctl_do_kdf() (src/cdev/crypto2dev_fd.c, lines 1725-1726):\n\n    if (copy_from_user(&op, (void __user *)arg, sizeof(op)))\n        return -EFAULT;   /* \u2190 returns without clearing inbuf */\n\nThe caller writes IKM (input keying material \u2014 a secret) to the fd via write()\nbefore calling DO_KDF.  This IKM is held in state->inbuf.\n\nIf copy_from_user() fails (invalid user pointer), the function returns -EFAULT\nimmediately.  state->inbuf is NOT zeroized and NOT freed.  The IKM remains in\nkernel memory until the fd is closed.\n\nFIPS 140-3 requirement (Critical Security Parameter zeroization): CSPs must be\nzeroized on every exit path, including error paths.  A missed zeroization is a\nFIPS compliance failure regardless of whether the memory is later freed.\n\nCompare with ioctl_key_import() which was fixed this session (lines 1597-1603):\n    if (copy_from_user(&op, (void __user *)arg, sizeof(op))) {\n        mutex_lock(&state->lock);\n        inbuf_clear(state);\n        mutex_unlock(&state->lock);\n        return -EFAULT;\n    }\n\nThe same pattern must be applied to ioctl_do_kdf().\n\nNote: the out_zero: label at line 1895 does call inbuf_clear, but it is NOT\nreached from the copy_from_user early return at line 1726 \u2014 the 'return -EFAULT'\nbypasses the goto chain entirely.\n\nFix: apply the same pattern as ioctl_key_import:\n    if (copy_from_user(&op, (void __user *)arg, sizeof(op))) {\n        mutex_lock(&state->lock);\n        inbuf_clear(state);\n        mutex_unlock(&state->lock);\n        return -EFAULT;\n    }\n\nFile: src/cdev/crypto2dev_fd.c, ioctl_do_kdf(), lines 1725-1726",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:34:51Z",
+  "updated_at": "2026-04-19T21:43:57Z",
+  "closed_at": "2026-04-19T21:43:57Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-u2s",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T14:34:50Z"
+    }
+  ]
+}

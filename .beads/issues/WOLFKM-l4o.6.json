@@ -1,0 +1,26 @@
+{
+  "id": "WOLFKM-l4o.6",
+  "title": "Update example_provider.c with sess_reset stub",
+  "description": "Add example_reset(void *ctx) stub function to example_provider.c with a comment explaining what a real implementation should do (re-init the hash/cipher state while preserving key material). Add .sess_reset = example_reset to the ops struct. The stub can return -EOPNOTSUPP with a TODO comment.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:26Z",
+  "updated_at": "2026-04-17T18:31:31Z",
+  "closed_at": "2026-04-17T18:31:31Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-l4o",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:26Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-l4o.1",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:40Z"
+    }
+  ]
+}

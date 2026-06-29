@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-s6t",
+  "title": "Audit: crypto2dev 2026-04-19",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:18:01Z",
+  "updated_at": "2026-04-20T04:30:14Z",
+  "closed_at": "2026-04-20T04:30:14Z",
+  "notes": "Confidence (updated after wolfCrypt source review):\nFIPS gate coverage (provider callbacks): 100% \u2014 verified in wolfssl_*.c and kcapi_*.c.\nFramework gate ordering: 5 violation clusters confirmed (P0) \u2014 gate called after fd state checks in write/read/finalize/reset/set_iv/gen_iv/set_aad/set_tag.\nKey material leak risk: LOW \u2014 memzero_explicit consistent; two DO_KDF inbuf-persistence bugs are the main gap.\nECC peer key validation: CONFIRMED MISSING \u2014 wc_ecc_import_x963_ex passes untrusted=0, WOLFSSL_VALIDATE_ECC_IMPORT defaults off; zero SP 800-56A validation in default build (ecc.c lines 11039-11124, 10581-10734). Fix is one wc_ecc_check_key() call at wolfssl_ecdh.c:182.\nGCM streaming: CONFIRMED REAL CIPHERTEXT \u2014 wc_AesGcmEncryptUpdate encrypts immediately (CTR-mode XOR, aes.c lines 12416-12475); wc_AesGcmEncryptFinal produces tag only. wolfssl and kcapi providers are incompatible at UAPI level.\nRemaining gaps needing live system: lockdep run for sleeping-in-atomic confirmation; CMVP lab for framework gate ordering ruling."
+}

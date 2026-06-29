@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-4l7",
+  "title": "Audit: crypto2dev 2026-04-20",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T11:42:23Z",
+  "updated_at": "2026-04-20T11:51:33Z",
+  "closed_at": "2026-04-20T11:51:33Z",
+  "notes": "UAPI stability risk: LOW \u2014 All struct layouts are stable with proper padding, reserved fields validated, string null-termination enforced universally, tombstoned slots return -ENOTTY, GET_STATE exposes all diagnostic fields including inbuf_pending/outbuf_pending for all fd types.\nConfidence: FIPS gate coverage: 97%, Key material leak risk: 2%, UAPI stability: LOW. Gaps: cannot verify wolfCrypt_GetStatus_fips() return values without a running FIPS module; cannot verify wc_AesCbcEncrypt CBC chaining state reset behavior without executing code; lock ordering correctness on PREEMPT_RT requires kernel lockdep run. Would raise confidence if: (1) lockdep run on PREEMPT_RT kernel with concurrent ioctl stress test, (2) CMVP lab review of the fips_gate ordering relative to state->lock acquisition, (3) valgrind-equivalent kernel memory tool run to verify no leaks under all error paths. Pass 4 found 3 new observability gaps and 0 correctness/FIPS/crypto/kernel/UAPI issues \u2014 the core security properties are stable across 4 audit passes."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-29j",
+  "title": "Audit: crypto2dev 2026-04-19",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T04:43:50Z",
+  "updated_at": "2026-04-20T05:08:15Z",
+  "closed_at": "2026-04-20T05:08:15Z",
+  "notes": "UAPI stability risk: LOW \u2014 all structs are naturally aligned with no implicit padding holes, no pointer-width-dependent fields, all input _pad[] fields are zero-checked, all string fields are force-null-terminated before use, unrecognized ioctls correctly return -ENOTTY, GET_STATE exports iv_set and require_fips, and ioctl struct size is encoded in the ioctl command word. One sequencing defect (DO_KDF _pad check fires after ikm_fd IKM extraction, not before) filed as WOLFKM-29j.8.\nUAPI stability risk: LOW \u2014 All structs are hole-free without explicit padding. Reserved fields validated on every input ioctl. Strings null-terminated before use. Unknown commands return -ENOTTY. GET_STATE exposes iv_set and require_fips. One minor issue: DO_KDF _pad check occurs after ikm_fd work rather than before it (WOLFKM-29j.8).\nConfidence: FIPS gate coverage: 92%. The gate ordering in ioctl handlers (29j.13) and the helper-without-gate risk (29j.1) were real findings a less thorough audit would have missed. The REQUIRE_FIPS TOCTOU (29j.5) is a semantic + race bug that requires code tracing, not just grep. Key material leak risk: 10%. memzero_explicit is used correctly everywhere visible. What we cannot verify: that the compiler actually treats memzero_explicit as a barrier in the specific kernel build configuration. UAPI stability: 95%. All structs analyzed field-by-field. Gaps: (1) No lockdep run \u2014 cannot verify there is no lock ordering inversion between provider_lock and per-fd mutex in any path. (2) No FIPS wolfcrypt build available \u2014 cannot verify wolfssl_fips_gate() actually returns -EACCES on degraded state without running it. (3) kcapi provider fips_gate=NULL design (29j.9) needs human policy decision: is kcapi intended to be FIPS-excluded by design, or is it a bug? Would raise confidence if: lockdep run on a loaded module, wolfcrypt FIPS build smoke test, CMVP lab review of the gate ordering (29j.13)."
+}

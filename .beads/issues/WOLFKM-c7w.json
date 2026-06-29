@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-c7w",
+  "title": "crypto2dev_rng.c: register DRBG as kernel crypto_rng",
+  "description": "Register wolfCrypt's DRBG as a kernel crypto_rng algorithm with .cra_name='stdrng' (the name kernel consumers use for the default RNG). Implement: .generate calls wolfkm_fips_gate() then wc_RNG_GenerateBlock(); .seed reseeds via get_random_bytes() passed to wc_RNG_DRBG_Reseed() or equivalent wolfCrypt reseed API. wolfcrypt.ko initializes the DRBG at load time \u2014 wolfkm_rng.c wraps the existing instance, it does NOT create a new one.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "feature",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:53:51Z",
+  "updated_at": "2026-04-18T01:08:02Z",
+  "closed_at": "2026-04-18T01:08:02Z",
+  "design": "wolfCrypt's DRBG entropy source (get_random_bytes()) is the subject of HUMAN_TASK_007 \u2014 the FIPS argument for this must come from the FIPS consultant, not from this code. The implementation just wraps the existing wolfCrypt RNG. .cra_flags must include CRYPTO_ALG_TYPE_RNG. See DESIGN.md \u00a7rng.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dvd",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:06Z"
+    }
+  ]
+}

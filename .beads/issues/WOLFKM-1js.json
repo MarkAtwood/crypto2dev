@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-1js",
+  "title": "Review: DO_KDF HKDF/PBKDF2 implementation (ae9d714, 179f504)",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T15:51:07Z",
+  "updated_at": "2026-04-18T15:58:35Z",
+  "closed_at": "2026-04-18T15:58:35Z",
+  "notes": "Maintainer risk: MEDIUM \u2014 five P1 issues (two API contract bugs, two FIPS compliance gaps, one footgun), no P0 memory safety or crash bugs. Code is functionally correct: no double-unlock, no double-free, copy_from_user/fget/fput all paired correctly, IKM always zeroized. Risk comes from FIPS compliance gaps (PBKDF2 salt, key purpose binding) that will generate audit findings.\nConfidence: 25% chance of a missed bug. Uncertainty driven by: (1) kernel hkdf_extract() NULL-salt behavior \u2014 the code passes NULL when salt_len==0, mirroring fs/crypto/hkdf.c, but the kernel HKDF API is lightly documented and this pattern is not in the tests yet; (2) wolfCrypt wc_PBKDF2 behavior with edge inputs (passwd_len == inbuf_len which could be up to CRYPTO2DEV_KEY_IMPORT_MAXLEN=8192 \u2014 cast to int, no overflow check); (3) FIPS 140-3 boundary compliance of the ikm_fd==-1 enforcement path. Would raise confidence if: full test coverage of HKDF with zero-salt on a running kernel, PBKDF2 with passwd_len > 32767 (int overflow on cast), and FIPS module boundary review by a CMVP consultant."
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-cyn",
+  "title": "crypto2dev_kpp.c: register ECDH (P-256, P-384) and DH",
+  "description": "Register three key-agreement algorithms as kernel kpp (key-protocol-primitive) algorithms: ecdh-nist-p256, ecdh-nist-p384, and dh. Implement .set_secret (parse the kernel kpp secret blob), .generate_public_key (wc_ecc_make_key for ECDH, wc_DhGenerateKeyPair for DH), .compute_shared_secret (wc_ecc_shared_secret for ECDH, wc_DhAgree for DH). Kernel kpp secret blob format: struct kpp_secret header + raw key bytes \u2014 parse with the kpp helper functions.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "feature",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:53:48Z",
+  "updated_at": "2026-04-18T01:08:02Z",
+  "closed_at": "2026-04-18T01:08:02Z",
+  "design": "Read include/crypto/kpp.h and include/crypto/ecdh.h carefully before writing. The kernel ECDH API uses a specific secret blob encoding (struct ecdh from include/crypto/ecdh.h). DH parameters (p, g) come from the secret blob for DH or are fixed for ECDH. FIPS-approved curves only: P-256, P-384. See DESIGN.md \u00a7kpp.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dvd",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:06Z"
+    }
+  ]
+}

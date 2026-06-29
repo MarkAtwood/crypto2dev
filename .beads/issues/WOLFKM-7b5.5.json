@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7b5.5",
+  "title": "Correctness: KEY_GENERATE does not zeroize inbuf",
+  "description": "Trigger: open fd, write() sensitive bytes (e.g. a key the caller was going to import but abandoned), then call CRYPTO2DEV_IOC_KEY_GENERATE. ioctl_key_generate (fd.c ~line 1591) never calls inbuf_clear(). Bad outcome: the accumulated inbuf bytes -- which may be sensitive key material -- remain in kernel heap for the entire lifetime of the KEY fd, until close(). ioctl_key_import correctly calls inbuf_clear() at line 1515 regardless of success/failure. KEY_GENERATE has no equivalent. This is a FIPS 140-3 zeroization violation: sensitive material must be destroyed as soon as it is no longer needed, not deferred to fd close. Fix: call inbuf_clear(state) immediately after key_generate succeeds (before setting fd_type).",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:19:33Z",
+  "updated_at": "2026-04-18T05:30:38Z",
+  "closed_at": "2026-04-18T05:30:38Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7b5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T22:19:32Z"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-dfn.23",
+  "title": "Observability: provider selection for a session not logged",
+  "description": "When two providers serve the same algorithm, the first-registered wins silently. No pr_info is emitted at sess_init time identifying which provider was selected. Workaround: GET_STATE exposes provider name in crypto2dev_fd_state_info. But kernel logs do not record 'session X initialized: algo=cbc(aes) provider=wolfssl'. In a post-mortem with only dmesg, a support engineer cannot determine which provider handled a session. Fix: add a pr_debug at sess_init logging algo+provider+op.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:04:50Z",
+  "updated_at": "2026-04-18T03:27:28Z",
+  "closed_at": "2026-04-18T03:27:28Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dfn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T17:04:50Z"
+    }
+  ]
+}

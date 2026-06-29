@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-tp5.49",
+  "title": "ioctl_key_export_private: outbuf_drained not reset \u2014 stale drain cursor on second export",
+  "description": "ioctl_key_export_private() installs new key bytes into outbuf and sets outbuf_drained = 0, outbuf_len = outlen. This correctly resets the drain cursor for the new export. However, this is the same outbuf used by OPERATION fds for update/finalize output, but KEY fds should not be using outbuf for crypto output. On a KEY fd, outbuf is exclusively used for key export (public via read(), private via KEY_EXPORT_PRIVATE). The outbuf_drained reset to 0 is correct. The ACTUAL BUG (confirming WOLFKM-tp5.41): if a user calls KEY_EXPORT_PRIVATE, reads partial bytes (outbuf_drained advances to N), then calls KEY_EXPORT_PRIVATE again, the new outbuf replaces the old one AND resets outbuf_drained=0. The N bytes that were drained from the first export are gone (freed+zeroized), and the new export starts fresh. The caller who read partial bytes gets a fresh complete key on the second read. This is actually CORRECT behavior for re-export semantics \u2014 each KEY_EXPORT_PRIVATE gives a fresh complete export. The issue in WOLFKM-tp5.41 is real: public key bytes being displaced. Confirming WOLFKM-tp5.41 is the real issue, not this one. No new bug.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:43:41Z",
+  "updated_at": "2026-04-18T03:43:45Z",
+  "closed_at": "2026-04-18T03:43:45Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:43:41Z"
+    }
+  ]
+}

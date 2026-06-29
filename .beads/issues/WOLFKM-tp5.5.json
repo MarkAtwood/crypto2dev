@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-tp5.5",
+  "title": "ioctl_gen_iv: iv_set set even if set_iv fails after gen_iv succeeds",
+  "description": "In ioctl_gen_iv(), the code calls gen_iv() to generate the IV, then calls set_iv() to program it into the provider session. If set_iv() fails, the goto goes to out_zeroize, which zeroizes the iv[] stack buffer and falls through to 'out:' \u2014 correctly not setting iv_set=true. The flow is: gen_iv() success \u2192 set_iv() failure \u2192 goto out_zeroize \u2192 memzero iv \u2192 mutex_unlock \u2192 return error. iv_set remains false. This is correct. HOWEVER: there is a subtle issue with the copy_to_user path. After set_iv() succeeds and memcpy(op.iv, iv, op.ivlen) is done, if copy_to_user fails, the function goes to out_zeroize without setting iv_set=true. This means: the IV IS programmed into the provider session (set_iv succeeded), but iv_set remains false. Subsequent write() calls will fail with -EINVAL because iv_set==false, even though the session actually has a valid IV. The session is in a partially-configured but unrecoverable state (can't call GEN_IV again without error since set_iv would program a DIFFERENT iv, can't call SET_IV to fix because caller doesn't know the generated IV bytes). Trigger: GEN_IV with valid ivlen but invalid uarg \u2192 set_iv succeeds (IV programmed in provider) \u2192 copy_to_user -EFAULT \u2192 iv_set=false \u2192 write() returns -EINVAL \u2192 session stuck.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:39:16Z",
+  "updated_at": "2026-04-18T04:02:49Z",
+  "closed_at": "2026-04-18T04:02:49Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:39:16Z"
+    }
+  ]
+}

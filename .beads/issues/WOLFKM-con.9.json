@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.9",
+  "title": "atomic_t fips_provider_count: correct design for lock-free FIPS mode query",
+  "description": "src/provider/crypto2dev_registry.c \u2014 fips_provider_count is atomic_t, snapshotted once at the start of crypto2dev_lookup_algo() with atomic_read() before the list walk, without acquiring provider_lock. This is correct: the hot path (every algorithm lookup) checks FIPS mode without a lock. A reviewer might suggest reading fips_provider_count inside the rwlock for consistency, but the atomic is sufficient \u2014 the rwlock already serializes writes, and a transiently stale read on the path between FIPS provider unregister and lookup is safe (the module refcount held by the exiting session prevents the window from being dangerous). Replacing the atomic with a plain int read inside the lock would force every lookup to acquire the read lock even when FIPS mode never changes, serializing all concurrent operations unnecessarily.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:03Z",
+  "updated_at": "2026-04-19T21:30:34Z",
+  "closed_at": "2026-04-19T21:30:34Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:37:02Z"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-w40",
+  "title": "CI: add ARM64/Graviton target",
+  "description": "Catches struct padding and alignment bugs that x86-64 hides. AWS Graviton 3 (c7g instances). ARCH=arm64 native build. pahole struct layout check is the main motivation \u2014 32-bit/ARM alignment rules differ from x86-64.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T02:57:48Z",
+  "updated_at": "2026-04-19T03:56:23Z",
+  "closed_at": "2026-04-19T03:56:23Z"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-y01",
+  "title": "kcapi PBKDF2-SHA384/SHA512 implementation",
+  "description": "Add pbkdf2(sha384) and pbkdf2(sha512) to kcapi provider. Kernel has no native PBKDF2 API (confirmed via /proc/crypto). Implement manually using crypto_alloc_shash(hmac(sha384)) + RFC 8018 \u00a75.2 counter iteration \u2014 identical approach to existing kcapi HKDF. Add kcapi_pbkdf2_sha384_kdf and kcapi_pbkdf2_sha512_kdf callbacks. Add ops structs with .min_iterations=1000 and .min_salt_len=16 (SP 800-132). Register in kcapi_algo_list[]. Update kcapi_provider.h with extern declarations. ARRAY_SIZE(kcapi_algo_list)-1 already used so num_algos self-updates.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T01:03:03Z",
+  "updated_at": "2026-04-20T01:08:43Z",
+  "closed_at": "2026-04-20T01:08:43Z"
+}

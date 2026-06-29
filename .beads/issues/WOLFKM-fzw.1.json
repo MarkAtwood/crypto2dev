@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-fzw.1",
+  "title": "wolfssl: add sha3-384 and sha3-512 algorithms",
+  "description": "Add C2D_SHA3_384 and C2D_SHA3_512 to wolfssl_sha.c and wire them into all dispatch paths.\n\n**What:** Extend wolfssl_sha.c so sha3-384 and sha3-512 are registered and functional FIPS algorithms.\n\n**Algorithm:**\n1. In wolfssl_sha.c: add `#define C2D_SHA3_384 4` and `#define C2D_SHA3_512 5` after C2D_SHA3_256=3\n2. In sha_algo_name(): add cases returning \"sha3-384\" and \"sha3-512\"\n3. In sha_digest_size(): add cases returning WC_SHA3_384_DIGEST_SIZE (48) and WC_SHA3_512_DIGEST_SIZE (64)\n4. In sha_ctx_init() switch: add cases calling wc_InitSha3_384(&ctx->wc.sha3, NULL, INVALID_DEVID) and wc_InitSha3_512(&ctx->wc.sha3, NULL, INVALID_DEVID) \u2014 same wc_Sha3 union field, wc_Sha3 struct is shared across all SHA3 variants\n5. In wolfssl_sha_sess_reset() switch: add cases calling wc_Sha3_384_Free + wc_InitSha3_384, and wc_Sha3_512_Free + wc_InitSha3_512 (same pattern as sha3-256 reset)\n6. In wolfssl_sha_sess_free() switch: add cases calling wc_Sha3_384_Free(&ctx->wc.sha3) and wc_Sha3_512_Free(&ctx->wc.sha3)\n7. In wolfssl_sha_update() switch: add cases calling wc_Sha3_384_Update and wc_Sha3_512_Update\n8. In wolfssl_sha_finalize() switch: add cases calling wc_Sha3_384_Final and wc_Sha3_512_Final\n9. Add two sess_init wrappers: wolfssl_sha3_384_sess_init and wolfssl_sha3_512_sess_init (identical pattern to wolfssl_sha3_256_sess_init)\n10. Add two ops structs: wolfssl_sha3_384_ops and wolfssl_sha3_512_ops (same fields as wolfssl_sha3_256_ops, different .algo and .sess_init)\n11. In wolfssl_provider.h: add extern declarations for the two new ops structs\n12. In wolfssl_provider.c: add &wolfssl_sha3_384_ops and &wolfssl_sha3_512_ops to wolfssl_algo_list; increment num_algos from 22 to 24\n\n**Defensive programming rules:**\n- FIPS gate is already called by the shared update/finalize/sess_reset functions \u2014 no additional gating needed in switch cases\n- wc_InitSha3_384/512 returns 0 on success, non-zero on error; check with != 0 (wolfCrypt convention)\n- Pair every Init with Free in sess_reset and sess_free \u2014 including error paths in sess_init\n- No enums, no flags, only #define integer constants\n- The wc_Sha3 union field is shared by sha3-256/384/512 \u2014 single field, discriminated by Init function called\n\n**Stub mode (#ifndef CRYPTO2DEV_HAVE_WOLFCRYPT):**\n- sha_digest_size() returns hardcoded values (48 and 64) in stub path \u2014 same pattern as existing sha3-256 returns 32\n- sess_init calls sha_sess_init which already has stub handling; Init/Free calls are inside #ifdef\n\n**Agent team:** single implementer (the pattern is mechanical)",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:35:25Z",
+  "updated_at": "2026-04-20T00:42:33Z",
+  "closed_at": "2026-04-20T00:42:33Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-fzw",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:35:24Z"
+    }
+  ]
+}

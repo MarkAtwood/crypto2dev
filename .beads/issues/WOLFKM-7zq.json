@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-7zq",
+  "title": "wolfssl provider: PBKDF2 via wc_PKCS5_PBKDF2",
+  "description": "Implement the KDF provider callback for PBKDF2 in the wolfssl provider. wc_PKCS5_PBKDF2 in wolfcrypt.ko accepts password, salt, iterations, and output length. The provider glues: (1) password from fd state inbuf (populated via write()), (2) salt from crypto2dev_kdf_op.salt, (3) iterations from crypto2dev_kdf_op.kdf.pbkdf2.iterations (minimum 1000 enforced at framework layer, check again here), (4) key length = target algo key size, (5) output written directly to key_ctx key material, zeroized after. Depends on WOLFKM-ely (UAPI struct) and WOLFKM-nid (design/callback contract).",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:25:32Z",
+  "updated_at": "2026-04-18T06:52:01Z",
+  "closed_at": "2026-04-18T06:52:01Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ely",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T15:26:11Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-nid",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T15:26:12Z"
+    }
+  ]
+}

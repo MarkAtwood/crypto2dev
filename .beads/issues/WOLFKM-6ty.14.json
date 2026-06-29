@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-6ty.14",
+  "title": "[DECISION] ECDH Z never leaves provider via HKDF embedding",
+  "description": "wolfssl_ecdh_agree performs ECDH(A_priv, B_pub) to produce Z, immediately feeds Z into wc_HKDF, then memzero_explicit(z) before any exit. Z is a stack variable; it never appears in any UAPI struct, log message, or return value. This satisfies SP 800-56A requirement that raw shared secret not be exposed to callers and FIPS 140-3 zeroization. The design choice to embed HKDF in the agree callback (rather than returning Z for the caller to KDF separately) is correct and should not be changed.",
+  "status": "closed",
+  "priority": 4,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:10:11Z",
+  "updated_at": "2026-04-18T22:23:26Z",
+  "closed_at": "2026-04-18T22:23:26Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-6ty",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T15:10:10Z"
+    }
+  ]
+}

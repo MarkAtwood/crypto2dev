@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-s6t.27",
+  "title": "fips_provider_count atomic_t updated under write_lock keeps count consistent with list \u2014 plus stale comment defect",
+  "description": "The comment at registry.c:263-271 claims fips_provider_count is read 'without acquiring provider_lock', but the atomic_read at line 272 is inside the read_lock acquired at line 261. The comment is stale and wrong. The actual defensible design: fips_provider_count is an atomic_t updated under write_lock (incremented in register, decremented via atomic_dec_if_positive in unregister). This means the count is always consistent with the list state observed by readers holding read_lock \u2014 there is no TOCTOU between 'is there a FIPS provider?' and 'which provider am I dispatching to?'. A reviewer might suggest 'just walk the list and check is_fips \u2014 you don't need a separate counter' \u2014 that would require O(n) scan plus lock on every lookup instead of one atomic_read. The stale comment claiming this is a lock-free read is a separate defect that should be fixed in the comment text.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:22:58Z",
+  "updated_at": "2026-04-20T04:23:11Z",
+  "closed_at": "2026-04-20T04:23:11Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:22:57Z"
+    }
+  ]
+}

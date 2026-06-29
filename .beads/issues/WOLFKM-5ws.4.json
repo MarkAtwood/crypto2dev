@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-5ws.4",
+  "title": "CORRECT: setauthsize called in set_tag not in decrypt \u2014 it is a transform property",
+  "description": "crypto_aead_setauthsize configures the transform, not the request. Calling it in set_tag sets it exactly once when the caller establishes the tag length, before any crypt operation. Calling it in decrypt instead would add per-call overhead and place a transform-configuration call inside a data-path function, violating the kernel AEAD API's init/config/use sequencing. A reviewer might suggest moving it into decrypt to 'keep set_tag simple', but that conflates transform state with per-operation parameters.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:27:01Z",
+  "updated_at": "2026-04-20T02:28:23Z",
+  "closed_at": "2026-04-20T02:28:23Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-5ws",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:27:00Z"
+    }
+  ]
+}

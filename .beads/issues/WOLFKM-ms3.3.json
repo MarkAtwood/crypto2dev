@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-ms3.3",
+  "title": "FIPS gate missing: example/set_iv",
+  "description": "src/providers/example/example_provider.c:256 \u2014 example_set_iv() has no fips_gate() call. First executable statement is argument validation (if (!iv || ivlen == 0 ...)). Gate must precede all argument checks per design rule.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:03:02Z",
+  "updated_at": "2026-04-18T03:15:35Z",
+  "closed_at": "2026-04-18T03:15:35Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ms3",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:03:02Z"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-7b5.26",
+  "title": "Defend: iv_set flag set only after copy_to_user succeeds in GEN_IV",
+  "description": "crypto2dev_fd.c:ioctl_gen_iv \u2014 state->iv_set is set to true only after copy_to_user succeeds. If copy_to_user fails, iv_set remains false, forcing the caller to retry GEN_IV. A reviewer might suggest 'set iv_set before copy_to_user so the IV is committed regardless of whether userspace receives it'. This is wrong: if the caller never receives the IV (because copy_to_user faulted), they cannot transmit the IV with the ciphertext, so the ciphertext is permanently undecryptable. The protocol-correct behavior is: the session does not commit to an IV until the caller has successfully received it. This is the correct ordering. Comment in ioctl_gen_iv says exactly this: 'iv_set only after the IV has been delivered to the caller; if copy_to_user fails the caller never received the IV'.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:21:05Z",
+  "updated_at": "2026-04-18T17:35:56Z",
+  "closed_at": "2026-04-18T17:35:56Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7b5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T22:21:04Z"
+    }
+  ]
+}

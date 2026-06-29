@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-6ty.6",
+  "title": "wolfssl_ecdh_agree: no upper bound on okm_len before passing to wc_HKDF",
+  "description": "wolfssl_ecdh_agree validates okm_len != 0 but does not check okm_len <= CRYPTO2DEV_AGREE_OKM_MAXLEN. wc_HKDF with WC_SHA256 supports at most 255*32=8160 bytes (RFC 5869 \u00a72.3). If okm_len exceeds that, wc_HKDF returns an error after potentially running ECDH. More importantly, okm points to a struct field in a copy of the UAPI struct (size is bounded by struct layout), but the provider should not assume framework-level validation was done. Add check: if (okm_len > CRYPTO2DEV_AGREE_OKM_MAXLEN) return -EINVAL.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:09:24Z",
+  "updated_at": "2026-04-18T22:19:18Z",
+  "closed_at": "2026-04-18T22:19:18Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-6ty",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T15:09:23Z"
+    }
+  ]
+}

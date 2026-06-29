@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-jq8.1",
+  "title": "Update UAPI: add DO_SIGN/DO_VERIFY/DO_AGREE/RESET structs, mark SET_SIG/GET_SIG RESERVED",
+  "description": "In include/uapi/crypto2dev_ioctl.h: remove OP_SIGN/OP_VERIFY/OP_AGREE from op code list (or mark reserved); add CRYPTO2DEV_HASH_MAXLEN=64 constant; add struct crypto2dev_sign_op {char algo[64]; __s32 key_fd; __u8 digest[64]; __u32 digestlen; __u8 sig[512]; __u32 siglen}; add struct crypto2dev_verify_op (same fields, no sig output); add struct crypto2dev_agree_op {char algo[64]; __s32 key_fd; __u8 peer_pub[256]; __u32 peer_publen; __u8 secret[256]; __u32 secretlen}; add ioctl numbers 16=DO_SIGN, 17=DO_VERIFY, 18=DO_AGREE, 19=RESET; mark slots 6 and 7 as RESERVED in comments.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:01:26Z",
+  "updated_at": "2026-04-17T18:16:39Z",
+  "closed_at": "2026-04-17T18:16:39Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-jq8",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:01:25Z"
+    }
+  ]
+}

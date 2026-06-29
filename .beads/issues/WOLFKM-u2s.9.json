@@ -1,0 +1,19 @@
+{
+  "id": "WOLFKM-u2s.9",
+  "title": "RFC 4231 TC2 vectors tagged fips_skip=1; vectors preserved but skipped under fips_enabled",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:34:02Z",
+  "updated_at": "2026-04-19T23:28:35Z",
+  "closed_at": "2026-04-19T23:28:35Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-u2s",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T14:34:02Z"
+    }
+  ]
+}

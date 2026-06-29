@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.12",
+  "title": "Observability: provider selection at sess_init logged only at pr_debug, invisible in production",
+  "description": "ioctl_init logs 'init dispatched to provider' only at pr_debug (fd.c:777). pr_debug is compiled out or requires CONFIG_DYNAMIC_DEBUG + runtime activation \u2014 invisible in a standard production kernel. A support engineer cannot determine post-hoc which provider handled a session from dmesg alone without enabling dynamic debug before the event. KEY_IMPORT and KEY_GENERATE do not even have a pr_debug for provider selection. GET_STATE ioctl returns the provider name to the calling application, but that requires the application to query it; there is no passive audit trail in the kernel log.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:13Z",
+  "updated_at": "2026-04-19T21:30:50Z",
+  "closed_at": "2026-04-19T21:30:50Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:37:12Z"
+    }
+  ]
+}

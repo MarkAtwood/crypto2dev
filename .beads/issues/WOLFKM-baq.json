@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-baq",
+  "title": "CI: add KASAN build target",
+  "description": "KASAN_BUILD=1 is already implemented in test-on-aws.sh but not run routinely. Add it as a scheduled CI target to catch use-after-free, out-of-bounds, and other memory bugs that only surface under real workloads.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T02:57:47Z",
+  "updated_at": "2026-04-19T20:19:36Z",
+  "closed_at": "2026-04-19T20:19:36Z"
+}

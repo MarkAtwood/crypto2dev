@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-lrx",
+  "title": "Error recovery: define fd state after failed operations",
+  "description": "The behavior of an operation fd after an error is unspecified. Developers will encounter errors and not know whether the fd is still usable.\n\nUnspecified cases:\n1. write() returns an error (copy_from_user failure, ops->update() failure, outbuf full). Is the fd still usable? Can the caller retry the write? Is the accumulated output discarded?\n2. read() returns -EBADMSG (GCM tag verification failure). Is the fd dead? Can the caller try again with a different tag via SET_TAG + write() + read()?\n3. ops->finalize() returns an error. Same question.\n4. CRYPTO2DEV_IOC_FINALIZE returns an error. Same question.\n\nHUMAN DECISION NEEDED:\n\nError recovery model \u2014 two options:\n\nA. 'Fd is dead on any error': any error from write(), read(), or FINALIZE puts the fd in an error state. Subsequent write()/read() return -EIO until RESET is called. Clean and predictable. Forces explicit recovery.\n\nB. 'Soft errors are retryable': copy_from_user failures (transient) leave the fd in its prior state \u2014 nothing was consumed. wolfCrypt errors (bad key, bad padding) are fatal to the session \u2014 fd requires RESET. Distinguishes kernel errors from crypto errors.\n\nC. 'Only fatal for finalization errors': errors during update() are retryable (nothing committed); errors during finalize() are fatal (session state is indeterminate).\n\nRecommendation: A is safest and easiest to specify. Implement a per-fd error flag; RESET clears it.\n\nWork items once decision is made:\n- Add error state tracking to crypto2dev_fd_state\n- Implement RESET clearing the error state\n- Document all error return paths and their effect on fd state in a state machine comment in crypto2dev_fd.c\n- Add test cases: verify write() after update() error returns correct code; verify RESET restores usability",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "epic",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T20:37:32Z",
+  "updated_at": "2026-04-18T03:29:16Z",
+  "closed_at": "2026-04-18T03:29:16Z",
+  "notes": "DECISION 2026-04-17: Option A + -EFAULT carve-out. Any error that reaches update() or finalize() marks the session dead (state->error=true); subsequent write()/read() return -EIO until RESET. copy_from_user failure in write() returns early before lock/state-touch (already safe). copy_to_user failure in read() leaves data in outbuf \u2014 caller can retry with valid pointer (already safe). RESET clears the error flag."
+}

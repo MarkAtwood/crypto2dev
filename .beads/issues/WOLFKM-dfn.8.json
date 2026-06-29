@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-dfn.8",
+  "title": "Crypto misuse: wolfssl GCM set_tag accepts truncated auth tags",
+  "description": "wolfssl_aes_gcm set_tag at src/providers/wolfssl/wolfssl_aes_gcm.c:289 accepts taglen from 1 to 16 with no minimum enforcement. FIPS 140-3 requires GCM authentication tags be at least 96 bits (12 bytes). Trigger: caller sets taglen=4, provider accepts, GCM encryption/decryption runs with 32-bit tag. Outcome: 2^32 forgery probability vs 2^128 \u2014 authentication guarantee destroyed silently. A tag of 4 bytes provides essentially no authentication against an active adversary.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:03:31Z",
+  "updated_at": "2026-04-18T00:53:20Z",
+  "closed_at": "2026-04-18T00:53:20Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dfn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T17:03:30Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-yjf.2",
+  "title": "RSA stub mode silently accepts wrong key size in per-algo import wrappers",
+  "description": "Trigger: build without CRYPTO2DEV_HAVE_WOLFCRYPT (stub mode), then call wolfssl_rsa_2048_key_import() with a 4096-bit key (or vice versa). The expected_key_bytes validation is inside #ifdef CRYPTO2DEV_HAVE_WOLFCRYPT so it never runs in stub mode. wolfssl_rsa_2048_key_import() accepts a 4096-bit key silently instead of returning -EINVAL. Violates the documented invariant that rsa-2048 handles must not accept rsa-4096 keys. Stub mode is not production, but the invariant should hold. Fix: add a stub-mode size check using rawlen heuristic or just enforce expected_key_bytes unconditionally before the ifdef block. src/providers/wolfssl/wolfssl_rsa.c:195-281",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:16:55Z",
+  "updated_at": "2026-04-18T23:31:15Z",
+  "closed_at": "2026-04-18T23:31:15Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-yjf",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:16:55Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-bsw",
+  "title": "kcapi provider: PBKDF2 availability audit",
+  "description": "Determine whether the kernel crypto API provides PBKDF2, and if so, wire it in the kcapi provider. As of 5.15, the kernel does not export a standalone wc_PKCS5_PBKDF2-equivalent via the public crypto API \u2014 PBKDF2 exists internally (fs/cifs, etc.) but not as a registerable shash. Audit: grep /proc/crypto and kernel source for 'pbkdf2'. Expected outcome: kcapi provider returns -ENOTSUP for PBKDF2, causing the framework to fall back to wolfssl provider. Document the fallback path and any kernel version caveats. If kernel PBKDF2 is found, implement it; otherwise record the finding in the issue and close with 'not applicable'.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:25:41Z",
+  "updated_at": "2026-04-18T17:42:03Z",
+  "closed_at": "2026-04-18T17:42:03Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ely",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T15:26:13Z"
+    }
+  ]
+}

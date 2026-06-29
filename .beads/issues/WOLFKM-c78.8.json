@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-c78.8",
+  "title": "[DECISION] fget refcount protection on ikm_fd prevents use-after-free",
+  "description": "src/cdev/crypto2dev_fd.c lines 1791-1800: ikm_fd is passed to fget() immediately, which increments the file's refcount. The fd remains open (not closeable by userspace) until fput() at line 1826. This prevents the ikm_fd from being closed and its KEY fd state freed mid-operation. Without the refcount hold, userspace could close(ikm_fd) after passing it to DO_KDF but before the kernel reads the key material, causing use-after-free. The pattern is: fget() \u2192 acquire ks->lock \u2192 read key material \u2192 release ks->lock \u2192 fput(). This is the standard kernel pattern for fd passing between ioctls, but it is non-obvious that fget() is the safety mechanism. A less careful implementation might not hold the refcount while accessing the fd's private_data.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:15:07Z",
+  "updated_at": "2026-04-20T00:27:09Z",
+  "closed_at": "2026-04-20T00:27:09Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-c78",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:15:07Z"
+    }
+  ]
+}

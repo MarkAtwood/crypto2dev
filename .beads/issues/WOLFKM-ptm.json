@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-ptm",
+  "title": "Provider: wolfssl_aes_cbc \u2014 true streaming update()",
+  "description": "Fix src/providers/wolfssl/wolfssl_aes_cbc.c to process complete blocks in update() instead of accumulating all input in ctx->inbuf.\n\nCurrent (batch) behavior:\n- update() appends to ctx->inbuf\n- finalize() calls wc_AesCbcEncrypt(ctx->inbuf, full_len)\n\nRequired (streaming) behavior:\n- update() partitions input into: complete 16-byte blocks + trailing partial block\n- update() calls wc_AesCbcEncrypt() on all complete blocks immediately, writes ciphertext to out[]\n- update() saves trailing partial bytes (0-15) in ctx->tail[] for finalize\n- finalize() applies PKCS#7 padding to ctx->tail[], encrypts final block, writes to out[]\n- ctx->inbuf is removed; ctx->tail[16] (max one AES block) replaces it\n\nFor decrypt:\n- update() similarly: hold back one full block to detect padding on finalize\n- finalize() strips PKCS#7 padding\n\nKey correctness check: the CBC chaining state (last ciphertext block) is maintained in the wc_Aes struct across update() calls \u2014 do NOT reset it between calls.\n\nTest vectors: existing NIST CAVP vectors in tests/vectors/aes_cbc.h must still pass.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T20:30:05Z",
+  "updated_at": "2026-04-18T01:51:12Z",
+  "closed_at": "2026-04-18T01:51:12Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-n3j",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T13:31:20Z"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-76h",
+  "title": "Audit: crypto2dev 2026-04-19",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:00:06Z",
+  "updated_at": "2026-04-20T03:14:49Z",
+  "closed_at": "2026-04-20T03:14:49Z",
+  "notes": "Confidence: FIPS gate coverage: 99% \u2014 every callback in every provider was inspected individually by the subagent; zero violations found. The only unverified risk is a future caller of wolfssl_ec_key.c internal helpers without gating (the helpers themselves are not gated; callers must gate). Key material leak risk: 5% \u2014 memzero_explicit is consistent throughout; the ikm_buf double-free (WOLFKM-76h.1) hits freed memory but does not expose key material to userspace. UAPI stability: 98% \u2014 all structs verified for padding, all reserved fields validated, all slot tombstones handled. Gaps: (1) could not run lockdep to verify no sleeping-in-atomic paths missed at runtime; (2) could not run KASAN to confirm the ikm_buf double-free trigger independently; (3) kcapi GCM 12-byte tag bug (WOLFKM-76h.2) was found by static analysis but not confirmed with a live test run. Would raise confidence if: kernel lockdep run on the test suite, KASAN/KFENCE enabled test run, and a CMVP lab review of the FIPS gate two-level architecture (framework + per-callback defense-in-depth)."
+}

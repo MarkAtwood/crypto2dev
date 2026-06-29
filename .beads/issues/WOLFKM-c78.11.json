@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-c78.11",
+  "title": "[DECISION] Test vectors use OpenSSL oracle (not derived from code)",
+  "description": "tests/userspace/test_kdf.c lines 37-84: Two-stage HKDF ikm_fd chain vectors (ikm_fd_stage1_ikm, ikm_fd_stage2_salt, ikm_fd_stage2_okm) are verified against OpenSSL 3.0.13, not derived from the module's own code. The test comment at lines 37-46 shows the exact OpenSSL commands used: 'Stage 1: IKM = ...' with explicit 'openssl kdf' invocation and hex salt/info arguments. This is the standard independent-oracle pattern: the test encrypts/derives with the module and compares against a third-party reference implementation. The vectors are hardcoded as static arrays (lines 47-84), making tests fully offline. This pattern prevents test artifacts (e.g., a test that derives with OpenSSL, encrypts with the module, then decrypts with the same module) which would pass trivially. The OpenSSL oracle is non-negotiable per CLAUDE.md 'Test Design Constraint' section.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:15:19Z",
+  "updated_at": "2026-04-20T00:27:14Z",
+  "closed_at": "2026-04-20T00:27:14Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-c78",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:15:19Z"
+    }
+  ]
+}

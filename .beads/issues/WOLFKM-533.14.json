@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-533.14",
+  "title": "Double-gate in wolfssl_ec_key helpers is correct defense-in-depth",
+  "description": "wolfssl_ec_key_export_public() and wolfssl_ec_key_export_private() call wolfssl_fips_gate() directly at their entry point, even though the per-algo wrappers in wolfssl_ecdsa.c and wolfssl_ecdh.c also call it before delegating. The comment in wolfssl_ec_key.c is explicit: 'The helpers are called from gated per-algo wrappers today, but the gate lives here so no future caller can bypass it by accident.' The file header also documents: 'Per-algo wrappers in each .c file call wolfssl_fips_gate() before delegating to these functions.' The double-gate is the correct defense-in-depth posture: shared helper functions that perform cryptographic operations must not rely on their callers having already checked FIPS status. If a new call site is added \u2014 another file, a refactor, a test harness \u2014 that omits the gate at the wrapper layer, the helper's own gate prevents any bypass. A reviewer might suggest removing the 'redundant' gate from the helper to simplify call paths. That removal would leave these helpers unguarded if ever called directly, which is a FIPS compliance failure that the compiler cannot catch.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:29:17Z",
+  "updated_at": "2026-04-20T05:48:59Z",
+  "closed_at": "2026-04-20T05:48:59Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-533",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T22:29:16Z"
+    }
+  ]
+}

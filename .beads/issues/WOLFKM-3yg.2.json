@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-3yg.2",
+  "title": "SEC2: No efficiency issues",
+  "description": "SEC2 efficiency review complete:\n\n1. Union sizing: wc_Sha3 union member does not increase struct overhead. Union already sized for wc_Sha512 (~360B); SHA3 variants use same struct regardless of digest size.\n\n2. sess_reset pattern: Free + Re-init is correct for FIPS compliance. wc_Sha3_384_GetHash exists but doesn't fully reset state; Free+Re-init pattern ensures clean cryptographic slate required by FIPS 140-3.\n\n3. kcapi_hash.c wrappers: Single-line trivial callees at sha3_384_sess_init/sha3_512_sess_init lines 248-258. Will inline with zero runtime overhead. Standard pattern matching sha256/sha384/sha512 wrappers.\n\nResult: No efficiency issues found. All three checks passed.",
+  "status": "closed",
+  "priority": 4,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:45:37Z",
+  "updated_at": "2026-04-20T00:48:38Z",
+  "closed_at": "2026-04-20T00:48:38Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-3yg",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:45:37Z"
+    }
+  ]
+}

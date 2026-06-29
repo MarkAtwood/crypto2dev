@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-tp5.31",
+  "title": "ioctl_init: inbuf not consumed or cleared when INIT called after write on UNSET fd",
+  "description": "When a userspace caller writes key bytes to an UNSET fd (for KEY_IMPORT) and then calls CRYPTO2DEV_IOC_INIT instead (perhaps by mistake, or as a deliberate state confusion attempt), the inbuf is NOT cleared by ioctl_init(). The fd transitions to OPERATION state with inbuf still allocated and containing key material. The key material sits in inbuf until close() is called (which calls inbuf_clear in the release handler). During the session lifetime, inbuf holds the (now-unused) key bytes alongside the active session state. This is not a use-after-free or functional bug (inbuf is unused by OPERATION fd), but it violates the FIPS 140-3 requirement that key material be zeroized as soon as it is no longer needed. The key bytes from the abandoned KEY_IMPORT write remain in kernel memory for the duration of the OPERATION session. Trigger: write(key_bytes) on UNSET fd \u2192 call INIT instead of KEY_IMPORT \u2192 inbuf holds key_bytes until close() \u2192 violates FIPS 140-3 'minimum time' key material retention requirement.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:41:18Z",
+  "updated_at": "2026-04-18T04:02:41Z",
+  "closed_at": "2026-04-18T04:02:41Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:41:18Z"
+    }
+  ]
+}

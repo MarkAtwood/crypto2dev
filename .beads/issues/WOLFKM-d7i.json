@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-d7i",
+  "title": "tests/userspace/test_chardev.c: /dev/crypto2dev session lifecycle tests",
+  "description": "Userspace test program for /dev/wolfcrypt streaming interface.\n\nTest cases (write/read streaming model):\n1. AES-CBC encrypt/decrypt round-trip: open, INIT(cbc(aes), key), SET_IV, write(plain), read(cipher), new fd, INIT(decrypt), SET_IV, write(cipher), read(plain), verify == original\n2. AES-GCM encrypt/decrypt with tag: INIT, SET_IV, SET_AAD, write, read, GET_TAG; then decrypt fd: INIT, SET_IV, SET_AAD, SET_TAG, write, read, verify\n3. AES-GCM tag tampering: modify tag by 1 bit, decrypt must return -EBADMSG\n4. SHA-256: INIT(sha256, HASH), write(data), read(32-byte digest), compare to known vector\n5. SHA-256 chunked: same data fed in 64-byte chunks, same digest expected\n6. HMAC-SHA256: INIT(hmac(sha256), HASH, key), write, read, compare to known HMAC vector\n7. GET_STATE before INIT: initialized==0, algo==\"\", bytes_written==0\n8. GET_STATE after INIT: initialized==1, algo matches what was configured\n9. GET_STATE after write+read: bytes_written and bytes_read reflect actual counts\n10. 1000 sequential sessions on same fd-per-session pattern\n11. 16 concurrent threads, each opens own fd, runs AES-CBC round-trip\n\nUse NIST CAVS vectors from tests/vectors/ for all known-answer checks.\nCompile with: gcc -o test_chardev test_chardev.c",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:56:48Z",
+  "updated_at": "2026-04-18T05:58:04Z",
+  "closed_at": "2026-04-18T05:58:04Z",
+  "design": "Each test case: open /dev/wolfcrypt, SESSION_NEW with algorithm+key, CRYPT, SESSION_FREE, close. Use test vectors from hardcoded arrays (same vectors as kernel tests \u2014 copy from tests/vectors/*.h). Check every ioctl return value. Report PASS/FAIL per test case. Exit nonzero if any FAIL. See DESIGN.md \u00a7test_chardev.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-2c4",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:27Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-lnm",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:27Z"
+    }
+  ]
+}

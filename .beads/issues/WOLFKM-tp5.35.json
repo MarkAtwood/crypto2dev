@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-tp5.35",
+  "title": "Crypto misuse: kcapi GCM fips_gate is NULL \u2014 no FIPS boundary check possible",
+  "description": "kcapi_gcm_aes_ops sets .fips_gate = NULL (kcapi_aead.c line 406). All kcapi providers have NULL fips_gate. When wolfssl FIPS provider is not loaded, kcapi GCM operates with zero FIPS operational state checking. The design depends entirely on the FIPS provider loaded -> kcapi unreachable property, with no defense-in-depth. Risk: misconfigured deployment without wolfssl FIPS loaded silently uses non-FIPS GCM with no indication.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:41:32Z",
+  "updated_at": "2026-04-18T04:09:31Z",
+  "closed_at": "2026-04-18T04:09:31Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:41:31Z"
+    }
+  ]
+}

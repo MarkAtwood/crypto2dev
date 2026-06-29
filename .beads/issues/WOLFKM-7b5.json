@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-7b5",
+  "title": "Audit: crypto2dev 2026-04-17",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:16:59Z",
+  "updated_at": "2026-04-18T17:40:59Z",
+  "closed_at": "2026-04-18T17:40:59Z",
+  "notes": "UAPI stability risk: LOW \u2014 one observability gap (GET_STATE does not reflect require_fips on UNSET fds); all struct layouts are hole-free, all reserved fields are validated, all string fields are null-terminated, unknown ioctl slots correctly return -ENOTTY\nConfidence: FIPS gate coverage: 95%. Every ioctl handler that touches crypto state calls ops->fips_gate() before the first wolfCrypt call. The one verified exception is sess_free and key_free (intentional: cleanup must always proceed). The fips_gate is also called inside the provider's own callbacks (e.g. wolfssl_aes_gcm_sess_init calls wolfssl_fips_gate at line 89), providing defense in depth. Key material leak risk: 5%. memzero_explicit is used consistently \u2014 on inbuf, outbuf, ioctl stack frames (op structs for init/sign/verify/agree), provider session contexts, and key export buffers. The one area that cannot be verified without running the code: whether wolfCrypt's wc_AesFree/wc_FreeRng/wc_RsaPrivateKeyFree internally zeroize their own structs. That is a wolfCrypt correctness question, not a crypto2dev question. UAPI stability: 90%. All structs have _pad fields with zero-checks. Ioctl numbers are assigned to named slots, with slots 6-7 explicitly reserved. The is_fips/non-FIPS provider separation is stable. Gaps: (1) Cannot verify that the wc_AesGcmEncryptUpdate streaming path produces exactly inlen bytes of ciphertext without running wolfCrypt \u2014 the framework assumes *outlen == inlen for stream ciphers; (2) Cannot verify that the GCM decrypt finalize path returns plaintext in the correct order relative to tag verification without a real wolfCrypt build; (3) Cannot verify the FIPS gate behavior under wolfCrypt degraded state without a FIPS build. Would raise confidence if: (a) compile and run tests/userspace/run_tests.sh against a real wolfCrypt build; (b) confirm wolfCrypt AES/RNG structs are self-zeroizing on wc_AesFree/wc_FreeRng; (c) add a test that loads a non-FIPS provider, registers a FIPS provider, and verifies the non-FIPS provider becomes unreachable."
+}

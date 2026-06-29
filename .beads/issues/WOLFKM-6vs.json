@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-6vs",
+  "title": "Audit observability improvements",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:10:46Z",
+  "updated_at": "2026-04-20T03:13:00Z",
+  "closed_at": "2026-04-20T03:13:00Z",
+  "notes": "Fixes audit findings: WOLFKM-76h.3, 76h.4, 76h.5, 76h.6, 76h.7, 76h.8"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "WOLFKM-uvl",
+  "title": "WOLFKM-8ii impl: RESET state machine + GEN_IV provider callback",
+  "description": "Implement decisions from WOLFKM-8ii: (a) Option A: add iv_set tracking; after RESET, write() returns -EINVAL if ops->set_iv is non-NULL but iv_set is false. (b) Option A: add gen_iv callback to algo_ops; wolfssl providers use wc_RNG_GenerateBlock, kcapi falls back to get_random_bytes. (c) Option B: no framework change for GCM nonce length.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T23:09:18Z",
+  "updated_at": "2026-04-17T23:14:41Z",
+  "closed_at": "2026-04-17T23:14:41Z"
+}

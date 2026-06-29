@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-dfn.26",
+  "title": "Decision: FIPS gate checked per-operation, not only at session init",
+  "description": "fips_gate() is checked at every crypto entry point (write/update, read/finalize, sign, verify, agree, set_iv, gen_iv) not only at INIT time. This is correct: wolfCrypt's FIPS status can change at runtime (POST re-run failure, integrity check failure). An operation that started on a healthy session might reach the provider code in a degraded FIPS state. FIPS 140-3 requires operational-time checks, not only initialization-time. A reviewer suggesting 'check once at INIT \u2014 the session's state is already gated' is wrong about the FIPS operational requirement.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:05:10Z",
+  "updated_at": "2026-04-18T00:42:58Z",
+  "closed_at": "2026-04-18T00:42:58Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dfn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T17:05:10Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-29j.4",
+  "title": "Observability: DO_KDF successful dispatch has no provider attribution log",
+  "description": "ioctl_do_kdf calls crypto2dev_lookup_algo() fresh and dispatches to a provider, but on success never logs which provider was selected. INIT, KEY_IMPORT, and KEY_GENERATE all emit 'dispatched to provider' on success. DO_KDF is the only dispatch path that is silent on success. A support engineer reviewing a ring buffer from a system where DO_KDF produced wrong output or a follow-on INIT failed on key algo mismatch cannot determine from the log which provider ran the KDF. Fix: add pr_info_ratelimited after successful kdf() call, matching the pattern used by ioctl_init and ioctl_key_import.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T04:47:40Z",
+  "updated_at": "2026-04-20T05:06:08Z",
+  "closed_at": "2026-04-20T05:06:08Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-29j",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T21:47:39Z"
+    }
+  ]
+}

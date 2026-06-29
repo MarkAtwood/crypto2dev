@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-29j.9",
+  "title": "Crypto misuse: kcapi provider bypasses FIPS gate on all crypto ops",
+  "description": "src/providers/kcapi/kcapi_aead.c:452 and kcapi_skcipher.c:365/383/407 \u2014 kcapi_gcm_aes_ops, kcapi_cbc_aes_ops, kcapi_ctr_aes_ops, kcapi_xts_aes_ops all set .fips_gate = NULL. fd.c:385 checks 'if (state->ops && state->ops->fips_gate)' and silently skips the gate when fips_gate is NULL. Trigger: wolfCrypt FIPS module enters error/degraded state; user requests gcm(aes) or cbc(aes) from the kcapi provider. Consequence: FIPS degradation is not enforced \u2014 crypto operations continue through the kcapi path without checking whether the wolfCrypt FIPS module is operational. This is a FIPS 140-3 operational requirement violation: every cryptographic operation must be gated behind the FIPS health check.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T04:48:26Z",
+  "updated_at": "2026-04-20T04:54:48Z",
+  "closed_at": "2026-04-20T04:54:48Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-29j",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T21:48:26Z"
+    }
+  ]
+}

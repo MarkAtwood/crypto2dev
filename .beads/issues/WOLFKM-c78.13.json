@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-c78.13",
+  "title": "[DECISION] Symmetric-key-only restriction on ikm_fd enforces key chaining safety",
+  "description": "src/cdev/crypto2dev_fd.c lines 1805-1812: ikm_fd validation checks that the KEY fd must have key_type == CRYPTO2DEV_KEY_SYMMETRIC (rejected with -EBADF otherwise). This enforces a clear security boundary: only symmetric keys (derived via DO_KDF) can be used as IKM sources for further KDF stages. Asymmetric keys (RSA, EC) cannot be used as IKM. This is non-obvious: an implementation might allow any KEY fd as ikm_fd. But the restriction is correct: asymmetric keys are already public (or partially public); using them as IKM would blur key separation. The check is explicit and immediate: if (ks->key_type != CRYPTO2DEV_KEY_SYMMETRIC ...) \u2192 -EBADF. This prevents a class of semantic errors where an asymmetric key is accidentally passed as IKM for a subsequent KDF stage.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:15:30Z",
+  "updated_at": "2026-04-20T00:27:18Z",
+  "closed_at": "2026-04-20T00:27:18Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-c78",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:15:29Z"
+    }
+  ]
+}

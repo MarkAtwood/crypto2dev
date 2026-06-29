@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-6ty.12",
+  "title": "wolfssl_ecdh_agree: -EINVAL for PUBLIC key should be -ENOKEY",
+  "description": "wolfssl_ecdh_agree returns -EINVAL when ctx->key_type==CRYPTO2DEV_KEY_PUBLIC. The correct errno for 'this key cannot perform this operation' is -ENOKEY (Required key not available), not -EINVAL (Invalid argument). -EINVAL is for malformed parameters. wolfssl_ecdsa_sign correctly uses -ENOKEY. Fix the agree path to match.",
+  "status": "closed",
+  "priority": 4,
+  "issue_type": "chore",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:09:59Z",
+  "updated_at": "2026-04-18T22:23:08Z",
+  "closed_at": "2026-04-18T22:23:08Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-6ty",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T15:09:58Z"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-yjf.1",
+  "title": "WARN() in registry PBKDF2 backstop can halt module load on hardened kernels",
+  "description": "Trigger: PBKDF2 provider registers with min_iterations<1000 on a kernel built with CONFIG_BUG_ON_WARN=y (common on hardened/FIPS kernels). WARN() may halt execution at insmod time, causing the provider module to fail loading entirely \u2014 the opposite of what a backstop should do. The framework already enforces the limits in ioctl_do_kdf; the registration check is defense-in-depth only and should not block load. Fix: replace WARN() with pr_warn() and restructure as explicit if-statements. src/provider/crypto2dev_registry.c:73-80",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:16:54Z",
+  "updated_at": "2026-04-18T23:29:37Z",
+  "closed_at": "2026-04-18T23:29:37Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-yjf",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:16:54Z"
+    }
+  ]
+}

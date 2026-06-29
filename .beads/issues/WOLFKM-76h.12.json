@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-76h.12",
+  "title": "CORRECT: outbuf allocated lazily at first write/finalize, not at open or INIT",
+  "description": "The output buffer (outbuf) for OPERATION fds is allocated by outbuf_grow() at fd.c:424 (first write()) or fd.c:1399 (finalize), not at open() or INIT. Sessions that are opened and never used for crypto allocate nothing. Why it is right: in high-connection-count deployments (many fds open simultaneously), eagerly allocating even 4KB per open() would cause significant kernel heap pressure. Deferred allocation means only active sessions consume memory. What a reviewer might suggest: 'allocate at INIT so the error can be reported there rather than at write time.' That changes the allocation failure reporting site but does not improve the actual deployment characteristics. Deferred allocation is the correct pattern for kernel chardevs where open() semantics are lightweight by convention.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:06:28Z",
+  "updated_at": "2026-04-20T03:14:41Z",
+  "closed_at": "2026-04-20T03:14:41Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-76h",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:06:28Z"
+    }
+  ]
+}

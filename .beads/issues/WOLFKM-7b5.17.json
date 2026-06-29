@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-7b5.17",
+  "title": "Defend: fips_provider_count as atomic outside the spinlock",
+  "description": "crypto2dev_registry.c \u2014 fips_provider_count is an atomic_t that is inc/decremented under the write_lock but read via atomic_read() in fips_provider_loaded() and lookup_algo() without taking any lock. A reviewer might suggest 'just read the value under the read_lock to avoid atomics'. The existing approach is correct and superior: atomic_read is cheaper than read_lock/read_unlock, callers in the hot path (every ioctl_init) benefit, and the correctness guarantee is identical \u2014 the write_lock is already preventing races on the counter during register/unregister. Using the atomic for reads avoids any lock ordering concern between provider_lock and any future per-session locks. Do not change this.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:20:05Z",
+  "updated_at": "2026-04-18T17:40:53Z",
+  "closed_at": "2026-04-18T17:40:53Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7b5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T22:20:04Z"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-w4c.1",
+  "title": "FIPS gate missing at framework level for DO_SIGN/VERIFY/AGREE ioctls",
+  "description": "ioctl_do_sign, ioctl_do_verify, ioctl_do_agree in crypto2dev_fd.c dispatch to provider callbacks (sign/verify/agree) without the framework first calling ops->fips_gate(). Sequence: open KEY fd, import key, call CRYPTO2DEV_IOC_DO_SIGN \u2192 provider's sign() is invoked with only the provider's own gate as defense. Contrast with ioctl_init which calls ops->fips_gate() before sess_init(). Belt (provider gate) is present; framework suspenders are missing for one-shot asymmetric ops. Risk: if a future provider forgets to gate sign/verify/agree, the framework will not catch it. Current providers gate correctly, so this is not an active bypass.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:00:22Z",
+  "updated_at": "2026-04-20T15:07:36Z",
+  "closed_at": "2026-04-20T15:07:36Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-w4c",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-20T08:00:22Z"
+    }
+  ]
+}

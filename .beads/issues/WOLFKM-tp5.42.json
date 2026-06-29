@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-tp5.42",
+  "title": "write() wakes poll_wq when fd_type is UNSET (inbuf path), but poll reports no EPOLLIN",
+  "description": "In crypto2dev_fd_write(), on the UNSET fd path (inbuf_append), on success ret=count>0 and outlen==0. The wake_up check is 'if (ret > 0 && outlen > 0) wake_up_interruptible'. Since outlen==0 on the UNSET path, wake_up is NOT called. This is correct \u2014 no poll event should fire for UNSET fds. However: on the OPERATION fd path where update() produces zero output (outlen==0), the wake_up is also skipped. This is correct: no new output bytes, so no EPOLLIN event. But: poll() documentation typically says EPOLLOUT becomes set when the fd becomes writable again. After write() on an OPERATION fd (successfully), the fd is still writable (not finalized), so EPOLLOUT remains set. The wake_up is only needed when EPOLLIN state changes (new bytes in outbuf). When update() produces zero bytes (hash/AEAD streaming), no EPOLLIN edge occurs \u2014 correct. The EPOLLOUT edge was already set at INIT time. So no missed wake_up events for correctly-designed consumers. No actual bug \u2014 confirmed correct behavior.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:42:18Z",
+  "updated_at": "2026-04-18T03:42:21Z",
+  "closed_at": "2026-04-18T03:42:21Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:42:17Z"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-w4c.13",
+  "title": "DECISION: Provider ctx zeroization is contract-enforced, not framework-backstopped",
+  "description": "The framework calls sess_free(ctx)/key_free(ctx) and trusts the provider to memzero_explicit before kfree. Framework-owned buffers (inbuf, outbuf, fd_state) are zeroized independently. Provider ctx is not \u2014 the framework holds a void* of unknown size and cannot do so without memory pressure overhead (tracking ctx_size, keeping allocation alive across cleanup).\n\nThe contract in crypto2dev_provider.h lines 133-135 and 450-453 explicitly requires memzero_explicit over all sensitive fields before kfree. Enforcement is contract + code review + audit checklist item.\n\nA reviewer or auditor who suggests adding ctx_size + framework-level zeroization: the answer is no \u2014 the memory pressure is not justified given the explicit contract and review gate. The risk (future provider omitting memzero_explicit) is accepted and mitigated by documentation and audit, not by runtime mechanism.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:16:34Z",
+  "updated_at": "2026-04-20T15:24:32Z",
+  "closed_at": "2026-04-20T15:24:32Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-w4c",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-20T08:16:34Z"
+    }
+  ]
+}

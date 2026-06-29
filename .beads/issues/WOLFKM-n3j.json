@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-n3j",
+  "title": "Design: streaming I/O model \u2014 UAPI contract and provider contract",
+  "description": "Before any code changes, write down the exact contract for the new streaming model in DESIGN.md.\n\nUAPI contract:\n- write() calls ops->update() immediately; output available for read() at any time\n- read() without prior FINALIZE drains whatever update() has produced (may be 0 for hash)\n- CRYPTO2DEV_IOC_FINALIZE signals end-of-input; calls ops->finalize(); sets finalized=true\n- read() after FINALIZE drains final output (last CBC block, digest, GCM tag) then EOF\n- write() after FINALIZE returns -EINVAL\n- RESET clears finalized flag, outbuf, and provider state for same key/algo\n\nProvider contract:\n- update() MUST process all complete blocks immediately and write output to out[]/outlen\n- update() MAY buffer at most one incomplete trailing block (for block ciphers)\n- update() for hash/MAC produces 0 output (state update only)\n- finalize() produces: last padded block (CBC), digest (hash/MAC), tag (GCM encrypt), tag-verify (GCM decrypt)\n- finalize() may be called with inlen==0 (caller wrote only full blocks)\n\nAcceptance: DESIGN.md section 'Streaming I/O Model' written and reviewed before any implementation starts.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T20:29:42Z",
+  "updated_at": "2026-04-18T01:11:17Z",
+  "closed_at": "2026-04-18T01:11:17Z"
+}

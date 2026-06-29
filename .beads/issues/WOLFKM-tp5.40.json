@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-tp5.40",
+  "title": "ioctl_reset: blocked by EOPNOTSUPP but session remains in finalized=true state",
+  "description": "ioctl_reset() checks ops->sess_reset and returns -EOPNOTSUPP if NULL. At this point: state->finalized remains true, state->error remains false (if we got here after a successful finalize). The fd is now permanently stuck: write() returns -EINVAL (finalized=true), finalize() returns -EINVAL (finalized=true), reset() returns -EOPNOTSUPP. The only recovery is close() and reopen. This is documented behavior (per provider.h: 'Providers that do not support reuse should leave this NULL; the framework returns -EOPNOTSUPP'), but the UAPI header and DESIGN.md do not clearly document that after -EOPNOTSUPP from RESET, the fd is permanently dead. The GET_STATE ioctl would show finalized=1 error=0, which is misleading \u2014 a caller seeing error=0 might think the session is healthy. After EOPNOTSUPP from RESET, there should be a way to detect this via GET_STATE. Currently: no state transition occurs, finalized stays true, error stays false. A caller polling GET_STATE would see a perpetually 'finalized but not error' state with no path forward. Not a safety issue but a UAPI usability and documentation gap. Trigger: provider with sess_reset==NULL \u2192 INIT \u2192 write \u2192 FINALIZE \u2192 read \u2192 RESET \u2192 -EOPNOTSUPP \u2192 fd stuck finalized, not dead, no recovery path except close.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:41:54Z",
+  "updated_at": "2026-04-18T04:08:24Z",
+  "closed_at": "2026-04-18T04:08:24Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:41:54Z"
+    }
+  ]
+}

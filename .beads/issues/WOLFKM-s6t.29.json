@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-s6t.29",
+  "title": "Crypto misuse: ECDH agree() does not zero okm on HKDF failure within provider",
+  "description": "In wolfssl_ecdh_agree (wolfssl_ecdh.c), if wc_HKDF fails after partial execution, the okm output buffer may contain partial or uninitialized key material. The okm pointer is passed in from the caller (ioctl_do_agree). The provider does NOT call memzero_explicit(okm, okm_len) before returning the error. The framework (ioctl_do_agree) does call memzero_explicit(&op, sizeof(op)) on all error paths including through out_zero, which covers op.okm since okm points into op.okm. However this creates a latent correctness dependency: if agree() is ever called from a context that does NOT zero the buffer on error (e.g. a future refactored call site), partial OKM material would leak. The fix is defensive: add memzero_explicit(okm, okm_len) before the error return inside wolfssl_ecdh_agree when wc_HKDF fails. Z is already correctly zeroed before the wc_HKDF call outcome check. Only the OKM zeroization inside the provider is missing.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:23:37Z",
+  "updated_at": "2026-04-20T03:41:58Z",
+  "closed_at": "2026-04-20T03:41:58Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:23:36Z"
+    }
+  ]
+}

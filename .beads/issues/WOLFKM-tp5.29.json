@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-tp5.29",
+  "title": "Crypto misuse: krealloc in GCM/AEAD update leaks old inbuf without zeroization",
+  "description": "wolfssl_aes_gcm_update (line 415) and kcapi_aead_update (line 369) use krealloc to grow the ciphertext inbuf. When krealloc moves the buffer, the old allocation is freed internally without zeroization. Fix: replace krealloc with kmalloc+memcpy+memzero_explicit+kfree+pointer swap in both providers.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:41:15Z",
+  "updated_at": "2026-04-18T04:07:11Z",
+  "closed_at": "2026-04-18T04:07:11Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:41:15Z"
+    }
+  ]
+}

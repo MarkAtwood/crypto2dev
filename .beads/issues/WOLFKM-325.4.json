@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-325.4",
+  "title": "wolfCrypt FIPS errors translate to EIO instead of EACCES",
+  "description": "In wolfssl_aes_cbc.c wolfssl_cbc_xlat_err() and equivalent functions in wolfssl_aes_gcm.c: the default case returns -EIO for unknown wolfCrypt errors. If wolfCrypt transitions to non-FIPS state between the outer fips_gate() check and the wc_* call, wolfCrypt returns a FIPS-specific error code (e.g., IN_CORE_FIPS_E = -1224 or similar). This maps to -EIO instead of -EACCES, violating the documented contract that FIPS failures return EACCES. Fix: add FIPS error codes to xlat_err() in all wolfssl providers (check wolfssl/wolfcrypt/error-crypt.h for the exact constants) and map them to -EACCES.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:34Z",
+  "updated_at": "2026-04-17T18:16:39Z",
+  "closed_at": "2026-04-17T18:16:39Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-325",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:34Z"
+    }
+  ]
+}

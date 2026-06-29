@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-ms3.7",
+  "title": "Correctness: inbuf leaked on OPERATION fd close",
+  "description": "Trigger: open fd \u2192 write(fd, key_material, N) [fd is UNSET, data goes to inbuf] \u2192 ioctl(CRYPTO2DEV_IOC_INIT) [succeeds, fd_type set to OPERATION, inbuf NOT cleared] \u2192 close(fd).\n\nBad outcome: fd_release hits the OPERATION case (lines 278-287 of crypto2dev_fd.c). This case calls sess_free and frees outbuf, but does NOT call inbuf_clear(). The inbuf allocation (which may contain sensitive key material written before INIT) is never memzero_explicit'd and never kfree'd \u2014 simultaneous memory leak and sensitive data zeroization failure (FIPS 140-3 violation).\n\nSame bug applies if the caller writes to an UNSET fd then calls KEY_GENERATE (not KEY_IMPORT): ioctl_key_generate() does not call inbuf_clear(), and the KEY fd close case (lines 289-297) also does not call inbuf_clear().",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:03:16Z",
+  "updated_at": "2026-04-18T03:15:54Z",
+  "closed_at": "2026-04-18T03:15:54Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ms3",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:03:15Z"
+    }
+  ]
+}

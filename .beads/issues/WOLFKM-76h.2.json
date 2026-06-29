@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-76h.2",
+  "title": "kcapi GCM decrypt broken for 12-byte authentication tags",
+  "description": "Trigger: open fd, sess_init kcapi gcm(aes), set_tag with taglen=12 (FIPS-permitted per SP 800-38D \u00a75.2.1.2), write ciphertext, call finalize/DO_OP decrypt. In kcapi_aead_sess_init (line 62), crypto_aead_setauthsize is called with GCM_TAG_SIZE=16, fixing the kernel AEAD transform authsize to 16 unconditionally. In kcapi_aead_decrypt, src_buf is assembled as aad||ciphertext||ctx->tag[0..taglen-1] appending only 12 bytes of tag, but aead_request_set_crypt is called with inlen+taglen as crypt length. The kernel splits that buffer using authsize=16, reading 4 bytes past the tag (from zero-initialized tail of src_buf) as part of the tag. The kernel's GCM tag comparison fails because it sees a 16-byte input where the last 4 bytes are zeros instead of the actual tag. Result: every decrypt with a 12-byte tag returns -EBADMSG regardless of data correctness. No forgery risk (check is stricter than intended), but kcapi GCM is functionally broken for any FIPS-compliant caller using 12-byte tags. Fix: call crypto_aead_setauthsize(tfm, taglen) in kcapi_aead_finalize/decrypt, using the actual taglen set by set_tag.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:05:13Z",
+  "updated_at": "2026-04-20T03:14:10Z",
+  "closed_at": "2026-04-20T03:14:10Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-76h",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:05:12Z"
+    }
+  ]
+}

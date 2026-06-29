@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-76h.8",
+  "title": "No live system indicator that FIPS enforcement requires rmmod to deactivate",
+  "description": "The fact that FIPS enforcement (fips_provider_count > 0) can only be deactivated by unloading all FIPS provider modules is documented in registry.c:37-43 as a code comment, but is not observable from a running system. CRYPTO2DEV_IOC_STATUS exposes fips_state but carries no text explaining the deactivation mechanism. A support engineer who sees fips_state=OPERATIONAL and wants to test without FIPS has no kernel-level pointer to the answer. Fix: add a sysfs attribute (e.g., /sys/class/misc/crypto2dev/fips_enforcement) that reads 'active (deactivate by rmmod <provider>)' or 'inactive' when a FIPS provider is/is not loaded. Alternatively, add a note to the DESIGN.md that is observable via the device's sysfs documentation.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:05:56Z",
+  "updated_at": "2026-04-20T03:14:29Z",
+  "closed_at": "2026-04-20T03:14:29Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-76h",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:05:56Z"
+    }
+  ]
+}

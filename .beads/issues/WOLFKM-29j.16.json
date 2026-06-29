@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-29j.16",
+  "title": "write-before-ioctl key import: correct for variable-length keys",
+  "description": "KEY_IMPORT uses write(2) to accumulate key bytes before the ioctl, rather than embedding key bytes in the ioctl struct. This avoids a worst-case ioctl struct of 8192 bytes (ML-DSA-87: 4896 bytes + headroom) on the kernel stack for every import call including tiny EC keys. The write-before-ioctl pattern allocates exactly what the key requires on the heap, zeroes it after import. A reviewer who suggests embedding the key in the ioctl struct to 'simplify the API' is wrong.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T04:52:00Z",
+  "updated_at": "2026-04-20T05:08:03Z",
+  "closed_at": "2026-04-20T05:08:03Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-29j",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T21:51:59Z"
+    }
+  ]
+}

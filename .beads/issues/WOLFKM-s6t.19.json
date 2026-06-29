@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-s6t.19",
+  "title": "Correctness: FIPS gate not first in ioctl_reset",
+  "description": "In ioctl_reset() (crypto2dev_fd.c), the FIPS gate check (ops->fips_gate()) is at line 1474, after: (1) fd_type check (line 1463), (2) finalized/error check (line 1468). provider.h explicitly lists sess_reset in the set of callbacks that require FIPS gating: 'Called by the framework before every provider callback that touches cryptographic state (sess_init, set_iv, gen_iv, set_aad, set_tag, update, finalize, get_tag, sign, verify, agree, kdf, sess_reset...)'. Trigger: ioctl(fd, RESET) on a finalized session when the provider FIPS gate would return non-zero \u2014 the session state (finalized flag, error flag) is inspected and acted on before the gate fires. FIPS compliance failure: gate must be first, before any state inspection that controls whether crypto work proceeds.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:22:26Z",
+  "updated_at": "2026-04-20T03:41:28Z",
+  "closed_at": "2026-04-20T03:41:28Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:22:25Z"
+    }
+  ]
+}

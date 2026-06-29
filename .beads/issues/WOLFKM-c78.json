@@ -1,0 +1,14 @@
+{
+  "id": "WOLFKM-c78",
+  "title": "Review round 1: DO_KDF ikm_fd: use KEY fd as IKM source",
+  "description": "Review round 1 for epic WOLFKM-1vx (DO_KDF ikm_fd support). Seven agents review simultaneously.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:13:30Z",
+  "updated_at": "2026-04-20T00:27:23Z",
+  "closed_at": "2026-04-20T00:27:23Z",
+  "notes": "Confidence: 5% chance of missed bug. Reasoning: Seven agents reviewed the ikm_fd path covering lock ordering, zeroization, refcount safety, dual-source rejection, PBKDF2 restriction, test vectors, and FIPS gate placement. The P0 report (WOLFKM-c78.1) confirms no correctness bugs found with explicit checklist of six safety properties verified against source. The two SEC2 efficiency findings (WOLFKM-c78.6, WOLFKM-c78.9) describe early-exit ordering; neither identifies a correctness issue, only a minor inefficiency. WOLFKM-c78.3 (over-allocation) and WOLFKM-c78.4 (test name) are labeled opinion \u2014 no engineering substance. No P1 maintainer-burden issues filed. The DECISION issues (eight of them) are positive confirmations of correct behavior, not bug reports. The residual 5% reflects that no review is exhaustive: concurrent close(ikm_fd) races during process death and the interaction with fd reference count on process exit were not explicitly traced. Running out of real complaints: yes. P0=0, P1=0, P2=2 (efficiency only, no correctness), P3=0, P4=1 (opinion)."
+}

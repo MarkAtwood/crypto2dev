@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-ylx",
+  "title": "Implement poll() in file_operations (Option A)",
+  "description": "Add .poll to crypto2dev file_operations. Readiness rules: POLLOUT|POLLWRNORM when fd is initialized and not finalized. POLLIN|POLLRDNORM when outbuf has unread bytes. Wake_up on outbuf write (in fd_write after update produces output) and on FINALIZE. Add wait_queue_head_t to fd state. Document in ioctl header.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:00:33Z",
+  "updated_at": "2026-04-17T22:02:52Z",
+  "closed_at": "2026-04-17T22:02:52Z"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-d52",
+  "title": "wolfssl provider: HKDF via wc_HKDF",
+  "description": "Implement the kdf() callback for 'hkdf(sha256)', 'hkdf(sha384)', 'hkdf(sha512)' in the wolfssl provider.\n\nwolfCrypt API:\n  wc_HKDF(type, inKey, inKeySz, salt, saltSz, info, infoSz, out, outSz)\n  where type is WC_SHA256 / WC_SHA384 / WC_SHA512\n\nParse algo string to extract hash: 'hkdf(sha256)' -> WC_SHA256 etc.\n\nFIPS note: wc_HKDF is approved in FIPS 140-3 under SP 800-56C rev2. Verify\nwolfCrypt_GetStatus_fips() before calling.\n\nAdd kdf ops entry to wolfssl_provider for each of the three hkdf variants.\nwolfssl_aes_cbc.c and wolfssl_aes_gcm.c should have .kdf = NULL (cipher\nalgo_ops don't implement KDF). Add a new wolfssl_kdf.c file for KDF ops.\n\nTest vectors: RFC 5869 appendix A vectors (A.1, A.2, A.3) \u2014 hardcode as\nstatic const arrays in tests/vectors/hkdf.h.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:23:07Z",
+  "updated_at": "2026-04-18T06:52:01Z",
+  "closed_at": "2026-04-18T06:52:01Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ely",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T15:26:11Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-nid",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T15:26:11Z"
+    }
+  ]
+}

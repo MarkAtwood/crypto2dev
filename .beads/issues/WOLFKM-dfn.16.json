@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-dfn.16",
+  "title": "Observability: ioctl_init failure paths emit no pr_err",
+  "description": "ioctl_init (src/cdev/crypto2dev_fd.c:604-624) can fail with -ENOENT for at least 4 distinct reasons: (1) no provider found for the requested algo, (2) REQUIRE_FIPS set but no FIPS provider loaded, (3) fips_gate() returned non-zero, (4) sess_init failed. None of these failure paths emit a pr_err or pr_debug with the algorithm name, provider name, or originating error. A user sees 'INIT ioctl failed: -ENOENT' with no corresponding kernel log entry. All four paths need distinct pr_err messages.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:04:15Z",
+  "updated_at": "2026-04-18T01:02:32Z",
+  "closed_at": "2026-04-18T01:02:32Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dfn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T17:04:14Z"
+    }
+  ]
+}

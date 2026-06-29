@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-tp5.15",
+  "title": "Observability: provider callback failures logged only in write/finalize, not set_iv/sign/verify/agree/reset",
+  "description": "ops->set_iv(), ops->set_aad(), ops->get_tag(), ops->set_tag(), ops->sign(), ops->verify(), ops->agree(), and ops->sess_reset() all return their raw error code directly to the ioctl caller with no pr_err/pr_debug log. A support engineer cannot determine which algo/provider/wolfCrypt error caused a silent -EINVAL or -EIO without adding printks and reproducing the failure. Contrast: ops->update() and ops->finalize() correctly log algo, provider, and ret. The same pattern must be applied to all provider callback failure paths.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:40:21Z",
+  "updated_at": "2026-04-18T04:15:17Z",
+  "closed_at": "2026-04-18T04:15:17Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:40:20Z"
+    }
+  ]
+}

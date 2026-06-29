@@ -1,0 +1,34 @@
+{
+  "id": "WOLFKM-6sc",
+  "title": "tests/userspace/test_af_alg.c: AF_ALG socket tests via kernel crypto API",
+  "description": "Userspace test using Linux AF_ALG sockets to exercise wolfkm registrations via the standard kernel crypto API (not /dev/wolfcrypt). Tests: (1) skcipher: bind to 'cbc(aes)', set key, encrypt NIST vector, compare output; (2) hash: bind to 'sha256', hash NIST vector, compare digest; (3) aead: bind to 'gcm(aes)', encrypt with AAD. For each algorithm: also verify that /proc/crypto shows 'wolfkm' as the driver for that algorithm (confirms priority 300 override worked).",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:56:59Z",
+  "updated_at": "2026-04-18T05:52:33Z",
+  "closed_at": "2026-04-18T05:52:33Z",
+  "design": "AF_ALG usage: socket(AF_ALG, SOCK_SEQPACKET, 0), bind with sockaddr_alg, setsockopt for key, accept, send/recv for data. Read /proc/crypto after bind to confirm wolfkm driver selected. This tests the kernel crypto API path (used by dm-crypt, IPsec) independently of /dev/wolfcrypt. See DESIGN.md \u00a7test_af_alg.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-2c4",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:29Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-5gy",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:29Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-t6k",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:28Z"
+    }
+  ]
+}

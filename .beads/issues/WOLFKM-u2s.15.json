@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-u2s.15",
+  "title": "ioctl_do_kdf: out_zero lock pattern could be clearer",
+  "description": "The out_zero label (crypto2dev_fd.c:1895-1900) unconditionally acquires state->lock even for early validation failures before the lock was ever held. While the pattern is defensively correct, it obscures intent: for errors raised before line 1776 (mutex_lock), the lock/unlock/lock cycle is unnecessary. Consider either (a) a separate early-exit cleanup path without locking, or (b) explicit comments about why inbuf_clear must be guarded here. The code is safe but could be clearer about which error paths actually need the mutex.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "chore",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:38:43Z",
+  "updated_at": "2026-04-19T23:28:42Z",
+  "closed_at": "2026-04-19T23:28:42Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-u2s",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T14:38:42Z"
+    }
+  ]
+}

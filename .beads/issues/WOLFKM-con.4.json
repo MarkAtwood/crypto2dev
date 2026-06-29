@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-con.4",
+  "title": "FIPS gate present in kcapi callbacks: must be removed",
+  "description": "The kcapi provider sets fips_gate=NULL in every ops table (is_fips=0). Per CLAUDE.md section 1d, kcapi callbacks must NOT manually call any gate function. Audited: kcapi_aead.c, kcapi_hash.c, kcapi_kdf.c, kcapi_skcipher.c. No manual gate calls were found in any kcapi callback. This item is filed for completeness to document the negative finding.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:36:12Z",
+  "updated_at": "2026-04-18T23:36:17Z",
+  "closed_at": "2026-04-18T23:36:17Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:36:12Z"
+    }
+  ]
+}

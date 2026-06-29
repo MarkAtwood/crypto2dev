@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-fzw.2",
+  "title": "kcapi: add sha3-384 and sha3-512 algorithms",
+  "description": "Add sha3-384 and sha3-512 to the kcapi hash provider.\n\n**What:** Extend kcapi_hash.c and its provider registration so sha3-384 and sha3-512 are available through the kernel crypto API path.\n\n**Algorithm:**\n1. In kcapi_hash.c: add sha3_384_sess_init wrapper calling kcapi_hash_sess_init_impl(ctx, op, key, keylen, \"sha3-384\", false)\n2. Add sha3_512_sess_init wrapper calling kcapi_hash_sess_init_impl(ctx, op, key, keylen, \"sha3-512\", false)\n3. Add kcapi_sha3_384_ops struct: .algo=\"sha3-384\", .fips_gate=NULL, .sess_init=sha3_384_sess_init; all other fields same as kcapi_sha3_256_ops\n4. Add kcapi_sha3_512_ops struct: .algo=\"sha3-512\", .fips_gate=NULL, .sess_init=sha3_512_sess_init; all other fields same as kcapi_sha3_256_ops\n5. In kcapi_provider.h: add extern declarations for kcapi_sha3_384_ops and kcapi_sha3_512_ops; update comment to list sha3-384 and sha3-512\n6. In kcapi_provider.c: add &kcapi_sha3_384_ops and &kcapi_sha3_512_ops to kcapi_algo_list; increment num_algos from 15 to 17\n\n**Defensive programming rules:**\n- kcapi_hash_sess_init_impl handles all error paths internally; no additional error handling needed in wrapper\n- Kernel sha3-384 and sha3-512 are available via crypto_alloc_shash(\"sha3-384\", 0, 0) \u2014 these are provided by the kernel sha3 module\n- No enums, no flags\n- fips_gate=NULL is correct for kcapi (non-FIPS provider)\n\n**Agent team:** single implementer",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:35:34Z",
+  "updated_at": "2026-04-20T00:42:34Z",
+  "closed_at": "2026-04-20T00:42:34Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-fzw",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:35:33Z"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-76h.5",
+  "title": "Provider selection on successful INIT/KEY_IMPORT/KEY_GENERATE logged at pr_debug only",
+  "description": "fd.c:802 (INIT success), fd.c:1703 (KEY_IMPORT success), fd.c:2077 (KEY_GENERATE success): provider selection logged at pr_debug. In production (without dynamic debug) a support engineer cannot determine from dmesg which provider was selected for any session. GET_STATE does expose algo and provider fields, so post-hoc analysis is possible IF the caller queries GET_STATE before close(). But if a session has already closed and a bug is being investigated from a log, there is no kernel-side record. Fix: change to pr_info_ratelimited so production deployments have a ring buffer record of which provider handled each session.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:05:34Z",
+  "updated_at": "2026-04-20T03:14:19Z",
+  "closed_at": "2026-04-20T03:14:19Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-76h",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:05:34Z"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "WOLFKM-l4o",
+  "title": "Add CRYPTO2DEV_IOC_RESET for session reuse",
+  "description": "Currently each crypto operation requires open()/close() of the fd. For high-frequency workloads (HMAC per packet, CBC per block device request) this is expensive: open() triggers LSM hooks, allocates kernel state, takes locks. Add CRYPTO2DEV_IOC_RESET that re-arms a finalized OPERATION fd for a new operation with the same algo and key binding. The IV must be set again for cipher sessions after reset. Providers that cannot cheaply reset return -EOPNOTSUPP.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "epic",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:01:43Z",
+  "updated_at": "2026-04-17T18:31:32Z",
+  "closed_at": "2026-04-17T18:31:32Z"
+}

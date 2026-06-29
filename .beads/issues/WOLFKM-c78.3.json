@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-c78.3",
+  "title": "[SEC2] ikm_buf allocated at full OKM_MAXLEN regardless of actual key size",
+  "description": "src/cdev/crypto2dev_fd.c:1785 allocates ikm_buf at CRYPTO2DEV_KDF_OKM_MAXLEN (64 bytes) unconditionally, but only copies and uses sk_src->len bytes (potentially 16-32 bytes for typical symmetric keys). This wastes 32-48 bytes per ikm_fd KDF call. Improvement: allocate exactly sk_src->len bytes after validating the source key.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:14:52Z",
+  "updated_at": "2026-04-20T00:26:59Z",
+  "closed_at": "2026-04-20T00:26:59Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-c78",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:14:51Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-dfn.18",
+  "title": "FIPS operational: non-FIPS algo lookup failure gives no explanation",
+  "description": "In src/provider/crypto2dev_registry.c:177-200, when fips_mode is active and a lookup skips a non-FIPS provider, no log is emitted. If a caller requests ctr(aes) after wolfssl is loaded (ctr(aes) only in kcapi), ioctl_init returns -ENOENT. Nothing in dmesg explains why. A support engineer will search for the algorithm in /proc/crypto, find it, and conclude the driver is broken \u2014 not that FIPS enforcement is active. Fix: emit a single pr_info at lookup time when an algo is rejected due to FIPS enforcement, naming the algo.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:04:24Z",
+  "updated_at": "2026-04-18T01:00:19Z",
+  "closed_at": "2026-04-18T01:00:19Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dfn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T17:04:23Z"
+    }
+  ]
+}

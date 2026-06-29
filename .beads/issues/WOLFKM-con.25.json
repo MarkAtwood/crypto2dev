@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.25",
+  "title": "hard FIPS filter in lookup: non-FIPS providers invisible when FIPS active",
+  "description": "src/provider/crypto2dev_registry.c crypto2dev_lookup_algo() \u2014 when fips_mode is true, the loop body immediately continues (skips) any provider with !p->is_fips, with no fallback to non-FIPS providers. This is correct: FIPS 140-3 operational requirement is that FIPS-validated crypto and non-validated crypto are not interchangeable. A 'prefer FIPS, fall back to non-FIPS' policy would allow silent downgrade if the FIPS provider doesn't handle a given algorithm. The hard filter means the only correct failure mode when FIPS is active is -ENOENT, not silent use of unvalidated code. A reviewer might suggest the fallback for usability; that fallback would void the CMVP certification for any operation that used the fallback path.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:59Z",
+  "updated_at": "2026-04-19T21:31:21Z",
+  "closed_at": "2026-04-19T21:31:21Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:37:58Z"
+    }
+  ]
+}

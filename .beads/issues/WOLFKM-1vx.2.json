@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-1vx.2",
+  "title": "Tests: ikm_fd chain and error cases in test_kdf.c",
+  "description": "Add ikm_fd test cases to tests/userspace/test_kdf.c covering: (1) chain test with known-answer vector, and (2) all documented error paths.\n\n**What:** Extend test_kdf.c with ikm_fd-specific tests. Test vectors derived from OpenSSL \u2014 not from the implementation under test.\n\n**Algorithm:**\n1. Helper function: create_kdf_key_fd(algo, out_algo, ikm, ikm_len, salt, salt_len, info, info_len, okm_len) -> int fd. Opens /dev/crypto2dev, writes IKM, calls DO_KDF, returns open KEY fd. On error, returns negative errno.\n\n2. test_ikm_fd_chain(): Two-stage HKDF chain with known-answer vector.\n   - Stage 1: open fd, write raw IKM bytes, DO_KDF hkdf(sha256) -> KEY fd (fd1) with out_algo='hkdf(sha256)'\n   - Stage 2: open fd2 (UNSET), DO_KDF hkdf(sha256) with ikm_fd=fd1 (no write())\n   - Export fd2 via KEY_EXPORT_PRIVATE + read(); compare to expected OKM\n   - Vector source: OpenSSL KDF twice (hkdf two-stage).\n   - OpenSSL command to generate:\n       stage1_okm = openssl kdf -keylen 32 -kdfopt digest:SHA256 -kdfopt hexkey:<IKM1_HEX> -kdfopt hexsalt:<SALT1_HEX> -kdfopt hexinfo:<INFO1_HEX> HKDF\n       stage2_okm = openssl kdf -keylen 32 -kdfopt digest:SHA256 -kdfopt hexkey:<stage1_okm> -kdfopt hexsalt:<SALT2_HEX> -kdfopt hexinfo:<INFO2_HEX> HKDF\n   - Close fd1, fd2.\n\n3. test_ikm_fd_operation_fd_rejected(): Open fd, call INIT to promote it to OPERATION fd. Pass this fd as ikm_fd in a new DO_KDF. Expect -EBADF.\n\n4. test_ikm_fd_invalid_fd_rejected(): Pass ikm_fd=-2 (invalid). Expect -EINVAL or -EBADF.\n\n5. test_ikm_fd_dual_source_rejected(): Open fd2 as UNSET, write() IKM bytes to it, then call DO_KDF with ikm_fd=fd1 (valid KEY fd). Expect -EINVAL (dual source).\n\n6. test_ikm_fd_pbkdf2_rejected(): Create a valid symmetric KEY fd. Pass it as ikm_fd in a DO_KDF with algo='pbkdf2(sha256)'. Expect -EINVAL.\n\n7. Register all new tests in main() pass/fail counter.\n\n**Defensive programming rules:**\n- All open() and ioctl() return codes checked.\n- KEY fds closed in all paths (even on assertion failure \u2014 use goto cleanup).\n- Never derive test vectors from the implementation. Compute with OpenSSL command as oracle.\n- Test names include condition (e.g., 'ikm_fd: operation fd rejected').\n\n**Agent team:** TESTER derives vectors independently using OpenSSL. Does not read the implementation. After IMPLEMENTER closes W1, TESTER verifies tests pass without changes.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T23:56:34Z",
+  "updated_at": "2026-04-20T00:10:39Z",
+  "closed_at": "2026-04-20T00:10:39Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-1vx",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T16:56:34Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-1vx.1",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T16:56:36Z"
+    }
+  ]
+}

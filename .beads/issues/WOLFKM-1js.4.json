@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-1js.4",
+  "title": "out_algo label on SYMMETRIC KEY fd not enforced \u2014 key usable with any algo",
+  "description": "DO_KDF stores op.out_algo as state->key_algo (a label), but ioctl_init's key_fd path (fd.c:630-670) does not check that the SYMMETRIC KEY fd's key_algo matches op.algo. A key derived with out_algo='cbc(aes)' can be used to init a 'gcm(aes)' session, or vice versa. The UAPI doc says out_algo 'Determines the KEY fd's algo label and the provider used to wrap the derived key bytes' \u2014 but there is no wrapping and no enforcement. This violates key separation (using the same key material for two different algorithms), which is a FIPS 140-3 / SP 800-57 concern. Maintenance consequence: users will assume the label is enforced (it sounds like it is), then file issues when cross-algo use works silently. Fix: in ioctl_init key_fd path, reject if ks->key_algo \\!= op.algo.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T15:57:33Z",
+  "updated_at": "2026-04-18T17:06:52Z",
+  "closed_at": "2026-04-18T17:06:52Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-1js",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T08:57:33Z"
+    }
+  ]
+}

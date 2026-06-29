@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7d6.1",
+  "title": "Document AGREE raw Z output and KDF requirement",
+  "description": "In docs/programmers_guide.md ECDH section: add a prominent warning that DO_AGREE returns the raw X coordinate of the ECDH result (Z value per SP 800-56A). Callers MUST derive keying material from Z using an approved KDF (HKDF per RFC 5869 or SP 800-56C) before using it as a key. Using raw Z directly as a key is not SP 800-56A compliant and may void FIPS coverage. Include a short code example showing HKDF wrapping of the DO_AGREE output. Cite SP 800-56A Rev 3 Section 5.8. Also add a note to DESIGN.md recording this as a deliberate design decision (raw Z, KDF is caller responsibility) and why (KDF is protocol-specific).",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:36Z",
+  "updated_at": "2026-04-18T22:39:27Z",
+  "closed_at": "2026-04-18T22:39:27Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7d6",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:36Z"
+    }
+  ]
+}

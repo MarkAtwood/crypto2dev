@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-s6t.17",
+  "title": "Correctness: FIPS gate not first in ioctl_finalize",
+  "description": "In ioctl_finalize() (crypto2dev_fd.c), the FIPS gate check (ops->fips_gate()) is at line 1401, after: (1) fd_type check (line 1379), (2) finalized check (line 1384), (3) error check (line 1389), (4) iv_set check (line 1395). CLAUDE.md and DESIGN rule state: 'The very first line of every crypto entry point calls crypto2dev_fips_gate(). ... The gate must be the first executable statement \u2014 before argument validation, before lock acquisition, before anything else.' and 'One missed gate invalidates the entire CMVP certification.' Trigger: ioctl(fd, FINALIZE) on an fd in FIPS-degraded state \u2014 the gate is not checked until after iv_set validation, meaning a non-FIPS code path may branch before the gate fires. FIPS compliance failure: gate must execute before any session state is inspected.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:22:17Z",
+  "updated_at": "2026-04-20T03:41:23Z",
+  "closed_at": "2026-04-20T03:41:23Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:22:17Z"
+    }
+  ]
+}

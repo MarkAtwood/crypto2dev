@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-w4c.11",
+  "title": "DECISION: Double-gate in wolfssl_ec_key helpers is intentional defense-in-depth",
+  "description": "wolfssl_ec_key_export_public() and wolfssl_ec_key_export_private() (wolfssl_ec_key.c) each call wolfssl_fips_gate() directly, even though the per-algo wrappers in ecdh.c and ecdsa.c that call them also gate. The double-gate is safe (fips_gate has no side effects) and provides defense-in-depth: if a future caller is written that calls these helpers without a wrapper gate, the helpers still enforce the gate. A reviewer who says 'remove the redundant gate' is removing defense-in-depth from a FIPS boundary. Confirmed correct in pass2 audit (WOLFKM-7sx).",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:01:25Z",
+  "updated_at": "2026-04-20T15:24:31Z",
+  "closed_at": "2026-04-20T15:24:31Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-w4c",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-20T08:01:24Z"
+    }
+  ]
+}

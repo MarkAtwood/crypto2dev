@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-29j.15",
+  "title": "memzero_explicit throughout: correct, do not simplify",
+  "description": "All key-holding buffers are zeroed with memzero_explicit(), not memset(). The compiler is legally permitted to elide memset() when the buffer goes out of scope with no subsequent reads. memzero_explicit() is a compiler barrier. A reviewer who suggests replacing it with memset() or bzero() to 'clean it up' is wrong. FIPS 140-3 requires zeroization; memset() is not guaranteed to satisfy that requirement.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T04:51:58Z",
+  "updated_at": "2026-04-20T05:08:00Z",
+  "closed_at": "2026-04-20T05:08:00Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-29j",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T21:51:58Z"
+    }
+  ]
+}

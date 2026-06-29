@@ -1,0 +1,23 @@
+{
+  "id": "WOLFKM-ns8",
+  "title": "tests/kernel/test_fips_gate.c: verify ops fail when wolfCrypt not OPERATIONAL",
+  "description": "Kernel test module that verifies wolfkm correctly refuses all crypto operations when wolfCrypt is not in FIPS OPERATIONAL state. Test approach: if wolfCrypt exports a test function to force non-OPERATIONAL state (e.g. wc_RunAllCast_fips for error injection), call it, attempt a wolfkm crypto operation, verify it returns -EACCES, then restore OPERATIONAL state. If wolfCrypt has no injection API, test by unloading wolfcrypt.ko and checking that wolfkm refuses to load (module_init returns -ENODEV).",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:55:51Z",
+  "updated_at": "2026-04-18T06:00:21Z",
+  "closed_at": "2026-04-18T06:00:21Z",
+  "notes": "This test may be partially blocked by HUMAN_TASK_002 (wolfcrypt.ko API audit) \u2014 if wolfCrypt has no FIPS injection API, document that in a human_tasks file.",
+  "design": "Check wolfCrypt headers for any FIPS state injection API before writing. If no injection API exists, the test is: (1) modprobe -r wolfkm; (2) modprobe -r wolfcrypt; (3) attempt insmod wolfkm.ko without wolfcrypt loaded; (4) verify insmod fails with ENODEV. This may need to be implemented as a shell test in run_kernel_tests.sh rather than a .ko. See DESIGN.md \u00a7test_fips_gate.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ins",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:12Z"
+    }
+  ]
+}

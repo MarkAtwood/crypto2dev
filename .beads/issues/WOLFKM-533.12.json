@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-533.12",
+  "title": "REQUIRE_FIPS checks ops->fips_gate on the returned provider, closing TOCTOU",
+  "description": "In ioctl_init(), after crypto2dev_lookup_algo() returns the ops pointer, the REQUIRE_FIPS check is: 'if (state->require_fips && \\!ops->fips_gate)'. It does NOT re-call crypto2dev_fips_provider_loaded() for this decision. The code comment at this site is explicit: 'Check ops->fips_gate rather than re-reading fips_provider_loaded() \u2014 the latter is a separate atomic read that can race with a concurrent provider load between lookup and this check (TOCTOU). FIPS providers always set fips_gate; non-FIPS providers leave it NULL.' The check is on the specific ops struct that was already returned by lookup \u2014 the same ops that will be used for the session. If a FIPS provider were loaded after lookup but before a re-read of fips_provider_loaded(), the check would incorrectly conclude FIPS is active even though the selected ops are from a non-FIPS provider. Checking ops->fips_gate directly is both correct and race-free. A reviewer might simplify to 'just call fips_provider_loaded() again \u2014 it's cleaner.' That reintroduces the TOCTOU window.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:29:06Z",
+  "updated_at": "2026-04-20T05:49:02Z",
+  "closed_at": "2026-04-20T05:49:02Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-533",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T22:29:05Z"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-s6t.23",
+  "title": "inbuf zeroized even on copy_from_user failure in KEY_IMPORT \u2014 key material cannot be left pending",
+  "description": "In ioctl_key_import(), if copy_from_user() fails (bad ioctl struct pointer), the handler acquires the lock and calls inbuf_clear() before returning -EFAULT (lines 1625-1629). The key bytes were already written to inbuf via a prior write() syscall. Without this inbuf_clear(), the key bytes would persist in inbuf until the fd is closed \u2014 across potentially many subsequent operations. A FIPS 140-3 requirement is that CSPs not persist beyond their operational need; failing to zeroize here leaves key material in a live kernel allocation. A reviewer might say 'the copy_from_user failed, just return -EFAULT \u2014 the fd will be closed eventually' \u2014 'eventually' is not acceptable for key material in kernel memory. The zeroize-on-all-paths discipline applies even to error paths that precede the crypto operation.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:22:39Z",
+  "updated_at": "2026-04-20T04:29:16Z",
+  "closed_at": "2026-04-20T04:29:16Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:22:39Z"
+    }
+  ]
+}

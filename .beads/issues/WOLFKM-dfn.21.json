@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-dfn.21",
+  "title": "UAPI: GET_STATE missing finalized/error/iv_set fields for OPERATION fds",
+  "description": "crypto2dev_fd_state_info (crypto2dev_ioctl.h:367-376) does not include finalized, error, or iv_set fields. For a KEY fd, key_exportable is also absent. ioctl_get_state (fd.c:1132-1168) hard-codes initialized=1 and omits these. A support engineer or debugging tool calling GET_STATE cannot determine: whether the session has finalized, whether it is in the error state, whether an IV has been set for CBC/GCM, or whether a key is exportable. These fields exist in struct crypto2dev_fd_state; they need corresponding entries in the info struct.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:04:40Z",
+  "updated_at": "2026-04-18T01:00:03Z",
+  "closed_at": "2026-04-18T01:00:03Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dfn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T17:04:39Z"
+    }
+  ]
+}

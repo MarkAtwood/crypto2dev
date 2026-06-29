@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-s6t.21",
+  "title": "Crypto misuse: wolfssl ECDH agree() does not explicitly validate peer public key on curve",
+  "description": "wolfssl_ecdh.c line 182: wc_ecc_import_x963_ex(..., peer_key, ctx->curve_id) followed immediately by wc_ecc_shared_secret() with no call to wc_ecc_check_key().\n\nwolfCrypt analysis (ecc.c):\n- wc_ecc_import_x963_ex() hardcodes untrusted=0 (line 11220), so the inline on-curve/infinity checks (block 2, lines 11043-11124) are NEVER executed.\n- WOLFSSL_VALIDATE_ECC_IMPORT (the compile-time flag that would trigger wc_ecc_check_key() at import) defaults OFF. Not set in FIPS builds by default.\n- _ecc_validate_public_key() (called by wc_ecc_check_key()) implements all four SP 800-56Ar3 \u00a75.6.2.3.3 checks: not-infinity (line 10654), Qx/Qy in range (lines 10671-10683), on-curve y\u00b2=x\u00b3+ax+b (line 10690), order check n\u00d7Q=infinity (line 10696). These are ONLY reachable via wc_ecc_check_key().\n- In default build: wc_ecc_import_x963_ex() does format parsing and coordinate deserialization ONLY. Zero SP 800-56A validation.\n\nFix: add wc_ecc_check_key(peer_key) after successful wc_ecc_import_x963_ex() at wolfssl_ecdh.c line 182. Treat any non-zero return as hard rejection.\n\nTrigger: attacker supplies a peer public key not on the curve (or at infinity, or with order != n). wc_ecc_shared_secret() computes ECDH using the unchecked point. Small-subgroup attack can reduce Z entropy to near-zero without error signal.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:22:32Z",
+  "updated_at": "2026-04-20T03:41:52Z",
+  "closed_at": "2026-04-20T03:41:52Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-s6t",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T20:22:31Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-4l7.3",
+  "title": "Observability: write() on KEY fd returns -ENODEV without log",
+  "description": "crypto2dev_fd_write() checks 'if (state->fd_type != CRYPTO2DEV_FDTYPE_OPERATION) { ret = -ENODEV; goto out; }' (line 402-404) for KEY fds with no log. KEY fds accept write() when UNSET (for key data accumulation before KEY_IMPORT), but once they are in FDTYPE_KEY state they reject write(). An app that mistakenly calls write() on a KEY fd after import gets -ENODEV indistinguishable from device not found. A support engineer sees write() \u2192 -ENODEV and cannot determine if the fd is the wrong type or uninitialized. Fix: add pr_info_ratelimited before the -ENODEV return logging fd_type. Location: crypto2dev_fd.c line 402.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T11:46:42Z",
+  "updated_at": "2026-04-20T11:51:23Z",
+  "closed_at": "2026-04-20T11:51:23Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-4l7",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-20T04:46:41Z"
+    }
+  ]
+}

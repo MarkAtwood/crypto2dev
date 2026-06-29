@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-u2s.8",
+  "title": "ioctl_finalize: state->inbuf_len always 0 at FINALIZE; AEAD decrypt outbuf undersized",
+  "description": "In ioctl_finalize() (crypto2dev_fd.c ~line 1394-1398):\n\n    size_t need = CRYPTO2DEV_HASH_MAXLEN;\n    if (state->inbuf_len > 0)\n        need = max_t(size_t, need, state->inbuf_len + 16);\n    ret = outbuf_grow(state, need);\n\nstate->inbuf is the pre-INIT write buffer (used by KEY_IMPORT / DO_KDF).\nIt is cleared by inbuf_clear(state) at line 782 when INIT is called.\nBy the time FINALIZE is called, state->inbuf_len is always 0 for a\nproperly-initialized OPERATION fd.\n\nConsequence: the condition 'state->inbuf_len > 0' is always false at\nFINALIZE time.  The outbuf is only grown by CRYPTO2DEV_HASH_MAXLEN (64 bytes).\n\nFor AEAD decrypt (wolfssl GCM batch path, kcapi AEAD): finalize() produces\nup to inbuf_len bytes of plaintext (provider's internal inbuf, not state->inbuf).\nwolfssl_aes_gcm_finalize() checks 'outbuf_size < inlen' and returns -EMSGSIZE.\nkcapi_aead_finalize() checks 'outbuf_size < ctx->inbuf_len' and returns -EMSGSIZE.\n\nThis means AEAD decrypt finalize fails with -EMSGSIZE for any ciphertext\nlarger than what was already in the outbuf when FINALIZE is called.\n\nThe fix must reserve space for the provider's output size.  For AEAD decrypt,\nthe provider knows how much ciphertext it has buffered in ctx->inbuf_len,\nbut the framework does not have direct access to that.  Options:\n  (a) Reserve CRYPTO2DEV_MAX_PAYLOAD for any AEAD algo (detectable by\n      ops->set_aad != NULL or ops->set_tag != NULL).\n  (b) Add a new ops callback (e.g. finalize_output_size()) for providers\n      to report expected output size before finalize() is called.\n  (c) Make the outbuf grow lazily inside outbuf_grow if needed.\n\nThe -EMSGSIZE return from finalize() is already caught (sets state->error = true),\nso the failure is deterministic and not a silent data corruption.  However,\nAEAD decrypt is completely broken for any message above ~CRYPTO2DEV_HASH_MAXLEN\nbytes at finalize time.\n\nFiles: src/cdev/crypto2dev_fd.c (ioctl_finalize, ~line 1394)",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:34:01Z",
+  "updated_at": "2026-04-19T21:43:52Z",
+  "closed_at": "2026-04-19T21:43:52Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-u2s",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T14:34:00Z"
+    }
+  ]
+}

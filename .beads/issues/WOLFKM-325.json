@@ -1,0 +1,12 @@
+{
+  "id": "WOLFKM-325",
+  "title": "Design review bug fixes",
+  "description": "Bugs identified during design review that can be fixed without user decisions: provider name given but no match silently falls through to wrong provider instead of returning ENOENT; outbuf always allocated at 1MB+512B regardless of operation type; kcapi hash buffers all input (batch) while wolfssl hash is truly streaming, causing inconsistent 1MB cap behaviour; wolfCrypt FIPS failure error codes incorrectly map to EIO instead of EACCES.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:10Z",
+  "updated_at": "2026-04-18T00:57:31Z",
+  "closed_at": "2026-04-18T00:57:31Z"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7b5.9",
+  "title": "Crypto misuse: CMAC sess_reset leaks key on wc_InitCmac failure",
+  "description": "wolfssl_cmac_aes_sess_reset() in src/providers/wolfssl/wolfssl_cmac.c line 133: when wc_InitCmac() returns non-zero, the function returns wolfssl_cmac_xlat_err(ret) without calling memzero_explicit(ctx->key_bytes, sizeof(ctx->key_bytes)) or zeroing ctx->key_len. The AES key material persists in kernel memory after a failed reset. Compare to wolfssl_hmac_sess_reset() (wolfssl_hmac.c lines 198-200, 206-209) and wolfssl_aes_cbc_sess_reset() which both correctly zeroize key_bytes before returning on error. Trigger: sess_reset() called on a CMAC session where wc_InitCmac() fails (e.g. wolfCrypt internal error or FIPS degraded state). Cryptographic consequence: FIPS 140-3 key zeroization requirement (SP 800-133 \u00a76) violated \u2014 the symmetric key remains recoverable from kernel memory after the session enters a failed state.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:19:41Z",
+  "updated_at": "2026-04-18T05:30:33Z",
+  "closed_at": "2026-04-18T05:30:33Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7b5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T22:19:41Z"
+    }
+  ]
+}

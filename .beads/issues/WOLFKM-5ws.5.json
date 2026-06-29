@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-5ws.5",
+  "title": "CORRECT: early return on setauthsize failure before copying tag bytes",
+  "description": "kcapi_aead_set_tag returns immediately on crypto_aead_setauthsize failure, before memcpy(ctx->tag, tag, taglen) and ctx->taglen = taglen. This is correct: a failed setauthsize leaves the transform's authsize in an unknown state. Accepting the tag bytes into ctx->tag under that condition would allow a subsequent decrypt call to run aead_request_set_crypt with a taglen that does not match the transform's actual authsize, producing a silent authentication bypass. A reviewer might suggest separating the setauthsize call so tag storage is always attempted, but that is wrong for exactly this reason.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:27:07Z",
+  "updated_at": "2026-04-20T02:28:24Z",
+  "closed_at": "2026-04-20T02:28:24Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-5ws",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:27:06Z"
+    }
+  ]
+}

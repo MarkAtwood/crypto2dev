@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-dud.2",
+  "title": "sess_reset ignores return of crypto_aead_setauthsize without WARN_ON",
+  "description": "kcapi_aead.c sess_reset calls crypto_aead_setauthsize(ctx->tfm, GCM_TAG_SIZE) and discards the return value without comment. It cannot fail for 16 bytes (always valid GCM authsize), but ignoring a kernel function return with no WARN_ON is a real code review target. Fix: add (void)crypto_aead_setauthsize(...) with a comment, or WARN_ON the return.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:32:47Z",
+  "updated_at": "2026-04-20T02:37:46Z",
+  "closed_at": "2026-04-20T02:37:46Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dud",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T19:32:47Z"
+    }
+  ]
+}

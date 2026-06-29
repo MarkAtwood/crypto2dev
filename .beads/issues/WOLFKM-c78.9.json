@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-c78.9",
+  "title": "[SEC2] PBKDF2+ikm_fd rejection delayed until after ikm_fd processing",
+  "description": "src/cdev/crypto2dev_fd.c:1780-1783 rejects the combination of PBKDF2 algo with ikm_fd, but this validation happens AFTER expensive ikm_fd extraction work (kmalloc 64 bytes, fget, mutex_lock, memcpy, fput). If a caller mistakenly tries PBKDF2 with ikm_fd, they waste heap allocation and lock acquisitions. Improvement: move the strncmp(op.algo, 'pbkdf2', 6) == 0 check before the ikm_fd block (before line 1773) to fail fast.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:15:13Z",
+  "updated_at": "2026-04-20T00:27:11Z",
+  "closed_at": "2026-04-20T00:27:11Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-c78",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:15:12Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-w4c.2",
+  "title": "Raw wolfCrypt errno from sess_init returned to userspace",
+  "description": "In ioctl_init (crypto2dev_fd.c), when ops->sess_init() fails, the raw wolfCrypt error code (e.g., -173 = BAD_FUNC_ARG, -125 = MEMORY_E, -230 = FIPS_DEGRADED_E) is returned directly to userspace as the ioctl return value. wolfCrypt error codes are internal signed integers that userspace has no contract to interpret. Correct behavior: log the wolfCrypt error code, then translate to -EINVAL, -ENOMEM, -EACCES, etc. before returning. Additional risk: returning -EACCES only for FIPS_DEGRADED_E is important so userspace can distinguish a FIPS failure from a bad argument \u2014 returning -EINVAL for a FIPS degraded error actively misleads the caller.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:00:27Z",
+  "updated_at": "2026-04-20T15:19:00Z",
+  "closed_at": "2026-04-20T15:19:00Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-w4c",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-20T08:00:26Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-1js.1",
+  "title": "okm_len > max returns -EINVAL, UAPI says -EMSGSIZE",
+  "description": "fd.c:1688-1689: 'op.okm_len > CRYPTO2DEV_KDF_OKM_MAXLEN' returns -EINVAL. UAPI comment says 'Returns -EMSGSIZE if @okm_len > CRYPTO2DEV_KDF_OKM_MAXLEN'. Error code mismatch \u2014 callers parsing -EMSGSIZE will never see it; callers parsing -EINVAL can't distinguish 'too big' from 'zero/invalid'. Fix: split the check \u2014 okm_len == 0 stays -EINVAL, okm_len > max becomes -EMSGSIZE.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T15:57:09Z",
+  "updated_at": "2026-04-18T17:06:51Z",
+  "closed_at": "2026-04-18T17:06:51Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-1js",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T08:57:09Z"
+    }
+  ]
+}

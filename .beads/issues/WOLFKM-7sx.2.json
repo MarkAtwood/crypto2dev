@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7sx.2",
+  "title": "Correctness: ioctl_key_generate leaves inbuf uncleared on pre-lock errors",
+  "description": "Trigger: user calls write(fd, sensitive_bytes, n) on an UNSET fd, then calls KEY_GENERATE with a bad arg pointer (copy_from_user fails), or with an empty algo string (line 2128), or with nonzero _pad (line 2131). All three exit paths return before acquiring state->lock and without calling inbuf_clear. The sensitive write() data remains in state->inbuf until fd close(). Contrast with ioctl_key_import which explicitly acquires the lock and calls inbuf_clear() on copy_from_user failure (lines 1712-1714). FIPS 140-3 requires CSPs to be zeroized when no longer operationally needed. A KEY_GENERATE failure leaves key material from a prior write() in inbuf for the lifetime of the fd. The EBUSY path (line 2139) correctly calls inbuf_clear; the pre-lock paths do not.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:12:44Z",
+  "updated_at": "2026-04-20T05:24:14Z",
+  "closed_at": "2026-04-20T05:24:14Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7sx",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T22:12:44Z"
+    }
+  ]
+}

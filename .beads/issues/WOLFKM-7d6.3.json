@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-7d6.3",
+  "title": "Add FIPS level callout to KEY_EXPORT_PRIVATE documentation",
+  "description": "In docs/programmers_guide.md KEY_EXPORT_PRIVATE section: add a callout box noting that plaintext private key export is incompatible with FIPS 140-3 Level 2 and above, which requires keys to leave a module only in encrypted (key-wrapped) form per SP 800-38F. State that this interface targets FIPS 140-3 Level 1 only. If Level 2+ compliance is required, private keys must remain non-exportable (exportable=0) and be managed entirely within the kernel module. Also update DESIGN.md to record this decision.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:47Z",
+  "updated_at": "2026-04-18T22:40:42Z",
+  "closed_at": "2026-04-18T22:40:42Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-7d6",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:46Z"
+    }
+  ]
+}

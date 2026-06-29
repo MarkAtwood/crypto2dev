@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-con.21",
+  "title": "Crypto misuse: ioctl_init early return leaks op.key on stack",
+  "description": "ioctl_init in crypto2dev_fd.c:616 returns -EFAULT directly when copy_from_user fails, bypassing the out_zeroize label that calls memzero_explicit(&op, sizeof(op)). A partial copy_from_user can deposit key bytes from the struct crypto2dev_init_op (op.key[128]) onto the kernel stack without zeroing them. The caller's key material then persists in kernel stack memory until overwritten. Fix: change the copy_from_user error path to goto out_zeroize instead of returning directly. This ensures op.key is always wiped regardless of when the error occurs.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:45Z",
+  "updated_at": "2026-04-19T21:23:58Z",
+  "closed_at": "2026-04-19T21:23:58Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-con",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-18T16:37:45Z"
+    }
+  ]
+}

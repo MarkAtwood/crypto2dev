@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-tp5.9",
+  "title": "Kernel discipline: key_export_public outlen not bounded before copy_to_user",
+  "description": "In crypto2dev_fd_read() KEY fd path, key_export_public() returns outlen into a u32. The code checks count < outlen (user buffer too small) but never checks outlen <= CRYPTO2DEV_PUBKEY_MAXLEN (the size of kbuf). A provider that misbehaves or is corrupted and returns outlen > CRYPTO2DEV_PUBKEY_MAXLEN will cause copy_to_user(ubuf, kbuf, outlen) to read past the end of the CRYPTO2DEV_PUBKEY_MAXLEN-sized kbuf allocation, producing a kernel heap over-read. Fix: add if (outlen > CRYPTO2DEV_PUBKEY_MAXLEN) check after the callback returns.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:39:58Z",
+  "updated_at": "2026-04-18T04:07:53Z",
+  "closed_at": "2026-04-18T04:07:53Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:39:58Z"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-vit",
+  "title": "crypto2dev_aead.c: register gcm(aes), ccm(aes)",
+  "description": "Register AES-GCM and AES-CCM as kernel AEAD algorithms. .cra_name='gcm(aes)' and 'ccm(aes)', driver names 'wolfkm-gcm-aes' and 'wolfkm-ccm-aes', priority 300. Implement .setkey, .setauthsize, .encrypt (generate auth tag), .decrypt (verify tag \u2014 return -EBADMSG on failure). wolfCrypt's streaming API handles the scatterlist with AAD prepended. Only use sg_copy_to_buffer as fallback if wolfCrypt scatter API has a gap \u2014 cap at 64 KB, reject larger inputs with -EMSGSIZE.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "feature",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:53:40Z",
+  "updated_at": "2026-04-18T01:08:03Z",
+  "closed_at": "2026-04-18T01:08:03Z",
+  "design": "GCM tag sizes: 4, 8, 12, 16 bytes (setauthsize validates). CCM nonce sizes: 7-13 bytes. Decrypt MUST return -EBADMSG (not -EINVAL) on tag mismatch \u2014 kernel AF_ALG and IPsec/xfrm depend on this exact errno. AAD is passed via the scatterlist ahead of the ciphertext in the kernel AEAD API. Read include/crypto/aead.h carefully before implementation. See DESIGN.md \u00a7aead.",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dvd",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:04Z"
+    }
+  ]
+}

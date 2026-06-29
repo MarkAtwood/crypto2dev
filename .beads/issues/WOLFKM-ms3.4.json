@@ -1,0 +1,21 @@
+{
+  "id": "WOLFKM-ms3.4",
+  "title": "FIPS gate missing: example/gen_iv",
+  "description": "src/providers/example/example_provider.c:290 \u2014 example_gen_iv() has no fips_gate() call. First executable statement is (void)ctx followed by argument validation. Gate must be first.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:03:05Z",
+  "updated_at": "2026-04-18T03:15:40Z",
+  "closed_at": "2026-04-18T03:15:40Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-ms3",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:03:05Z"
+    }
+  ]
+}

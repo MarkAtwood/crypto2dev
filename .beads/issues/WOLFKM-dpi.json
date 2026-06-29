@@ -1,0 +1,13 @@
+{
+  "id": "WOLFKM-dpi",
+  "title": "CI: add Ubuntu 24.04 (kernel 6.8) to test matrix",
+  "description": "UBUNTU_VERSION=24.04 support already exists in test-on-aws.sh but is not run as a standard target. Add it to the matrix so kernel 6.8 is covered alongside 5.15.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T02:57:40Z",
+  "updated_at": "2026-04-19T03:11:57Z",
+  "closed_at": "2026-04-19T03:11:57Z"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-dfn.27",
+  "title": "Decision: is_fips flag makes non-FIPS providers invisible at lookup time",
+  "description": "When any provider with is_fips=1 registers, fips_provider_count is incremented INSIDE the write lock. Subsequent lookups skip providers where is_fips=0. This two-layer enforcement (visibility + per-op gate) is correct. Layer 1 prevents routing to unvalidated paths. Layer 2 checks operational health. The counter update inside the write lock prevents a race where a reader sees the FIPS provider in the list but reads a stale zero counter. A reviewer suggesting 'just rely on per-op gate checks' would leave a window where a non-FIPS provider is reachable. FIPS 140-3 requires segregation of validated and unvalidated implementations.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:05:14Z",
+  "updated_at": "2026-04-18T00:43:01Z",
+  "closed_at": "2026-04-18T00:43:01Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-dfn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T17:05:14Z"
+    }
+  ]
+}

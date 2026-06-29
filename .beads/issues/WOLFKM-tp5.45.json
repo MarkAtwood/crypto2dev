@@ -1,0 +1,20 @@
+{
+  "id": "WOLFKM-tp5.45",
+  "title": "inbuf_append: each append re-kmallocs entire buffer \u2014 quadratic for many small writes",
+  "description": "inbuf_append() allocates a new buffer of size (inbuf_len + len), copies the existing inbuf, then frees the old one. This is O(n^2) in the number of write() calls: N writes of 1 byte each produce N kmalloc+memcpy+kfree sequences. For a 4KB key across 4096 1-byte writes: 4096 allocations, total bytes copied = 1+2+...+4096 = ~8MB. While key material writes are not expected to be split across many tiny writes, there is no limit on the number of write() calls to an UNSET fd before KEY_IMPORT. A malicious userspace can cause excessive kernel memory allocations. The MAX_PAYLOAD limit (1MB) bounds the total size but not the number of iterations. Each iteration holds two allocations simultaneously (old + new) before freeing old. The total allocation work is O(n^2). This is a minor correctness/efficiency issue \u2014 not exploitable for kernel memory exhaustion due to MAX_PAYLOAD limit. Flag as low-priority correctness issue.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "bug",
+  "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:43:00Z",
+  "updated_at": "2026-04-18T03:45:41Z",
+  "closed_at": "2026-04-18T03:45:41Z",
+  "dependencies": [
+    {
+      "depends_on_id": "WOLFKM-tp5",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T20:43:00Z"
+    }
+  ]
+}
