@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-dfn.10",
+  "title": "UAPI: SET_AAD/GET_TAG/SET_TAG ioctls not dispatched — AEAD broken",
+  "description": "CRYPTO2DEV_IOC_SET_AAD (slot 3), CRYPTO2DEV_IOC_GET_TAG (slot 4), and CRYPTO2DEV_IOC_SET_TAG (slot 5) are defined in crypto2dev_ioctl.h and have handler functions (ioctl_set_aad, ioctl_get_tag, ioctl_set_tag) but are NOT present in the switch statement at src/cdev/crypto2dev_fd.c:1424-1466. Every call to these ioctls returns -ENOTTY. Outcome: all AEAD (GCM) operations requiring AAD or tag management are completely unreachable from userspace. AES-GCM authenticated encryption is silently broken.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:03:38Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:49:49Z",
+  "closed_at": "2026-04-18T00:49:49Z",
+  "close_reason": "False positive: SET_AAD/GET_TAG/SET_TAG are correctly wired in switch at fd.c:1435-1440",
+  "labels": [
+    "audit",
+    "correctness",
+    "uapi",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.10",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:03:38Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

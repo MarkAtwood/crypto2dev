@@ -1,0 +1,32 @@
+{
+  "id": "WOLFKM-dfn.19",
+  "title": "FIPS operational: FIPS aggregate status doesn't identify failing provider",
+  "description": "CRYPTO2DEV_IOC_STATUS returns CRYPTO2DEV_FIPS_NOT_OPERATIONAL (src/cdev/crypto2dev_fd.c:1118-1130) but does not identify which provider's fips_gate is failing. crypto2dev_fips_aggregate() (registry.c:273-307) iterates providers, stops at first gate failure, returns a state code. In a multi-provider deployment (wolfssl + hardware accel), the caller cannot determine which provider to remediate. The FIPS_NOT_OPERATIONAL code should be paired with a pr_err naming the failing provider, or the status struct should include a provider name field.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:04:31Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T01:00:15Z",
+  "closed_at": "2026-04-18T01:00:15Z",
+  "close_reason": "Addressed by dfn.14 fix: pr_err_ratelimited in wolfssl_fips_gate identifies the failing provider",
+  "labels": [
+    "audit",
+    "fips",
+    "observability",
+    "operational",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.19",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:04:30Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

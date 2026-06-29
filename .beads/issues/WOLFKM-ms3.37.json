@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-ms3.37",
+  "title": "Crypto misuse: HMAC sess_init error paths kfree without memzero_explicit on key_bytes",
+  "description": "In hmac_sess_init() (src/providers/wolfssl/wolfssl_hmac.c line 114): memcpy(ctx-\u003ekey_bytes, key, keylen) before wolfCrypt init. Two error paths then call kfree(ctx) without memzero_explicit: (1) wc_HmacInit failure (~line 119-121): kfree(ctx) — key_bytes not zeroed; (2) wc_HmacSetKey failure (~line 125-129): wc_HmacFree + kfree(ctx) — key_bytes not zeroed. FIPS 140-3 requirement: key material must be zeroized before memory is released. Fix: add memzero_explicit(ctx, sizeof(*ctx)) before each kfree on error paths.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:50Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:13:42Z",
+  "closed_at": "2026-04-18T03:13:42Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "crypto",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.37",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:49Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

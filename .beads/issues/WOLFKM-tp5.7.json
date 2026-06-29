@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-tp5.7",
+  "title": "outbuf_grow uses outbuf_cap - outbuf_len after memmove compaction",
+  "description": "outbuf_grow() compacts the buffer by memmove'ing unread bytes to the front (clearing drained prefix), updates outbuf_len and outbuf_drained, then checks 'if state-\u003eoutbuf_cap - state-\u003eoutbuf_len \u003e= extra'. After compaction, outbuf_len is correct (= bytes_accumulated - bytes_drained). The capacity check is correct. However: write() calls 'outbuf_grow(state, count + CRYPTO2DEV_HASH_MAXLEN)' and then calls update() passing 'state-\u003eoutbuf + state-\u003eoutbuf_len' as the output pointer and 'state-\u003eoutbuf_cap - state-\u003eoutbuf_len' as outbuf_size. If outbuf_grow does a compaction (memmove) but does NOT realloc (existing capacity sufficient after compaction), state-\u003eoutbuf pointer is unchanged and state-\u003eoutbuf_len is now smaller. The subsequent update() writes to outbuf + outbuf_len which correctly points past existing valid data. This is correct. ALSO: WARN_ON checks 'outlen \u003e state-\u003eoutbuf_cap - state-\u003eoutbuf_len' but outbuf_grow was called with 'count + CRYPTO2DEV_HASH_MAXLEN', so the available space is at least that much. If outlen \u003c= count + CRYPTO2DEV_HASH_MAXLEN, the WARN_ON should not fire. The WARN_ON uses outbuf_cap - outbuf_len rather than the guarantee from outbuf_grow's extra parameter, which is a tighter bound. This is safe (WARN_ON fires if outlen exceeds total remaining capacity, which is the correct overflow check). No bug found in outbuf_grow.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:39:43Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:39:44Z",
+  "closed_at": "2026-04-18T03:39:44Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.7",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:39:43Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

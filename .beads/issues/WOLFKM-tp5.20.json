@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-tp5.20",
+  "title": "crypto2dev_fd_release: mutex held across memzero_explicit of state struct",
+  "description": "In crypto2dev_fd_release(), the cleanup sequence is: mutex_lock(\u0026state-\u003elock), do cleanup (sess_free, module_put, outbuf free), mutex_unlock(\u0026state-\u003elock), then memzero_explicit(state, sizeof(*state)), then kfree(state). The memzero_explicit(state) call zeroes the mutex itself (state-\u003elock is at offset 0 of the struct). This is a use-after-unlock of the mutex object: memzero_explicit writes to state-\u003elock after mutex_unlock. On some mutex implementations (e.g. PREEMPT_RT futex-based mutexes) the mutex struct may have kernel-managed waitqueue state. Writing zeros over it after unlock is undefined behavior if any other thread is concurrently blocked on mutex_lock(\u0026state-\u003elock). However: release() is called from the VFS when the file's refcount hits zero. At that point, no other thread can hold a file descriptor reference to this file, so no other thread can be in an ioctl/read/write that holds or waits on state-\u003elock. The only exception would be if a DO_SIGN/DO_VERIFY/DO_AGREE has a reference via fget() to this fd as the key fd, and is concurrently executing. In that case: the key operation holds key_state-\u003elock, not state-\u003elock. fget() takes a file reference, preventing release() from being called. So memzero after unlock is safe here because no concurrent access is possible at release time. No actual bug — checking for correctness. Closing.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:40:37Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:40:39Z",
+  "closed_at": "2026-04-18T03:40:39Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.20",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:40:36Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

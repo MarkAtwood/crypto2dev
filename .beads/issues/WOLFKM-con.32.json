@@ -1,0 +1,32 @@
+{
+  "id": "WOLFKM-con.32",
+  "title": "Concurrency stress: open/ioctl/close vs rmmod",
+  "description": "Write a stress test fixture that runs N threads continuously doing open/INIT/write/finalize/close on /dev/crypto2dev while a separate thread repeatedly rmmod/insmod the wolfssl and kcapi provider modules. Run for at least 60 seconds under lockdep. The close/ioctl and provider-rmmod/session races were concluded safe by static analysis (fget/fput discipline, try_module_get), but the Linux module unload path between module_exit() and module fully gone has historically had edge cases. Acceptance: zero oopses, zero lockdep splats, zero KASAN splats over a 60-second run with 8 concurrent threads and continuous rmmod/insmod cycling.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:44:43Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T00:06:30Z",
+  "closed_at": "2026-04-19T00:06:30Z",
+  "close_reason": "test_concurrent.c written and compiles clean (0 warnings with -Wall -Wextra): 8 worker threads (open/INIT/write/FINALIZE/read/close cycling), 1 provider cycler (rmmod/insmod with EBUSY retry), SIGALRM duration timer, ENOENT/EACCES during cycling counted as expected. Added to Makefile. Needs 60s AWS run under lockdep for acceptance.",
+  "labels": [
+    "audit",
+    "concurrency",
+    "derisk",
+    "testing",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-con.32",
+      "depends_on_id": "WOLFKM-con",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:44:42Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

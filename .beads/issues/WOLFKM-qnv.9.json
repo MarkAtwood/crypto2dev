@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-qnv.9",
+  "title": "verify_registration.sh verifies wolfcrypt.ko, not crypto2dev — name is misleading",
+  "description": "scripts/verify_registration.sh is named 'verify_registration' and the CLAUDE.md quality gate section says to run it. But it verifies that wolfkm (wolfcrypt.ko) algorithms appear in /proc/crypto — not anything about crypto2dev.ko's chardev registration. A maintainer reading the quality gate section would expect it to verify crypto2dev's chardev sysfs entry (/sys/class/misc/crypto2dev) or the algo list, not wolfcrypt.ko's kernel crypto API registration. What would make it clear: rename to verify_wolfkm_registration.sh or add a header comment explaining it is a prerequisite check (wolfcrypt.ko loaded and registered) that must pass before crypto2dev tests can be meaningful. Currently the CLAUDE.md quality gate instruction references this script without explaining what it actually checks.",
+  "status": "closed",
+  "priority": 4,
+  "issue_type": "chore",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T06:15:00Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T06:19:47Z",
+  "closed_at": "2026-04-18T06:19:47Z",
+  "close_reason": "Closed",
+  "labels": [
+    "my-oss",
+    "readability",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-qnv.9",
+      "depends_on_id": "WOLFKM-qnv",
+      "type": "parent-child",
+      "created_at": "2026-04-17T23:15:00Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

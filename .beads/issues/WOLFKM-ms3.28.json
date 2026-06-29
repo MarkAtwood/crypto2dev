@@ -1,0 +1,32 @@
+{
+  "id": "WOLFKM-ms3.28",
+  "title": "Observability: fips_aggregate NOT_OPERATIONAL emits no log identifying failing provider",
+  "description": "crypto2dev_fips_aggregate() in src/provider/crypto2dev_registry.c lines 281-314: when p-\u003ealgos[i]-\u003efips_gate() returns non-zero, the function immediately returns CRYPTO2DEV_FIPS_NOT_OPERATIONAL with no kernel log. There is no message identifying which provider's gate failed, what wolfCrypt status was returned, or which algorithm triggered the check. A support engineer polling IOC_STATUS and seeing fips_state==2 cannot determine the cause from dmesg without a debugger. Fix: at the point crypto2dev_fips_aggregate() detects a failing gate, emit pr_err_ratelimited naming the provider (p-\u003ename) and the return code.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:28Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:26:00Z",
+  "closed_at": "2026-04-18T03:26:00Z",
+  "close_reason": "Fixed in this session",
+  "labels": [
+    "audit",
+    "fips",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.28",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:28Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

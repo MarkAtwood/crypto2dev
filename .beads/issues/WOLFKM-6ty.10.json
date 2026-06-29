@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-6ty.10",
+  "title": "PBKDF2 min constraints now provider-declared — no framework backstop",
+  "description": "Before this commit, crypto2dev_fd.c enforced SP 800-132 PBKDF2 minimums via strncmp('pbkdf2'...). This commit moves enforcement to ops-\u003emin_iterations and ops-\u003emin_salt_len populated by providers. The strncmp guard was removed from fd.c. A future provider implementing PBKDF2 that forgets to set these fields will silently bypass enforcement. The old approach was brittle but exhaustive; the new approach is clean but relies on provider discipline. Mitigation: add a framework-level rule in the provider registration path that asserts: if algo contains 'pbkdf2', then min_iterations \u003e= 1000 and min_salt_len \u003e= 16.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T22:09:49Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T22:20:52Z",
+  "closed_at": "2026-04-18T22:20:52Z",
+  "close_reason": "Added WARN() backstop in crypto2dev_register_provider: any pbkdf2 algo with min_iterations\u003c1000 or min_salt_len\u003c16 triggers a kernel warning with stack trace at registration time.",
+  "labels": [
+    "maintainer-burden",
+    "my-oss",
+    "review",
+    "risk"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-6ty.10",
+      "depends_on_id": "WOLFKM-6ty",
+      "type": "parent-child",
+      "created_at": "2026-04-18T15:09:48Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

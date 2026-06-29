@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-ms3.35",
+  "title": "Observability: algo-not-found in non-FIPS mode logs at pr_debug — invisible in production",
+  "description": "ioctl_init() in src/cdev/crypto2dev_fd.c lines 628-630: when no provider is registered for a requested algorithm and no FIPS provider is loaded, the failure is logged at pr_debug level. In production kernels, dynamic debug is disabled by default, so this message is invisible. A support engineer investigating -ENOENT from INIT in a non-FIPS deployment sees nothing in dmesg. The symmetric case (FIPS provider loaded) correctly uses pr_info_ratelimited at line 625. Fix: raise the non-FIPS-mode case from pr_debug to pr_info_ratelimited to match the existing FIPS-mode log level, so both cases are visible without dynamic debug.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:44Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:26:10Z",
+  "closed_at": "2026-04-18T03:26:10Z",
+  "close_reason": "Fixed in this session",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.35",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:44Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

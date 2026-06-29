@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-qnv.2",
+  "title": "kcapi_aead_decrypt: pr_err on every AEAD auth failure is wrong",
+  "description": "The old kcapi_aead_decrypt checked ret == -EBADMSG separately from ret \u003c 0. The new code collapses both into a single if (ret) branch that calls pr_err_ratelimited before going to the same out_free_req label. Functional behavior (goto destination) is unchanged, but pr_err is now emitted on every authentication failure. AEAD authentication failures (-EBADMSG) are a normal security event under replay attacks or corrupt data — not a kernel error. A ratelimited pr_err will appear in dmesg on every failing decryption attempt up to the ratelimit, making dmesg noisy and potentially masking real errors. Trigger: any AEAD decryption with wrong key or tampered ciphertext. Bad behavior: pr_err floods dmesg with 'crypto_aead_decrypt returned -74' messages.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T06:14:15Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T06:17:04Z",
+  "closed_at": "2026-04-18T06:17:04Z",
+  "close_reason": "Closed",
+  "labels": [
+    "correctness",
+    "my-oss",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-qnv.2",
+      "depends_on_id": "WOLFKM-qnv",
+      "type": "parent-child",
+      "created_at": "2026-04-17T23:14:14Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

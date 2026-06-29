@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-7b5.21",
+  "title": "Observability: wc_AesInit failure in GCM sess_init emits no log",
+  "description": "wolfssl_aes_gcm.c:111-113: wc_AesInit failure jumps to err_free_ctx with no pr_err before wolfssl_gcm_xlat_err(ret). This is the only wolfCrypt call in the file that has no log before translation. Every other failure in wolfssl_aes_gcm.c (wc_AesGcmSetKey:117, wc_AesGcmEncryptInit:382, wc_AesGcmEncryptUpdate:391/401, wc_AesGcmEncryptFinal:474, wc_AesGcmDecrypt:513) has a pr_err_ratelimited with __func__ and the raw wc_err. A wc_AesInit failure would be reported to the fd layer as a translated -EIO (or -ENOMEM/-EINVAL) with nothing in the ring buffer identifying the raw wolfCrypt code.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T05:20:26Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T05:32:52Z",
+  "closed_at": "2026-04-18T05:32:52Z",
+  "close_reason": "Fixed in fd.c, wolfssl_aes_gcm.c, kcapi_aead.c",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-7b5.21",
+      "depends_on_id": "WOLFKM-7b5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T22:20:25Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

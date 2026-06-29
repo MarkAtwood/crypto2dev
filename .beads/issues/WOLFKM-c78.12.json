@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-c78.12",
+  "title": "[DECISION] HKDF iterations validation rejects non-zero to catch PBKDF2 confusion",
+  "description": "src/cdev/crypto2dev_fd.c lines 1762-1768: Pre-lock validation checks that for HKDF, iterations must be 0 (rejected with -EINVAL otherwise). This is a non-obvious UX choice: HKDF has no iteration parameter, but PBKDF2 requires it (≥1000). A developer might confuse the two and pass an iteration count for HKDF expecting it to be ignored. Instead, the framework explicitly rejects it. This is a loud error that forces clarification: the developer must either use PBKDF2 (with iterations) or HKDF (without). The comment explains: 'HKDF has no iteration count; reject non-zero to catch user errors where the caller mistakes HKDF for PBKDF2 and passes an iteration count that is silently discarded.' This prevents silent failures where an iteration count is accepted but ignored, leading to incorrect derived keys if the developer misunderstood the algorithm semantics.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T00:15:25Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T00:27:16Z",
+  "closed_at": "2026-04-20T00:27:16Z",
+  "close_reason": "Review converged. SEC7: running out of real complaints. P0=0 P1=0. Efficiency findings .6/.9 are marginal (no correctness impact). DECISION records noted.",
+  "labels": [
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-c78.12",
+      "depends_on_id": "WOLFKM-c78",
+      "type": "parent-child",
+      "created_at": "2026-04-19T17:15:24Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

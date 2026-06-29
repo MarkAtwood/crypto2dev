@@ -1,0 +1,15 @@
+{
+  "id": "WOLFKM-3yg",
+  "title": "Review round 1: SHA3 completeness",
+  "description": "Review round 1 for WOLFKM-fzw (SHA3 completeness: sha3-384 and sha3-512). Review all changes in wolfssl_sha.c, kcapi_hash.c, wolfssl_provider.h/c, kcapi_provider.h/c, tests/vectors/sha3.h, tests/userspace/test_chardev.c, DESIGN.md.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T00:44:26Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-20T00:48:45Z",
+  "close_reason": "Closed"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-u2s.5",
+  "title": "fips_aggregate skips is_fips=0 providers to match fips_provider_loaded semantics",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-19T21:33:50Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T23:28:31Z",
+  "closed_at": "2026-04-19T23:28:31Z",
+  "close_reason": "Decision record — no-action-needed, design intentional",
+  "labels": [
+    "no-action-needed",
+    "review",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-u2s.5",
+      "depends_on_id": "WOLFKM-u2s",
+      "type": "parent-child",
+      "created_at": "2026-04-19T14:33:49Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

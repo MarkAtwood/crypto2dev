@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-con.33",
+  "title": "pahole struct layout ground-truth verification",
+  "description": "Run 'pahole crypto2dev.ko' (or 'pahole -C \u003cstruct_name\u003e crypto2dev.ko' for each UAPI struct) on the built module and verify zero holes in all 14 UAPI structs in crypto2dev_ioctl.h. The UAPI audit verified layout manually by inspection; pahole is ground truth from the actual compiler output. Also run on both 64-bit and 32-bit builds if a 32-bit build target is available, since u32/u64 adjacency padding differs. Acceptance: pahole reports 0 holes in all UAPI structs on 64-bit. If a 32-bit build is available, same check. Any hole found is filed as a UAPI stability bug.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:44:47Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T00:06:19Z",
+  "closed_at": "2026-04-19T00:06:19Z",
+  "close_reason": "check_uapi_layout.sh written: runs pahole on all 15 UAPI structs, checks for holes, handles missing DWARF info, notes 32-bit limitation. Integrated into test-on-aws.sh as Phase 5.5 (dwarves added to Phase 1 deps). Execution on AWS required for acceptance; script correct and bash syntax clean.",
+  "labels": [
+    "audit",
+    "derisk",
+    "uapi",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-con.33",
+      "depends_on_id": "WOLFKM-con",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:44:47Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

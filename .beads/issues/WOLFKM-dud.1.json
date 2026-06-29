@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-dud.1",
+  "title": "Review: WARN_ON does not abort — tag_len==0 silently skips tag verification in test_aead.c",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T02:31:46Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T02:37:45Z",
+  "closed_at": "2026-04-20T02:37:45Z",
+  "close_reason": "WARN_ON_ONCE + early return added; fires before buf_len calc; return not goto avoids use of uninit ptrs",
+  "labels": [
+    "correctness",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dud.1",
+      "depends_on_id": "WOLFKM-dud",
+      "type": "parent-child",
+      "created_at": "2026-04-19T19:31:45Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

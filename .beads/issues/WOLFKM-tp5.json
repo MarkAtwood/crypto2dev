@@ -1,0 +1,19 @@
+{
+  "id": "WOLFKM-tp5",
+  "title": "Audit: crypto2dev 2026-04-17",
+  "notes": "UAPI stability risk: MEDIUM — no struct layout holes or missing reserved-field validation found; three diagnostic gaps in crypto2dev_fd_state_info and two structs (KEY_IMPORT, KEY_GENERATE) lack reserved bytes for future ABI extension without a new ioctl.\nConfidence: FIPS gate coverage: 99% (every callback enumerated, zero violations found; residual 1% = unreviewed inline stubs we cannot reach without running the code). Key material leak risk: 15% (several confirmed partial-zeroization bugs filed as P0/P1; zero-path coverage on error paths requires runtime testing to be fully confident). UAPI stability: HIGH risk on forward-compatibility (no layout defects; gaps are extensibility). Gaps: cannot verify wolfCrypt init/free pairing without running under KASAN; inbuf O(n^2) worst case not exercised; stub-mode is_fips=1 risk not catchable by static analysis alone. Would raise confidence if: KASAN run on full ioctl sequence (open/write/init/update/finalize/reset cycle for each algo), lockdep run under concurrent open/close stress, CMVP lab review of zeroization paths on error exits.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:37:40Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T04:15:28Z",
+  "close_reason": "all steps complete",
+  "labels": [
+    "audit",
+    "wolfkm"
+  ]
+}

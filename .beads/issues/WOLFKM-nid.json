@@ -1,0 +1,15 @@
+{
+  "id": "WOLFKM-nid",
+  "title": "Design: KDF UAPI struct and provider callback contract",
+  "description": "Define the ioctl struct and provider API before any implementation.\n\nUAPI struct (crypto2dev_kdf_op):\n  algo[64]:          'hkdf(sha256)', 'hkdf(sha384)', 'hkdf(sha512)', 'pbkdf2(sha256)', 'pbkdf2(sha1)'\n  out_algo[64]:      algorithm the derived key will be used for (e.g. 'cbc(aes)'); determines KEY fd type\n  out_keylen:        derived key length in bytes (max 64 for v1)\n  ikm_fd:            KEY fd holding HKDF IKM; -1 = use data written via write()\n  salt[64]:          salt bytes (HKDF: optional; PBKDF2: required)\n  salt_len:          length of salt\n  info[256]:         HKDF context/label (ignored for PBKDF2)\n  info_len:          length of info\n  iterations:        PBKDF2 iteration count (ignored for HKDF; framework enforces \u003e= 1000)\n  _pad[4]:           reserved\n\nFd lifecycle:\n  - Caller opens an unset fd\n  - For PBKDF2: write() the password (sensitive; framework stores temporarily, zeroizes after ioctl)\n  - For HKDF with inline IKM: write() the IKM; OR set ikm_fd to a KEY fd\n  - Call CRYPTO2DEV_IOC_DO_KDF\n  - On success: fd is now a KEY fd holding the derived key; write() data is zeroized\n  - read() on the KEY fd returns the public key if asymmetric, or is not applicable for symmetric\n\nProvider callback:\n  int (*kdf)(void *key_ctx,\n             const char *algo,\n             const u8 *ikm, u32 ikm_len,\n             const u8 *salt, u32 salt_len,\n             const u8 *info, u32 info_len,\n             u32 iterations,\n             u8 *out_key, u32 out_keylen);\n  - Returns raw derived key bytes into out_key[]\n  - Framework wraps out_key into a KEY fd via key_import internally, then memzero_explicit(out_key)\n  - Provider never returns key bytes to userspace directly\n\nAcceptance: DESIGN.md KDF section written and reviewed before implementation starts.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T22:22:50Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T03:30:26Z",
+  "close_reason": "DESIGN.md KDF section written: struct, fd lifecycle, provider callback, FIPS constraints"
+}

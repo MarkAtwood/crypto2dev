@@ -1,0 +1,17 @@
+{
+  "id": "WOLFKM-yok",
+  "title": "key_fd security model: copy semantics defeat non-exportable guarantee",
+  "description": "The UAPI comment for CRYPTO2DEV_IOC_INIT states: 'The KEY fd may be closed after INIT returns; the session holds its own copy of the key.'\n\nThis means: when a KEY fd is passed via key_fd in INIT, the provider's sess_init() receives the key bytes and copies them into the operation context (struct Aes, struct Hmac, etc.). After sess_init() returns, the key material exists in two places: the original KEY fd's key_ctx, and the operation fd's ctx.\n\nThe security model developers will assume: 'I created a non-exportable key fd; the private key never leaves that fd.' This is false. The key is copied into every operation fd that references it. A sufficiently privileged reader of kernel memory (or a memory disclosure bug) can find the key in the operation context.\n\nThis also means the 'non-exportable' property only prevents calling KEY_EXPORT_PRIVATE — it does not prevent the key from being in memory in the operation context. For FIPS key confidentiality requirements, this may be insufficient.\n\nHUMAN DECISION NEEDED:\n\nWhat is the intended security guarantee of a non-exportable key fd?\n\nOption A: 'Non-exportable means no userspace export only.' The key is copied into operation contexts freely. Document this clearly. Non-exportable is an export-prevention control, not a memory-isolation control.\n\nOption B: 'Non-exportable means the key material stays in the key fd's context.' sess_init() receives a reference to the key_ctx, not a copy of the raw key bytes. Providers must accept a key_ctx* and use the key in-place (calling wolfCrypt with the pre-initialized Aes/Hmac context from the KEY fd, or re-deriving from the KEY fd on each operation). This requires a provider API change: sess_init_with_key_ctx() instead of raw bytes.\n\nOption C: 'Key fds are only for asymmetric operations.' Symmetric keys are always inline in INIT (current CRYPTO2DEV_KEY_MAXLEN = 128 bytes). KEY fds are only useful for RSA/EC private keys where the kernel-boundary semantics matter most. Document this scope clearly.\n\nWork items:\n- Decision determines whether provider API needs a new callback\n- If Option A: update docs and DESIGN.md\n- If Option B: new provider callback, update wolfssl + kcapi providers, update fd.c sess_init dispatch\n- If Option C: restrict key_fd in INIT to asymmetric key types only, document for symmetric",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T20:39:43Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-17T23:00:09Z",
+  "closed_at": "2026-04-17T23:00:09Z",
+  "close_reason": "KEY fds asymmetric-only: removed key_ctx from sess_init callback (all 9 providers), removed key_fd handling from ioctl_init(), marked key_fd reserved in ioctl.h, updated KEY fds section to document asymmetric-only semantics, updated example_provider.c comment",
+  "labels": [
+    "human-decision"
+  ]
+}

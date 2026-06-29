@@ -1,0 +1,18 @@
+{
+  "id": "WOLFKM-157",
+  "title": "CI: add RHEL 9 FIPS target (AWS Marketplace PAYG)",
+  "description": "RHEL 9 proper via AWS Marketplace PAYG (owner 309956199486, no separate subscription needed for on-demand). Same CI flow as Rocky Linux 9 FIPS target: fips-mode-setup --enable + reboot, verify FIPS mode, run full test suite. Required if a customer needs proof of testing on certified RHEL, not just a rebuild.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-19T02:59:44Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T03:56:23Z",
+  "closed_at": "2026-04-19T03:56:23Z",
+  "close_reason": "RHEL 9 FIPS: all tests pass on 5.14.0-611.47.1.el9_7.x86_64 with FIPS mode enabled. Fixed: (1) enable CRB repo by RHUI name for RHEL PAYG; (2) kernel version alignment via dnf update kernel + reboot; (3) glibc-static needed for wolfSSL get_thread_size host helper. kernel tests: 4 modules pass (test_shash 12/15 - 3 HMAC TC2 fips_skip vectors correctly excluded).",
+  "labels": [
+    "distrotest"
+  ]
+}

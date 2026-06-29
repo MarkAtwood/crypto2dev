@@ -1,0 +1,18 @@
+{
+  "id": "WOLFKM-d0m",
+  "title": "CI: add Amazon Linux 2023 target",
+  "description": "Amazon Linux 2023 runs kernel ~6.1, is RHEL-compatible, and is widely deployed on AWS. Likely deployment target for customers. Needs new AMI owner/pattern and dnf package names (similar to CentOS).",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-19T02:57:47Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T03:11:58Z",
+  "closed_at": "2026-04-19T03:11:58Z",
+  "close_reason": "Amazon Linux 2023 kernel-6.1 passes 19/0. AMI owner 137112412989, pattern al2023-ami-2023*kernel-6.1-x86_64, ec2-user, dnf.",
+  "labels": [
+    "distrotest"
+  ]
+}

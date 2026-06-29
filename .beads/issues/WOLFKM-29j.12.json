@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-29j.12",
+  "title": "Correctness: ioctl_key_generate -EBUSY path does not clear inbuf (asymmetry with key_import)",
+  "description": "Trigger: open() fd → write(key_bytes) → KEY_GENERATE (fd is already initialized → -EBUSY).\n\nIn ioctl_key_generate, the state-\u003efd_type != FDTYPE_UNSET (-EBUSY) check jumps to 'out:' which only does mutex_unlock — inbuf_clear is NOT called on this path.\n\nBy contrast, ioctl_key_import on its -EBUSY path jumps to 'out_inbuf_clear' which does clear the inbuf.\n\nThe practical impact is currently zero: write() on a non-UNSET fd returns -ENODEV for KEY fds and routes through update() for OPERATION fds (no inbuf accumulation). So when KEY_GENERATE fires -EBUSY, inbuf is always empty in practice.\n\nHowever the asymmetry is a latent correctness issue: if the fd type or write() routing ever changes, the inbuf would not be cleared on the -EBUSY path in KEY_GENERATE. The fix is to call inbuf_clear(state) on all KEY_GENERATE error paths inside the lock, matching the pattern used in KEY_IMPORT.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T04:48:51Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T05:06:00Z",
+  "closed_at": "2026-04-20T05:06:00Z",
+  "close_reason": "Added inbuf_clear(state) on KEY_GENERATE -EBUSY path inside the lock, matching the pattern used by ioctl_key_import",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-29j.12",
+      "depends_on_id": "WOLFKM-29j",
+      "type": "parent-child",
+      "created_at": "2026-04-19T21:48:51Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

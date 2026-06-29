@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-dfn.29",
+  "title": "Decision: iv_set flag prevents write before IV is set",
+  "description": "iv_set is set true only after set_iv()/gen_iv() succeeds; write() returns -EINVAL if set_iv\\!=NULL and \\!iv_set; RESET clears iv_set (fd.c:352-355, 682, 732, 1108). This is correct: reusing the same IV+key pair on a stream cipher destroys the keystream and enables plaintext recovery. By requiring explicit SET_IV/GEN_IV after each RESET, the API forces awareness of IV semantics. A reviewer suggesting 'auto-generate an IV if write() is called without SET_IV' would hide a critical operation from the caller and break deterministic testing with NIST CAVP vectors.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:05:28Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:43:05Z",
+  "closed_at": "2026-04-18T00:43:05Z",
+  "close_reason": "Reviewed, documented, and hardened in CLAUDE.md, DESIGN.md, and AGENTS.md",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.29",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:05:27Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

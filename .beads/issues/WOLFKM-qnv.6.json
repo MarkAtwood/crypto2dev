@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-qnv.6",
+  "title": "inbuf_append: capacity-clamping branch is dead code",
+  "description": "In inbuf_append, after the geometric doubling: 'if (new_cap \u003e CRYPTO2DEV_KEY_IMPORT_MAXLEN) new_cap = CRYPTO2DEV_KEY_IMPORT_MAXLEN;'. This branch is unreachable: the function returns -EMSGSIZE at the top if new_len \u003e CRYPTO2DEV_KEY_IMPORT_MAXLEN. Since new_cap = max(inbuf_cap*2, new_len), and new_len \u003c= CRYPTO2DEV_KEY_IMPORT_MAXLEN (enforced above), the only way new_cap could exceed the limit is if inbuf_cap*2 \u003e CRYPTO2DEV_KEY_IMPORT_MAXLEN with inbuf_cap being CRYPTO2DEV_KEY_IMPORT_MAXLEN itself, which cannot happen since new_len \u003e inbuf_cap when we enter the branch. Remove the dead clamp, or restructure to make the invariant explicit with a BUILD_BUG_ON or comment. Suggested rewrite: remove the dead clamp line entirely; the -EMSGSIZE guard at the top is the single source of truth.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "chore",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T06:14:41Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T06:19:01Z",
+  "closed_at": "2026-04-18T06:19:01Z",
+  "close_reason": "Analysis error: the clamp 'if (new_cap \u003e CRYPTO2DEV_KEY_IMPORT_MAXLEN) new_cap = MAXLEN' IS reachable. When inbuf_cap=5000 and new_len=5001, new_cap doubles to 10000 which exceeds MAXLEN=8192 while new_len passes the -EMSGSIZE guard. Code is correct.",
+  "labels": [
+    "elegance",
+    "my-oss",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-qnv.6",
+      "depends_on_id": "WOLFKM-qnv",
+      "type": "parent-child",
+      "created_at": "2026-04-17T23:14:41Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

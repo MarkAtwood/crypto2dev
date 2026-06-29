@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-tp5.17",
+  "title": "ioctl_do_agree: salt and info not zeroized on stack after use",
+  "description": "ioctl_do_agree() places derived key material in op.okm[] on the stack struct. On success and failure, memzero_explicit(op.okm) is called. But the salt[] and info[] fields in the same stack struct are not zeroized. salt and info may contain sensitive protocol context (e.g. session keys, identity material). FIPS 140-3 requires memzero_explicit before releasing memory. A stack frame is released by pointer adjustment, not zeroing, so salt/info bytes persist in the stack until overwritten. Same issue applies to digest[] in ioctl_do_sign and ioctl_do_verify. Trigger: DO_AGREE with non-zero salt/info → function returns → salt/info bytes remain in kernel stack until next function uses that frame.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:40:25Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:03:58Z",
+  "closed_at": "2026-04-18T04:03:58Z",
+  "close_reason": "fixed: converted ioctl_do_agree to goto out_zero pattern; memzero_explicit(\u0026op, sizeof(op)) covers all paths including salt[] and info[]",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.17",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:40:25Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

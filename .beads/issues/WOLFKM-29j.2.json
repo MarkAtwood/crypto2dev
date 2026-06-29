@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-29j.2",
+  "title": "Observability: CBC sess_init wc_AesInit/wc_InitRng_ex raw error codes silently dropped",
+  "description": "wolfssl_aes_cbc_sess_init: wc_AesInit() and wc_InitRng_ex() failure paths call wolfssl_cbc_xlat_err(ret) and return without logging the raw wolfCrypt error code first. A support engineer reading dmesg after a sess_init failure cannot tell whether it was wc_AesInit or wc_InitRng_ex that failed, or what wolfCrypt returned. Compare with wc_AesSetKey which does log before translating. Fix: add pr_err_ratelimited('%s: wc_AesInit returned %d', __func__, ret) and pr_err_ratelimited('%s: wc_InitRng_ex returned %d', __func__, ret) before each wolfssl_cbc_xlat_err() call on these paths.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T04:47:27Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T05:07:55Z",
+  "closed_at": "2026-04-20T05:07:55Z",
+  "close_reason": "Added pr_err_ratelimited before wolfssl_cbc_xlat_err() in wc_AesInit and wc_InitRng_ex failure paths in wolfssl_aes_cbc_sess_init — raw wolfCrypt codes now logged before translation",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-29j.2",
+      "depends_on_id": "WOLFKM-29j",
+      "type": "parent-child",
+      "created_at": "2026-04-19T21:47:27Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

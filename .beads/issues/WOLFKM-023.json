@@ -1,0 +1,15 @@
+{
+  "id": "WOLFKM-023",
+  "title": "In-device key derivation: HKDF and PBKDF2 via the chardev",
+  "description": "No key derivation functions (KDF) are available via /dev/crypto2dev. Applications needing derived keys must:\n1. Export master key material to userspace\n2. Run KDF in userspace (OpenSSL, libsodium, etc.)\n3. Import derived key back into kernel via KEY_IMPORT\n\nThis forces sensitive master key material through userspace and prevents FIPS-compliant key derivation within the FIPS boundary. SP 800-56C and SP 800-132 require KDFs to operate on keying material within the FIPS module boundary.\n\nMinimum needed:\n- HKDF (RFC 5869): extract-then-expand, HMAC-based. Used in TLS 1.3, SSH, Signal.\n- PBKDF2 (RFC 8018 / SP 800-132): password-based. Used in PKCS#12, disk encryption.\n- SP 800-108 counter-mode KBKDF: required by some USG/FIPS use cases.\n\nHUMAN DECISION NEEDED:\n\n(a) Which KDFs to support in v1?\n  Option A: HKDF only (RFC 5869). Most broadly applicable; TLS 1.3 requires it.\n  Option B: HKDF + PBKDF2. Adds password-based derivation for key storage use cases.\n  Option C: All three (HKDF + PBKDF2 + KBKDF SP 800-108). Full FIPS coverage but significant scope.\n\n(b) UAPI design — how should KDF operations be exposed?\n  Option A: New OPERATION fd op type (e.g., CRYPTO2DEV_OP_KDF). INIT with algo='hkdf(sha256)', write() feeds IKM+salt+info, read() returns OKM. Fits existing fd model.\n  Option B: One-shot ioctl CRYPTO2DEV_IOC_DO_KDF with all inputs inline in the struct. Consistent with DO_SIGN/DO_VERIFY/DO_AGREE pattern.\n  Option C: KDF produces a KEY fd directly — output is not returned to userspace but immediately becomes a KEY fd usable for INIT. Keeps derived key material in kernel.\n\n  Option C is the most secure (derived key never in userspace) and naturally extends the key fd model. But it requires the KDF output to be a known-size key (caller must specify target algo for the derived key fd).\n\n(c) For PBKDF2: where does the password come from? Options:\n  - write() feeds the password bytes (never returned)\n  - Inline in the ioctl struct (up to CRYPTO2DEV_KEY_MAXLEN bytes)\n\nWork items once decisions are made:\n- Design UAPI structs/ioctls\n- Implement in wolfssl provider (wc_HKDF, wc_PKCS5_PBKDF2 or equivalent)\n- Implement in kcapi provider (kernel has HKDF via crypto_shash; PBKDF2 may need wolfCrypt)\n- NIST test vectors exist for HKDF (RFC 5869 appendix A) and PBKDF2 (RFC 6070)",
+  "notes": "BLOCKED: KDF design conflict — see bd human flag. out_algo field missing from impl vs design. Symmetric KEY fd support not in current system.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "epic",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T20:41:21Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T17:16:14Z",
+  "closed_at": "2026-04-18T17:16:14Z",
+  "close_reason": "KDF implementation complete: DO_KDF ioctl, wolfssl+kcapi providers, test vectors, userspace tests"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-yjf.5",
+  "title": "SPKI DER curve_id check after wc_EccPublicKeyDecode prevents cross-curve substitution",
+  "description": "wc_EccPublicKeyDecode accepts any curve embedded in the DER without checking it against the expected curve_id. Without the post-decode wc_ecc_get_curve_id() comparison, a P-384 SPKI DER could be silently imported into a P-256 context, potentially causing undefined behavior or a FIPS boundary violation. A contributor may suggest removing the check as redundant with wolfCrypt. It is not redundant. Keep it.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:17:12Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T23:31:30Z",
+  "closed_at": "2026-04-18T23:31:30Z",
+  "close_reason": "Decision record — no code work required; preserved as review audit trail",
+  "labels": [
+    "my-oss",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-yjf.5",
+      "depends_on_id": "WOLFKM-yjf",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:17:12Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

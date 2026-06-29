@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-con.18",
+  "title": "key_generate error path skips inbuf_clear; sensitive IKM lingers",
+  "description": "Trigger: user writes key bytes to an UNSET fd (intending KEY_IMPORT), then calls KEY_GENERATE; ops-\u003ekey_generate() returns an error. Call sequence: write(fd, secret, n) → ioctl(fd, KEY_GENERATE, ...) where key_generate fails. Bad outcome: the goto-out path (lines 1931-1932) does module_put(owner); goto out; without calling inbuf_clear(state). The sensitive write() bytes remain in state-\u003einbuf until fd close, violating FIPS 140-3 key zeroization. A successful subsequent KEY_GENERATE on the same fd would also skip inbuf_clear — only the success path at line 1934 calls it.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:37:34Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T21:23:49Z",
+  "closed_at": "2026-04-19T21:23:49Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-con.18",
+      "depends_on_id": "WOLFKM-con",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:37:33Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

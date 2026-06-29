@@ -1,0 +1,14 @@
+{
+  "id": "WOLFKM-j95",
+  "title": "WOLFKM-2ff impl: FIPS provider priority (A) + REQUIRE_FIPS ioctl (B)",
+  "description": "Implement both options: (A) FIPS-gated providers always outrank non-FIPS in registry dispatch — load order safe; (B) CRYPTO2DEV_IOC_REQUIRE_FIPS per-fd ioctl that makes INIT return -ENOENT if only non-FIPS provider available. Also add pr_warn on load-order FIPS bypass.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T23:17:18Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-17T23:20:59Z",
+  "closed_at": "2026-04-17T23:20:59Z",
+  "close_reason": "Implemented Option A (two-pass FIPS-first lookup in registry, informative collision warnings) + Option B (REQUIRE_FIPS ioctl slot 20, require_fips flag in fd_state, INIT rejects non-FIPS provider with -ENOENT if flag set)"
+}

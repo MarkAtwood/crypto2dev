@@ -1,0 +1,18 @@
+{
+  "id": "WOLFKM-e97",
+  "title": "CI: add Rocky Linux 9 FIPS target",
+  "description": "Rocky Linux 9 is a free 1:1 RHEL rebuild with FIPS mode support. Add as a CI target: boot instance, run fips-mode-setup --enable + reboot, verify fips-mode-setup --check, then run full test suite. Tests the RHEL FIPS kernel path at no extra cost. Prerequisite for RHEL FIPS certification confidence.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-19T02:59:43Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T03:29:53Z",
+  "closed_at": "2026-04-19T03:29:53Z",
+  "close_reason": "Rocky Linux 9 FIPS passes 20/0 on kernel 5.14.0-611.el9. Added rocky distro case; fips-mode-setup + reboot; HMAC TC2 short-key vectors now fips_skip=1.",
+  "labels": [
+    "distrotest"
+  ]
+}

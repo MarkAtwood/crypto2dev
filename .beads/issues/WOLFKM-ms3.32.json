@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-ms3.32",
+  "title": "UAPI: require_fips flag absent from GET_STATE output",
+  "description": "crypto2dev_fd_state_info (returned by CRYPTO2DEV_IOC_GET_STATE) does not include the require_fips flag. The per-fd require_fips field is set by CRYPTO2DEV_IOC_REQUIRE_FIPS and changes subsequent INIT behavior (non-FIPS providers are rejected). A caller who wants to audit or reconstruct the full state of an fd cannot determine whether REQUIRE_FIPS was set. The state struct is documented as supporting 'both OPERATION and KEY fds' and is the sole introspection surface. Adding require_fips now costs a reserved __u32 slot; deferring makes it an ABI-bump addition later. Suggested fix: add '__u32 require_fips;' to the struct and populate it in ioctl_get_state, consuming one of the implicit future reserved bytes.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:39Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:26:06Z",
+  "closed_at": "2026-04-18T03:26:06Z",
+  "close_reason": "Fixed in this session",
+  "labels": [
+    "abi",
+    "audit",
+    "uapi",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.32",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:39Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

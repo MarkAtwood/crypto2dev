@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-1js.3",
+  "title": "PBKDF2 with salt_len=0 is accepted — SP 800-132 violation",
+  "description": "ioctl_do_kdf permits salt_len=0 for pbkdf2(*) algos. SP 800-132 §5.1 requires salt length \u003e= 128 bits (16 bytes) for password-based KDFs. FIPS 140-3 audit will flag this as a compliance gap. The current UAPI doc says 'Set salt_len = 0 for no salt' without distinguishing HKDF (where 0-salt is RFC 5869-legal) from PBKDF2 (where it is not). Maintenance consequence: a FIPS tester will file this as a finding against the module; it will need to be fixed under time pressure. Fix: reject salt_len \u003c 16 when op.algo starts with 'pbkdf2', with -EINVAL and a comment citing SP 800-132 §5.1.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T15:57:26Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T17:06:51Z",
+  "closed_at": "2026-04-18T17:06:51Z",
+  "close_reason": "Closed",
+  "labels": [
+    "maintainer-burden",
+    "my-oss",
+    "review",
+    "risk"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-1js.3",
+      "depends_on_id": "WOLFKM-1js",
+      "type": "parent-child",
+      "created_at": "2026-04-18T08:57:25Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

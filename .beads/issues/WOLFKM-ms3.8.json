@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-ms3.8",
+  "title": "Correctness: sysfs algorithms_show TOCTOU OOB read",
+  "description": "Location: crypto2dev_cdev.c algorithms_show().\n\nTrigger: Thread A calls crypto2dev_algo_count() → gets N. Thread B registers a new provider, increasing algo count to N+M. Thread A calls kmalloc_array(N, sizeof(*info)). Thread A calls crypto2dev_enumerate_algos(info, N) → returns N+M (total) but only writes N entries to info[]. Thread A loops 'for (i = 0; i \u003c n; i++)' where n == N+M — reads info[N] through info[N+M-1] which are beyond the kmalloc'd buffer.\n\nBad outcome: heap out-of-bounds read. sysfs_emit_at() reads garbage bytes past the allocation boundary and emits them to the sysfs buffer. On a CONFIG_HARDENED_USERCOPY or KASAN kernel this is a kernel crash / BUG. On a non-hardened kernel it leaks heap memory contents into the sysfs output visible to any user with read access to /sys/class/misc/crypto2dev/algorithms.\n\nFix approach: use 'for (i = 0; i \u003c min(n, count); i++)' or re-read under lock once, or pass count (not n) as the loop bound.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:03:25Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:16:00Z",
+  "closed_at": "2026-04-18T03:16:00Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.8",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:03:24Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

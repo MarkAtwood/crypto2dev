@@ -1,0 +1,33 @@
+{
+  "id": "WOLFKM-jq8.2",
+  "title": "Update provider.h: replace set_sig/get_sig with sign/verify/agree ops",
+  "description": "In include/crypto2dev_provider.h: remove set_sig and get_sig function pointer fields from crypto2dev_algo_ops; add sign(void *key_ctx, const u8 *digest, u32 digestlen, u8 *sig, u32 bufsz, u32 *siglen); add verify(void *key_ctx, const u8 *digest, u32 digestlen, const u8 *sig, u32 siglen) returns 0 or -EBADMSG; add agree(void *key_ctx, const u8 *peer_pub, u32 peer_publen, u8 *secret, u32 bufsz, u32 *secretlen); add sess_reset(void *ctx) returns -EOPNOTSUPP if NULL.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T18:01:31Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-17T18:17:56Z",
+  "close_reason": "Closed",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-jq8.2",
+      "depends_on_id": "WOLFKM-jq8",
+      "type": "parent-child",
+      "created_at": "2026-04-17T11:01:30Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-jq8.2",
+      "depends_on_id": "WOLFKM-jq8.1",
+      "type": "blocks",
+      "created_at": "2026-04-17T11:01:52Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

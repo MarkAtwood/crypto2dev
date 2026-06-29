@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-tp5.28",
+  "title": "Observability: ioctl_init fips_gate failure path indistinguishable from no-provider failure",
+  "description": "ioctl_init() has five distinct failure reasons, but they are only partially distinguishable. The fips_gate() failure (lines 655-661) returns -EACCES, which is technically distinct from -ENOENT for the two no-provider paths. However: (1) no log is emitted on gate failure so the distinction is invisible in dmesg, (2) the module_get failure inside try_module_get inside crypto2dev_lookup_algo returns NULL just like a genuine not-found, with no log. Support engineers must infer the failure reason from the errno alone, which is insufficient when FIPS providers are registered and the gate is cycling between operational and degraded.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:41:12Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:15:05Z",
+  "closed_at": "2026-04-18T04:15:05Z",
+  "close_reason": "fixed: FIPS gate failure returns -EACCES (not -ENOENT) and logs distinct pr_err; no-provider path already returned -ENOENT with its own log",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.28",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:41:12Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

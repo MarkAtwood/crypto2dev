@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-7b5.22",
+  "title": "Defend: write-before-ioctl for KEY_IMPORT avoids large kernel stack frames",
+  "description": "crypto2dev_fd.c / crypto2dev_ioctl.h — key material for KEY_IMPORT is delivered via write() into inbuf, not embedded in the ioctl struct. The ioctl struct carries only metadata (algo, provider, key_type, keylen). A reviewer might suggest 'just put the key bytes in the ioctl struct like other ioctls do for their data'. This is wrong for two reasons: (1) worst-case key size is ML-DSA-87 at 4896 bytes, currently padded to KEY_IMPORT_MAXLEN=8192 for headroom; embedding this in an ioctl struct places 8192 bytes on the kernel stack on every KEY_IMPORT call (even for a 32-byte EC key), violating the kernel's ~1KB stack frame guideline and causing stack overflow risk; (2) the write-before-ioctl pattern allocates exactly inbuf_len bytes on the heap, zeroizes via memzero_explicit, and frees after import — minimal exposure. CLAUDE.md §5 documents this design decision explicitly.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T05:20:31Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T17:40:44Z",
+  "closed_at": "2026-04-18T17:40:44Z",
+  "close_reason": "Code verified correct. Rationale comments present in source.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-7b5.22",
+      "depends_on_id": "WOLFKM-7b5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T22:20:31Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

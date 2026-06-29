@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-ms3.31",
+  "title": "Observability: successful ioctl_init logs nothing about which provider was selected",
+  "description": "ioctl_init() in src/cdev/crypto2dev_fd.c emits no log on successful session creation. When a user calls INIT with an empty provider string (any-provider lookup), there is no dmesg record of which provider was selected. A support engineer examining a post-mortem log cannot determine post-hoc which provider handled a given session without capturing the GET_STATE ioctl result while the fd was open. The selected provider name is available at line 672 (strscpy into state-\u003eprovider_name). Fix: emit pr_debug at session creation success including algo and resolved provider name, allowing dynamic debug to surface this without production log noise.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:37Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:26:03Z",
+  "closed_at": "2026-04-18T03:26:03Z",
+  "close_reason": "Fixed in this session",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.31",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:36Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

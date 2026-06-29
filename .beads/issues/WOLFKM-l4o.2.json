@@ -1,0 +1,33 @@
+{
+  "id": "WOLFKM-l4o.2",
+  "title": "Implement sess_reset in wolfssl hash providers (SHA/HMAC/CMAC)",
+  "description": "wolfssl_sha.c: sess_reset calls the appropriate wc_InitSha*() to reset hash state. No key storage needed. wolfssl_hmac.c: sess_reset calls wc_HmacFree then wc_HmacInit+wc_HmacSetKey — requires storing key bytes and keylen in wolfssl_hmac_ctx. wolfssl_cmac.c: sess_reset re-calls wc_InitCmac — requires storing key bytes and keylen in wolfssl_cmac_ctx. Also clear any inbuf state (inbuf_len=0). All three also update their ops struct with .sess_reset = \u003cfunction\u003e.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T18:01:58Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-17T18:28:15Z",
+  "close_reason": "Closed",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-l4o.2",
+      "depends_on_id": "WOLFKM-l4o",
+      "type": "parent-child",
+      "created_at": "2026-04-17T11:01:58Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-l4o.2",
+      "depends_on_id": "WOLFKM-l4o.1",
+      "type": "blocks",
+      "created_at": "2026-04-17T11:02:29Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

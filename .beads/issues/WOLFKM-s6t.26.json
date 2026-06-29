@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-s6t.26",
+  "title": "Crypto misuse: GCM decrypt inbuf realloc uses exact-fit not doubling — O(n^2) allocations leak timing",
+  "description": "In wolfssl_aes_gcm_update (wolfssl_aes_gcm.c) decrypt path and kcapi_aead_update, when the inbuf needs to grow, the new allocation is exactly new_len = ctx-\u003einbuf_len + inlen bytes. This means every write() call that grows the buffer triggers a fresh kmalloc + memcpy + memzero_explicit + kfree. For n write() calls of k bytes each, this is O(n^2) work and n kernel allocations. The pattern also creates n-1 heap allocations that contain partial ciphertext and are zeroized then freed. While this is not a cryptographic correctness issue, each old inbuf buffer is correctly zeroized before free, so no plaintext exposure occurs. The timing side-channel is the concern: each additional write() takes progressively longer, potentially revealing the total ciphertext length to a timing-capable observer on the same system. The CBC path already uses a doubling strategy (comparison: wolfssl_aes_cbc uses tail[] fixed-size buffer). The fix is to use a doubling strategy for inbuf growth, same as crypto2dev_fd.c inbuf_append.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T03:22:55Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T04:23:35Z",
+  "closed_at": "2026-04-20T04:23:35Z",
+  "close_reason": "gcm_inbuf_append helper uses doubling growth strategy: new_cap = max(cap*2, 4096) while new_cap \u003c needed. O(n) total allocations for n update() calls. Used for both encrypt and decrypt paths.",
+  "labels": [
+    "audit",
+    "crypto",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-s6t.26",
+      "depends_on_id": "WOLFKM-s6t",
+      "type": "parent-child",
+      "created_at": "2026-04-19T20:22:55Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

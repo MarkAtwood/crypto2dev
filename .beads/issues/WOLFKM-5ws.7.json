@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-5ws.7",
+  "title": "test_aead: TAG_LEN hardcoded, v4 12-byte tag breaks test",
+  "description": "tests/kernel/test_aead.c defines TAG_LEN=16 and uses it unconditionally for crypto_aead_setauthsize, tag comparison (line 126), and decrypt setup (line 140). The new v4 vector has tag_len=12. When run_gcm_vector processes v4: (1) encrypt compares 16 bytes against the 12-byte v-\u003etag array (4-byte over-read + guaranteed T_FAIL); (2) decrypt copies 16 bytes from the 12-byte v-\u003etag array into src_buf (4-byte over-read), then passes inlen+16 to aead_request_set_crypt, causing EBADMSG because the appended garbage bytes form an invalid tag. Fix: replace TAG_LEN with v-\u003etag_len in run_gcm_vector, including setauthsize, buf_len allocation, tag comparison, decrypt tag copy, and aead_request_set_crypt crypt length.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T02:27:24Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T02:30:31Z",
+  "closed_at": "2026-04-20T02:30:31Z",
+  "close_reason": "test_aead.c: TAG_LEN removed, replaced with v-\u003etag_len; WARN_ON guard added",
+  "labels": [
+    "correctness",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-5ws.7",
+      "depends_on_id": "WOLFKM-5ws",
+      "type": "parent-child",
+      "created_at": "2026-04-19T19:27:23Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

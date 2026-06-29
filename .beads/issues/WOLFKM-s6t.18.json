@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-s6t.18",
+  "title": "is_fips flag on provider struct is the authoritative FIPS boundary marker — not fips_gate presence",
+  "description": "The registry uses p-\u003eis_fips on the struct crypto2dev_provider as the authoritative marker for FIPS boundary membership. The FIPS enforcement filter in crypto2dev_lookup_algo(), fips_aggregate(), and fips_provider_loaded() all check is_fips, not whether fips_gate is non-NULL. This is correct because these are orthogonal concepts: a non-FIPS provider could have a non-NULL fips_gate stub that always returns 0 (not-FIPS does not mean ungated), and a FIPS provider might have some algorithms without a per-algo gate (the module check may be provider-level, not per-algo). Using fips_gate \\!= NULL as a proxy for 'is FIPS certified' would misclassify both cases. A reviewer might suggest 'simplify by checking fips_gate \\!= NULL instead of a separate is_fips field' — that conflates operational gating with CMVP certification boundary membership, which are different properties.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T03:22:20Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T04:29:25Z",
+  "closed_at": "2026-04-20T04:29:25Z",
+  "close_reason": "Correct design: is_fips flag on provider struct is the authoritative FIPS boundary marker. It is set at provider registration time by the provider itself (wolfssl sets is_fips=1). The flag cannot be spoofed by userspace — providers are kernel modules loaded by root. FIPS enforcement is provider-declared, not user-declared.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-s6t.18",
+      "depends_on_id": "WOLFKM-s6t",
+      "type": "parent-child",
+      "created_at": "2026-04-19T20:22:19Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

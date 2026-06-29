@@ -1,0 +1,34 @@
+{
+  "id": "WOLFKM-ins",
+  "title": "crypto2dev_main.c: module_init, module_exit, FIPS gate",
+  "description": "The main module entry point orchestrates startup and shutdown in strict order, and is the first place wolfCrypt FIPS state is checked. module_init must: (1) call wolfCrypt_GetStatus_fips() and return -ENODEV if not OPERATIONAL, (2) call wolfkm_register_all(), (3) call wolfkm_cdev_init(), (4) pr_info with version, FIPS status, algorithm count. module_exit must call wolfkm_cdev_exit() then wolfkm_unregister_all(). Without wolfCrypt headers (WOLFKM_HAVE_WOLFCRYPT=0), stub mode emits pr_warn('wolfkm: STUB MODE — not for production').",
+  "design": "MODULE_LICENSE(GPL v2), MODULE_AUTHOR(wolfSSL Inc.), MODULE_SOFTDEP(pre: wolfcrypt). Module param debug_level int default 0. Forward-declare wolfkm_register_all(), wolfkm_unregister_all(), wolfkm_cdev_init(), wolfkm_cdev_exit() so this file compiles with empty stubs elsewhere. See DESIGN.md §Module Initialization.",
+  "acceptance_criteria": "Loads and unloads cleanly (insmod/rmmod) in stub mode. dmesg shows 'wolfkm: STUB MODE' warning. Module param debug_level visible in /sys/module/wolfkm/parameters/.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "feature",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T06:53:05Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T01:08:02Z",
+  "close_reason": "Stale: from abandoned kernel-crypto-API-registration design. crypto2dev does not register into kernel crypto API (wolfcrypt.ko does that). Current implementation uses chardev+provider model instead.",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ins",
+      "depends_on_id": "WOLFKM-bl1",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:58:46Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-ins",
+      "depends_on_id": "WOLFKM-dvd",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:59:03Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

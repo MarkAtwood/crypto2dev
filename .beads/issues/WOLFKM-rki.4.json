@@ -1,0 +1,41 @@
+{
+  "id": "WOLFKM-rki.4",
+  "title": "Refactor cdev dispatch: all paths through ops vtable",
+  "description": "Update crypto2dev_cdev.c and crypto2dev_fd.c so write(), read(), and all ioctls dispatch through ops-\u003e* callbacks.\n\n- Remove all direct wolfCrypt calls from cdev layer\n- crypto2dev_fips_gate() removed from framework; framework calls ops-\u003efips_gate() before sess_init if non-NULL\n- write() -\u003e ops-\u003eupdate()\n- read() -\u003e ops-\u003efinalize()\n- SET_IV -\u003e ops-\u003eset_iv()\n- SET_AAD -\u003e ops-\u003eset_aad()\n- GET_TAG -\u003e ops-\u003eget_tag()\n- SET_TAG -\u003e ops-\u003eset_tag()\n- STATUS ioctl: enumerate registered providers/algos instead of hardcoded wolfCrypt list\n\nDepends on: registry issue, fd_state refactor issue",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T15:20:30Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-16T15:37:02Z",
+  "close_reason": "Closed",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-rki.4",
+      "depends_on_id": "WOLFKM-rki.2",
+      "type": "blocks",
+      "created_at": "2026-04-16T08:20:51Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-rki.4",
+      "depends_on_id": "WOLFKM-rki.3",
+      "type": "blocks",
+      "created_at": "2026-04-16T08:20:51Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-rki.4",
+      "depends_on_id": "WOLFKM-rki",
+      "type": "parent-child",
+      "created_at": "2026-04-16T08:20:29Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

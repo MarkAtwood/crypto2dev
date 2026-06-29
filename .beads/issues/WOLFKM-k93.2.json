@@ -1,0 +1,26 @@
+{
+  "id": "WOLFKM-k93.2",
+  "title": "test_asym: add ecdh-p384 HKDF-SHA384 known-answer test",
+  "description": "Add a test case in tests/userspace/test_asym.c (or tests/kernel/test_kpp.c) that verifies ecdh-p384 agree() produces the expected HKDF-SHA384 OKM against the known-answer vector in ecdh_p384.h. Mirror the existing ecdh-p256 HKDF-SHA256 test structure.",
+  "acceptance_criteria": "Test exercises ecdh-p384 agree and compares OKM against hardcoded vector; test fails if wrong hash used",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-19T23:36:51Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T23:40:48Z",
+  "closed_at": "2026-04-19T23:40:48Z",
+  "close_reason": "Added test_ecdh_p384_agree() in test_asym.c mirroring P-256 structure; compares OKM against ecdh_p384_hkdf_sha384_okm from Python cryptography oracle",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-k93.2",
+      "depends_on_id": "WOLFKM-k93",
+      "type": "parent-child",
+      "created_at": "2026-04-19T16:36:50Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

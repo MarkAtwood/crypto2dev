@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-7b5.4",
+  "title": "Observability: provider-layer logs missing algo name for shared callbacks",
+  "description": "wolfssl_sha_update, wolfssl_sha_finalize, wolfssl_sha_sess_reset (wolfssl_sha.c), wolfssl_hmac_update, wolfssl_hmac_finalize, wolfssl_hmac_sess_reset (wolfssl_hmac.c), and wolfssl_cmac_aes_sess_reset (wolfssl_cmac.c) are shared callbacks used by multiple algo variants. Their pr_err_ratelimited lines log only __func__ and the raw wc_err — there is no algo name. When one of these fires, a support engineer cannot tell from the ring buffer whether the failure was in sha256 vs sha512, or hmac(sha256) vs hmac(sha512), without attaching a debugger to inspect ctx-\u003etype or ctx-\u003ehash_type. The ctx struct carries that information; it just is not included in the log message. Affected lines: wolfssl_sha.c:139 (sha_sess_init), :309 (wolfssl_sha_update), :367 (wolfssl_sha_finalize); wolfssl_hmac.c:128 (hmac_sess_init), :269 (wolfssl_hmac_update), :311 (wolfssl_hmac_finalize); wolfssl_cmac.c:133 (wolfssl_cmac_aes_sess_reset).",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T05:19:30Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T05:39:26Z",
+  "closed_at": "2026-04-18T05:39:26Z",
+  "close_reason": "Fixed: xlat pr_debug→pr_err, sha/hmac algo-name helpers, lookup_algo provider_name_out",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-7b5.4",
+      "depends_on_id": "WOLFKM-7b5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T22:19:30Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-7b5.20",
+  "title": "Defend: is_fips flag on provider enables hard FIPS filter in lookup",
+  "description": "crypto2dev_registry.c / crypto2dev_provider.h — the is_fips field on struct crypto2dev_provider is a single-bit sentinel. When any provider with is_fips=1 is registered, fips_provider_count goes positive, and crypto2dev_lookup_algo() hard-filters all non-FIPS providers out of the search — they are invisible regardless of load order and regardless of whether the caller names a non-FIPS provider explicitly. A reviewer might suggest 'just let callers specify the provider by name, no need for a filter'. This is wrong: FIPS 140-3 requires that the validated boundary be the only active crypto path when the FIPS module is loaded. Allowing explicit bypass of the filter via a provider name string would break FIPS algorithm non-bypass (FCS requirement). The hard filter is non-negotiable. The is_fips flag avoids a two-pass lookup (first checking FIPS providers, then falling back) which would create a TOCTOU window.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T05:20:22Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T17:40:47Z",
+  "closed_at": "2026-04-18T17:40:47Z",
+  "close_reason": "Code verified correct. Rationale comments present in source.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-7b5.20",
+      "depends_on_id": "WOLFKM-7b5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T22:20:22Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

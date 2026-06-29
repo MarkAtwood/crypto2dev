@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-4l7.5",
+  "title": "Provider output buffer overflow is fatal — WARN + error state, not silently capped",
+  "description": "When a provider callback returns outlen \u003e available outbuf space, crypto2dev_fd_write fires WARN_ON and sets state-\u003eerror=true, returning -EIO (crypto2dev_fd.c lines 449-453, 1528-1531). This treats provider buffer overruns as fatal. A reviewer might suggest silently capping outlen at available space and continuing. That would be wrong: a provider that claims to have written more bytes than the framework gave it buffer space for has either corrupted kernel memory (writing past the buffer) or is lying about outlen. Either case is a fatal bug in the provider. Silently capping would hide the corruption and continue producing incorrect output. The WARN + error state surfaces the bug immediately.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T11:47:00Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T11:51:30Z",
+  "closed_at": "2026-04-20T11:51:30Z",
+  "close_reason": "Design decision confirmed by code inspection — no code change required.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-4l7.5",
+      "depends_on_id": "WOLFKM-4l7",
+      "type": "parent-child",
+      "created_at": "2026-04-20T04:47:00Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

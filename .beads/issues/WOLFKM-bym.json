@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-bym",
+  "title": "tools/crypto2dev_status.c: CLI tool to query /dev/crypto2dev",
+  "description": "Userspace tool to query /dev/wolfcrypt module status.\n\nUsage: wolfkm_status [--json]\n\nOpens /dev/wolfcrypt, issues WOLFKM_IOC_STATUS ioctl, prints:\n- FIPS state (0=not operational, 1=operational, numeric for other states)\n- Number of registered algorithms\n- wolfkm version string\n\nHuman-readable output:\n  wolfkm v1.0 | FIPS: OPERATIONAL | algorithms: 24\n\nJSON output (--json flag):\n  {\"fips_state\":1,\"num_algorithms\":24,\"version\":\"1.0\"}\n\nExit code: 0 if FIPS OPERATIONAL, 1 if not operational, 2 on error.",
+  "design": "Links only against libc. Include include/uapi/wolfkm_ioctl.h. Human-readable FIPS state strings: 0=UNKNOWN, 1=OPERATIONAL, 2=ERROR. Handle -ENOENT (device not present) and -EACCES (permission denied) with clear error messages. See DESIGN.md §tools.",
+  "acceptance_criteria": "Compiles with gcc -Wall -Wextra. Prints correct output when wolfkm.ko is loaded. Exits 1 when wolfCrypt is not in OPERATIONAL state. Binary is standalone (no wolfSSL libs needed).",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T06:55:03Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T05:58:05Z",
+  "closed_at": "2026-04-18T05:58:05Z",
+  "close_reason": "Closed",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-bym",
+      "depends_on_id": "WOLFKM-5ne",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:59:10Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

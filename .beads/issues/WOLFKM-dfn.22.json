@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-dfn.22",
+  "title": "Correctness: empty algo string not rejected in ioctl_init",
+  "description": "ioctl_init null-terminates op.algo at line 576 but does not check op.algo[0] \\!= '\\0'. A zero-initialized crypto2dev_init_op passes this check. crypto2dev_lookup_algo() is called with an empty string, likely returns -ENOENT. This is not a crash but the contract does not explicitly forbid empty algo strings at the UAPI layer, creating an ambiguous failure mode. Fix: check op.algo[0] \\!= '\\0' and return -EINVAL early.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:04:43Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:59:58Z",
+  "closed_at": "2026-04-18T00:59:58Z",
+  "close_reason": "Added algo[0]==0 check before mutex lock in ioctl_init; returns -EINVAL",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.22",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:04:43Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

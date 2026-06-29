@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-qnv.11",
+  "title": "actual_provider from lookup stored in state, not user-supplied filter string",
+  "description": "After crypto2dev_lookup_algo, the matched provider's actual name is stored in state-\u003eprovider_name (not the user's op.provider filter string). This means GET_STATE reports 'wolfssl' even when the user specified provider=''. A contributor might 'simplify' this to just strscpy(state-\u003eprovider_name, op.provider, ...) since op.provider is already in scope. Defense: reporting the actual matched provider name is what makes GET_STATE useful for debugging. If the user specified '' (any) and got wolfssl, they need to know that. If they specified 'wolfssl' and got wolfssl, the information is the same either way. The actual_provider pointer lifetime is safe: it points to p-\u003ename inside the locked registry, captured before module_put, used only while the module reference is held.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T06:15:15Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T06:19:53Z",
+  "closed_at": "2026-04-18T06:19:53Z",
+  "close_reason": "Decision records — no code change needed",
+  "labels": [
+    "my-oss",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-qnv.11",
+      "depends_on_id": "WOLFKM-qnv",
+      "type": "parent-child",
+      "created_at": "2026-04-17T23:15:15Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

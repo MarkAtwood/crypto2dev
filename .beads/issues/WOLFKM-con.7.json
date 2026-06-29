@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-con.7",
+  "title": "Observability: FIPS gate failure in DO_KDF, KEY_IMPORT, KEY_GENERATE emits no log",
+  "description": "ioctl_do_kdf (fd.c:1773), ioctl_key_import (fd.c:1636), and ioctl_key_generate (fd.c:1914) call ops-\u003efips_gate() and silently fall through to the error exit if it returns non-zero — no pr_err or pr_debug is emitted in fd.c at these sites. The gate itself emits a rate-limited message but without algo name or operation context. A support engineer cannot determine whether the FIPS rejection was for a KDF, key import, or key generation without a debugger, and cannot correlate the message to the specific algorithm or provider involved. Contrast: ioctl_init does log the FIPS gate rejection with provider name at fd.c:734.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:36:59Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T21:30:29Z",
+  "closed_at": "2026-04-19T21:30:29Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-con.7",
+      "depends_on_id": "WOLFKM-con",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:36:59Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

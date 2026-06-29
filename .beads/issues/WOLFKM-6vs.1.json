@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-6vs.1",
+  "title": "Log: add provider name to sess_init failure message",
+  "description": "fd.c:787: pr_err_ratelimited format string omits provider name. actual_provider is non-NULL at that point (lookup succeeded). Fix: change format to include '%.*s' for actual_provider alongside algo and ret. One-line change.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T02:11:18Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T03:12:54Z",
+  "closed_at": "2026-04-20T03:12:54Z",
+  "close_reason": "Closed",
+  "labels": [
+    "fips",
+    "observability",
+    "support"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-6vs.1",
+      "depends_on_id": "WOLFKM-6vs",
+      "type": "parent-child",
+      "created_at": "2026-04-19T19:11:18Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

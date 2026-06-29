@@ -1,0 +1,65 @@
+{
+  "id": "WOLFKM-bxc",
+  "title": "Tests: update for FINALIZE ioctl + add streaming interleave tests",
+  "description": "Update tests/userspace/test_chardev.c for the new streaming model.\n\nChanges to existing tests:\n- All existing INIT/write/read test sequences must add CRYPTO2DEV_IOC_FINALIZE between the last write() and the first read()\n- Verify existing NIST CAVP vectors still produce correct results\n\nNew streaming tests to add:\n1. CBC streaming: write 64KB in 4KB chunks, read output after each write(), FINALIZE, read last block. Verify full ciphertext matches one-shot result.\n2. Hash streaming: write 1MB in 4KB chunks, read() returns 0 each time (no output until FINALIZE), FINALIZE, read 32-byte digest. Verify matches direct wc_Sha256 of the same data.\n3. GCM encrypt streaming: write in chunks, read partial ciphertext after each write, FINALIZE, read tag. Verify full ciphertext+tag matches one-shot.\n4. GCM decrypt streaming: confirm that plaintext is NOT returned until FINALIZE (all read() calls before FINALIZE return 0), FINALIZE verifies tag, then read() returns plaintext.\n5. Error case: write() after FINALIZE returns -EINVAL.\n6. Error case: two FINALIZEs return -EINVAL on second.\n\nThread safety: existing 16-thread concurrency test already covers concurrent sessions — verify it still passes.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T20:31:06Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T01:57:02Z",
+  "close_reason": "Created tests/userspace/test_chardev.c: CBC NIST CAVP vectors (oneshot + streaming), GCM encrypt/decrypt NIST vectors, SHA-256 hash, FINALIZE error cases (double FINALIZE, write-after-FINALIZE). Compiles clean with gcc -Wall -Wextra.",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-bxc",
+      "depends_on_id": "WOLFKM-ptm",
+      "type": "blocks",
+      "created_at": "2026-04-17T13:31:27Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-bxc",
+      "depends_on_id": "WOLFKM-6w9",
+      "type": "blocks",
+      "created_at": "2026-04-17T13:31:26Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-bxc",
+      "depends_on_id": "WOLFKM-7tv",
+      "type": "blocks",
+      "created_at": "2026-04-17T13:31:27Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-bxc",
+      "depends_on_id": "WOLFKM-360",
+      "type": "blocks",
+      "created_at": "2026-04-17T13:31:28Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-bxc",
+      "depends_on_id": "WOLFKM-ift",
+      "type": "blocks",
+      "created_at": "2026-04-17T13:31:28Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-bxc",
+      "depends_on_id": "WOLFKM-8ra",
+      "type": "blocks",
+      "created_at": "2026-04-17T13:31:26Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

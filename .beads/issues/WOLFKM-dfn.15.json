@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-dfn.15",
+  "title": "Observability: wolfCrypt error codes masked before returning to userspace",
+  "description": "When ops-\u003esess_init() fails at src/cdev/crypto2dev_fd.c:627-631, the wolfCrypt error code is passed through directly without logging. Callers see -EINVAL (or whatever the provider returned) but the kernel ring buffer contains no record of which algorithm failed, which provider was selected, or what the raw wolfCrypt error was (e.g., -173=BAD_FUNC_ARG vs -125=MEMORY_E vs FIPS_DEGRADED). Same pattern throughout write/update and read/finalize paths. A support engineer cannot distinguish 'invalid key length' from 'FIPS degraded' from 'OOM' from dmesg alone.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:04:11Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T01:02:36Z",
+  "closed_at": "2026-04-18T01:02:36Z",
+  "close_reason": "Added pr_err_ratelimited at sess_init failure with algo name and error code",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.15",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:04:10Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

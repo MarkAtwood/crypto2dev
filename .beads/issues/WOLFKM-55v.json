@@ -1,0 +1,25 @@
+{
+  "id": "WOLFKM-55v",
+  "title": "DESIGN.md: sync streaming I/O section to implementation",
+  "description": "Update DESIGN.md to reflect the streaming I/O model after all implementation issues are closed.\n\nSections to update:\n1. Character device section: replace 'write() appends to inbuf via krealloc' with accurate description of write()-\u003eupdate() streaming\n2. Provider API section: replace process() with update()/finalize() contract (DESIGN.md still shows the old process() vtable)\n3. Usage examples: add CRYPTO2DEV_IOC_FINALIZE to all three code examples (CBC, GCM, SHA)\n4. Per-fd state section: remove inbuf/inbuf_len/processed fields; describe outbuf_drained model\n\nDo not touch any other section. Do not add new sections.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T20:31:16Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T17:47:18Z",
+  "closed_at": "2026-04-18T17:47:18Z",
+  "close_reason": "All outdated text was already removed in commit 31ce57a (streaming I/O FINALIZE commit). The DESIGN.md accurately reflects write()-\u003eupdate()-\u003eFINALIZE-\u003eread() model. Items 3 and 4 (usage examples, per-fd state section) referenced sections that never existed in the tracked DESIGN.md.",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-55v",
+      "depends_on_id": "WOLFKM-bxc",
+      "type": "blocks",
+      "created_at": "2026-04-17T13:31:28Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

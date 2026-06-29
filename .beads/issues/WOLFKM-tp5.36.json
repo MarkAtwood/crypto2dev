@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-tp5.36",
+  "title": "fd_release zeroes outbuf_cap bytes not outbuf_len — correct for stale tail data",
+  "description": "Why it is right: crypto2dev_fd_release() calls memzero_explicit(state-\u003eoutbuf, state-\u003eoutbuf_cap) not memzero_explicit(state-\u003eoutbuf, state-\u003eoutbuf_len). krealloc() may reuse memory that held sensitive data from a prior allocation. The unfilled tail between outbuf_len and outbuf_cap could contain residual bytes from prior slab use. FIPS 140-3 zeroization applies to any memory that held key material or derived output, not just the portion written this session. What a reviewer might suggest: 'only zero what you wrote (outbuf_len) to avoid wasted work.' For non-sensitive buffers this would be correct; for FIPS output material the tail must also be zeroed.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:41:39Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:09:53Z",
+  "closed_at": "2026-04-18T04:09:53Z",
+  "close_reason": "confirmed correct: zeroing outbuf_cap bytes covers slab tail that may hold sensitive data from prior allocation; zeroing only outbuf_len would leave residue",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.36",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:41:38Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

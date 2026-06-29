@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-tp5.19",
+  "title": "Crypto misuse: CMAC key not zeroized when HAVE_CMAC_FREE is undefined",
+  "description": "wolfssl_cmac_aes_sess_reset and wolfssl_cmac_aes_sess_free call wc_CmacFree only when HAVE_CMAC_FREE is defined (wolfssl_cmac.c lines 124-125 and 152-153).\n\nIf wolfCrypt is built without HAVE_CMAC_FREE (which is the case in some wolfCrypt configurations), wc_CmacFree is never called. The Cmac struct stores the AES key material internally (the subkeys K1/K2 derived from the block cipher key, plus the running block state). Without wc_CmacFree, these subkeys are not formally released through the wolfCrypt API.\n\nThe ctx-level memzero_explicit(ctx, sizeof(*ctx)) in sess_free does overwrite the embedded Cmac struct, which covers the case for the context struct itself. However, if wc_InitCmac internally allocated heap memory (which some wolfCrypt versions do for certain hardware acceleration paths), those heap allocations will be leaked without wc_CmacFree, and the heap-allocated key material will not be zeroized.\n\nThe conditional compile creates silent non-FIPS behavior: on builds where HAVE_CMAC_FREE is not defined, FIPS 140-3 zeroization requirements may not be fully met for heap-allocated internal CMAC state.\n\nTrigger: build with wolfCrypt that does not define HAVE_CMAC_FREE.\nConsequence: potential key material leak in heap (implementation-dependent); FIPS 140-3 zeroization may be incomplete.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:40:35Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:59:51Z",
+  "closed_at": "2026-04-18T03:59:51Z",
+  "close_reason": "false positive: memzero_explicit(ctx, sizeof(*ctx)) already present unconditionally outside HAVE_CMAC_FREE guard in sess_free; sess_init error path also already correct",
+  "labels": [
+    "audit",
+    "crypto",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.19",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:40:34Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

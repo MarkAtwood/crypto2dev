@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-7b5.11",
+  "title": "Observability: ioctl_init logs empty provider name when no provider hint given",
+  "description": "In crypto2dev_fd.c:713-717, the success log 'init dispatched to provider' copies op.provider (the user-supplied hint string) into state-\u003eprovider_name before logging it. When the caller passes an empty provider string (the normal case), the log emits: init('cbc(aes)') dispatched to provider ''. A support engineer reading the ring buffer post-incident cannot determine which actual provider handled the session. The selected provider name is available from the registry entry returned by crypto2dev_lookup_algo but is not captured.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T05:19:46Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T05:39:21Z",
+  "closed_at": "2026-04-18T05:39:21Z",
+  "close_reason": "Fixed: xlat pr_debug→pr_err, sha/hmac algo-name helpers, lookup_algo provider_name_out",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-7b5.11",
+      "depends_on_id": "WOLFKM-7b5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T22:19:46Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

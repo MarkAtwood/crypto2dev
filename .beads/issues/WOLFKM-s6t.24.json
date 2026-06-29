@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-s6t.24",
+  "title": "Crypto misuse: RSA verify wc_RsaSSL_Verify return-value check uses wrong convention",
+  "description": "In wolfssl_rsa_verify (wolfssl_rsa.c), wc_RsaSSL_Verify returns positive on success (length of recovered message), or a wolfCrypt negative error code on failure. The check 'if (ret \u003e 0)' is therefore correct for the success path. However, if wc_RsaSSL_Verify returns exactly 0 (e.g. zero-length recovered message — theoretically impossible for PKCS#1 v1.5 but not impossible for all RSA modes), the else branch calls wolfssl_rsa_xlat_err(0). That function's switch statement has no case for 0, so it falls through to 'default: return -EIO' — logging a spurious pr_err and returning -EIO rather than -EBADMSG. The actual security consequence is minor (verify fails with wrong errno), but the return-value convention comment in the CLAUDE.md says wolfCrypt returns 0 for success and must be checked with \\!= 0, while wc_RsaSSL_Verify actually uses a different convention (positive = bytes written). This is a documentation/convention inconsistency that makes the code harder to audit. The check should use explicit: if (ret \u003e 0) success; if (ret == 0) unexpected zero-length (treat as -EBADMSG); if (ret \u003c 0) wolfCrypt error. Priority downgraded: no actual security bypass exists because xlat_err(0) returns -EIO not 0.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T03:22:43Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T04:28:46Z",
+  "closed_at": "2026-04-20T04:28:46Z",
+  "close_reason": "Added explicit ret==0 guard in wolfssl_rsa_verify: zero-length recovery is impossible for PKCS#1 v1.5 but xlat_err(0) fell through to -EIO instead of -EBADMSG. Now handled as a distinct branch returning -EBADMSG with its own log. Added comment explaining non-standard wc_RsaSSL_Verify return convention.",
+  "labels": [
+    "audit",
+    "crypto",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-s6t.24",
+      "depends_on_id": "WOLFKM-s6t",
+      "type": "parent-child",
+      "created_at": "2026-04-19T20:22:42Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

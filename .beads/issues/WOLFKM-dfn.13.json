@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-dfn.13",
+  "title": "Crypto misuse: kcapi skcipher no AES key size validation",
+  "description": "kcapi skcipher sess_init (src/providers/kcapi/kcapi_skcipher.c:61-65) passes keylen directly to crypto_skcipher_setkey without independently validating 16/24/32 bytes. wolfssl AES-CBC validates explicitly (wolfssl_aes_cbc.c:80-83). A caller can attempt to use a 1-byte key against kcapi; the kernel crypto API may or may not reject it depending on driver. FIPS 140-3 minimum is 128 bits (16 bytes). The kcapi provider must enforce this independently before delegating to kernel crypto API.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:03:53Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:55:53Z",
+  "closed_at": "2026-04-18T00:55:53Z",
+  "close_reason": "Added FIPS 140-3 AES key size validation (16/24/32 bytes only) in kcapi_skcipher_sess_init before crypto_skcipher_setkey",
+  "labels": [
+    "audit",
+    "crypto",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.13",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:03:53Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

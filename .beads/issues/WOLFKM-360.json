@@ -1,0 +1,25 @@
+{
+  "id": "WOLFKM-360",
+  "title": "Provider audit: kcapi providers streaming compliance",
+  "description": "Audit src/providers/kcapi/kcapi_skcipher.c, kcapi_hash.c, kcapi_aead.c.\n\nThe kcapi providers use the kernel crypto API (crypto_skcipher_encrypt, crypto_ahash_update, etc.). Determine whether the current update()/finalize() implementations:\n1. Process complete blocks immediately in update() (streaming), or\n2. Accumulate all input in update() and process in finalize() (batch)\n\nFor skcipher (CBC, CTR, XTS): update() should scatter-gather encrypt complete blocks immediately.\nFor hash/HMAC/CMAC: update() should call crypto_ahash_update() immediately.\nFor AEAD (GCM): same GCM streaming constraint as wolfssl — no unauthenticated plaintext on decrypt.\n\nFix any batch accumulation found. Document findings.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T20:30:56Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T01:51:20Z",
+  "close_reason": "kcapi_skcipher converted from batch to streaming: tail[16] replaces inbuf, update() processes complete blocks immediately; kcapi_hash already streaming; kcapi_aead batch retained (AEAD decrypt requires tag verify before plaintext release)",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-360",
+      "depends_on_id": "WOLFKM-n3j",
+      "type": "blocks",
+      "created_at": "2026-04-17T13:31:21Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

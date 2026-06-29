@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-c78.10",
+  "title": "[DECISION] memzero_explicit on ikm_buf ensures FIPS key zeroization before free",
+  "description": "src/cdev/crypto2dev_fd.c lines 1923-1930 and 1969-1972: When ikm_fd \\!= -1, ikm_buf is allocated, filled with key material extracted from the KEY fd, passed to the KDF provider, then immediately memzero_explicit'd regardless of KDF success/failure. The buffer is then kfree'd. This zeroization happens BEFORE the lock is released (line 1973). Comment at line 1923: 'FIPS 140-3: zeroize IKM regardless of KDF outcome'. Additionally, on error paths (line 1981-1983), ikm_buf is zeroized again in out_zero (pre-lock validation failure path). This double-zeroization (at line 1925 AND line 1982) is defensive: it ensures the buffer is cleared on all code paths, including early returns that never reach the main zeroization. The pattern is non-obvious: most code zeroizes once, but this code zeroizes both in the success path (within lock, before free) and in the early-exit error path (outside lock, for defense). This satisfies FIPS 140-3 compliance: key material must not persist after release.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T00:15:14Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T00:27:13Z",
+  "closed_at": "2026-04-20T00:27:13Z",
+  "close_reason": "Review converged. SEC7: running out of real complaints. P0=0 P1=0. Efficiency findings .6/.9 are marginal (no correctness impact). DECISION records noted.",
+  "labels": [
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-c78.10",
+      "depends_on_id": "WOLFKM-c78",
+      "type": "parent-child",
+      "created_at": "2026-04-19T17:15:13Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

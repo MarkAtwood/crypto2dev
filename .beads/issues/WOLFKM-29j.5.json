@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-29j.5",
+  "title": "FIPS operational risk: require_fips check uses re-read fips_provider_loaded after lookup, not provider identity",
+  "description": "In ioctl_init (crypto2dev_fd.c ~line 760), REQUIRE_FIPS is enforced by calling crypto2dev_fips_provider_loaded() *after* crypto2dev_lookup_algo() has already selected and ref-counted a provider. The lookup and the REQUIRE_FIPS check are two separate atomic reads of fips_provider_count with no lock held across them. Race: (1) REQUIRE_FIPS set, (2) INIT called while fips_provider_count=0 so lookup selects kcapi ops, (3) wolfssl provider loads between lookup and the require_fips check, (4) fips_provider_loaded() returns true, require_fips check passes, session proceeds with non-FIPS kcapi ops. Even without the race, the check is semantically wrong: it asks 'is any FIPS provider loaded?' not 'did this lookup select a FIPS provider?'. A correct implementation checks whether the returned provider's is_fips==1, not whether fips_provider_loaded() is true. Consequence: a caller that issues REQUIRE_FIPS to guarantee FIPS-validated crypto could get a non-FIPS session without any error — silent FIPS bypass under a narrow but real TOCTOU window. At CMVP audit time this is a material nonconformance.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T04:47:42Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T05:05:52Z",
+  "closed_at": "2026-04-20T05:05:52Z",
+  "close_reason": "Replaced crypto2dev_fips_provider_loaded() re-read with ops-\u003efips_gate NULL check: verifies the returned provider is FIPS-validated, closes TOCTOU race",
+  "labels": [
+    "audit",
+    "fips",
+    "operational",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-29j.5",
+      "depends_on_id": "WOLFKM-29j",
+      "type": "parent-child",
+      "created_at": "2026-04-19T21:47:41Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

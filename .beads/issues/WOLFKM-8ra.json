@@ -1,0 +1,25 @@
+{
+  "id": "WOLFKM-8ra",
+  "title": "UAPI: add CRYPTO2DEV_IOC_FINALIZE ioctl",
+  "description": "Add CRYPTO2DEV_IOC_FINALIZE to include/uapi/crypto2dev_ioctl.h.\n\nChanges:\n- New ioctl: CRYPTO2DEV_IOC_FINALIZE = _IO('W', 20) — no struct, no data transfer\n- Update header comment to describe the new write/read/finalize flow\n- Update usage examples in header: all three algorithms (CBC, GCM, SHA) must show FINALIZE step\n- No changes to existing ioctl numbers\n\nThis ioctl is the only UAPI change required. Provider API changes are internal.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T20:29:45Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T01:17:15Z",
+  "close_reason": "Closed",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-8ra",
+      "depends_on_id": "WOLFKM-n3j",
+      "type": "blocks",
+      "created_at": "2026-04-17T13:31:19Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

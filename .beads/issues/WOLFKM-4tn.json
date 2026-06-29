@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-4tn",
+  "title": "tests/userspace/test_concurrent.c: 16-thread concurrent /dev/crypto2dev stress",
+  "description": "Concurrent stress test for /dev/wolfcrypt streaming interface.\n\nDesign: 16 threads, each opens its own fd (one fd = one session). No shared fds.\n\nPer-thread loop (10,000 iterations):\n1. open('/dev/wolfcrypt', O_RDWR)\n2. WOLFKM_IOC_INIT with AES-CBC-256 encrypt, random key\n3. WOLFKM_IOC_SET_IV with random IV\n4. write() 4096 bytes of random plaintext\n5. read() 4096 bytes ciphertext\n6. close() — verifies key zeroization (no crashes on concurrent close)\n7. Repeat with AES-GCM and SHA-256 on alternating iterations\n\nVerification: no crashes, no -EBADMSG false positives, no fd state leakage between iterations (open a new fd each time).\n\nAlso test: two threads sharing the same fd must not corrupt each other's in-flight data (write/read must be serialized per-fd by the spinlock in wolfkm_fd_state).",
+  "design": "Each thread: open(/dev/wolfcrypt), SESSION_NEW x3, loop 10000 times (CRYPT each session), SESSION_FREE x3, close. Use pthread_barrier_t to start all threads simultaneously. Verify results by round-trip (encrypt then decrypt, compare to original). Report total_ops/sec at end. Any error is a test failure.",
+  "acceptance_criteria": "16 threads × 10,000 ops completes without deadlock, crash, or incorrect results. No kernel BUG or Oops in dmesg. Throughput reported to stdout.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T06:56:54Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T05:52:32Z",
+  "closed_at": "2026-04-18T05:52:32Z",
+  "close_reason": "Closed",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-4tn",
+      "depends_on_id": "WOLFKM-lnm",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:59:28Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

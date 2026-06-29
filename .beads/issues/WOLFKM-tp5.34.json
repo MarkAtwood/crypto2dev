@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-tp5.34",
+  "title": "FIPS operational risk: FIPS enforcement permanence not documented in DESIGN.md",
+  "description": "Once a FIPS provider loads, non-FIPS providers become invisible to all lookups and there is no mechanism to disable FIPS enforcement short of rmmod of the FIPS provider. This is the correct design, but it is not documented anywhere in DESIGN.md or in the registry source. The algorithm table in DESIGN.md mentions kcapi algorithms becoming unreachable but does not state the permanence guarantee explicitly. A support engineer or operator looking for a 'disable FIPS' flag or sysfs knob will not find documentation explaining why none exists. DESIGN.md needs a dedicated section stating: FIPS enforcement is a property of the loaded provider set; it cannot be disabled at runtime; rmmod of the FIPS provider is the only reversal path.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:41:30Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:06:18Z",
+  "closed_at": "2026-04-18T04:06:18Z",
+  "close_reason": "fixed: added 'No runtime disable' subsection to FIPS Enforcement section in DESIGN.md documenting permanence via fips_provider_count and rmmod-only reversal",
+  "labels": [
+    "audit",
+    "fips",
+    "operational",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.34",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:41:29Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

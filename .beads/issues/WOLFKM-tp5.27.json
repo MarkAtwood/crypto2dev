@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-tp5.27",
+  "title": "no WARN_ON if provider leaves key_ctx non-NULL on error",
+  "description": "ioctl_key_import and ioctl_key_generate trust that key_ctx==NULL on provider error per API contract. If a buggy provider sets *key_ctx non-NULL and returns error, framework does module_put(owner) without calling key_free(key_ctx), leaking key material. Same issue in ioctl_init sess_init path. Framework should WARN_ON(key_ctx != NULL) after failed callback and call key_free if non-NULL. Trigger: buggy provider sets *key_ctx = allocated_struct, returns -EINVAL → key material memory leaked.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:41:08Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:08:18Z",
+  "closed_at": "2026-04-18T04:08:18Z",
+  "close_reason": "fixed: added WARN(1,...) if provider leaves key_ctx non-NULL after returning error from key_import and key_generate",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.27",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:41:08Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

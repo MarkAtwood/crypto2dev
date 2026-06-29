@@ -1,0 +1,34 @@
+{
+  "id": "WOLFKM-dvd",
+  "title": "crypto2dev_reg.h: FIPS gate inline, shared constants, stub guards",
+  "description": "Header included by all six registration files. Provides: (1) wolfkm_fips_gate() inline function that calls wolfCrypt_GetStatus_fips() and returns -EACCES if not FIPS_OPERATIONAL; (2) WOLFKM_PRIORITY 300 constant; (3) #ifdef WOLFKM_HAVE_WOLFCRYPT guard macros for stub mode; (4) #include chain for wolfkm_compat.h and all wolfCrypt crypto headers needed by registration files.",
+  "design": "wolfkm_fips_gate() must be static inline so it gets inlined at every call site with zero overhead on the hot path. Under WOLFKM_HAVE_WOLFCRYPT=0 the gate always returns 0 (stub mode — FIPS check is meaningless without wolfCrypt). See DESIGN.md §FIPS Gate.",
+  "acceptance_criteria": "All six reg/*.c files include only wolfkm_reg.h for wolfCrypt headers and the FIPS gate. Compiles cleanly in both WOLFKM_HAVE_WOLFCRYPT=0 and =1 modes.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T06:53:20Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T01:08:01Z",
+  "close_reason": "Stale: from abandoned kernel-crypto-API-registration design. crypto2dev does not register into kernel crypto API (wolfcrypt.ko does that). Current implementation uses chardev+provider model instead.",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dvd",
+      "depends_on_id": "WOLFKM-bl1",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:59:02Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-dvd",
+      "depends_on_id": "WOLFKM-5j8",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:59:03Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

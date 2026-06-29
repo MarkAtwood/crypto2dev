@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-tp5.40",
+  "title": "ioctl_reset: blocked by EOPNOTSUPP but session remains in finalized=true state",
+  "description": "ioctl_reset() checks ops-\u003esess_reset and returns -EOPNOTSUPP if NULL. At this point: state-\u003efinalized remains true, state-\u003eerror remains false (if we got here after a successful finalize). The fd is now permanently stuck: write() returns -EINVAL (finalized=true), finalize() returns -EINVAL (finalized=true), reset() returns -EOPNOTSUPP. The only recovery is close() and reopen. This is documented behavior (per provider.h: 'Providers that do not support reuse should leave this NULL; the framework returns -EOPNOTSUPP'), but the UAPI header and DESIGN.md do not clearly document that after -EOPNOTSUPP from RESET, the fd is permanently dead. The GET_STATE ioctl would show finalized=1 error=0, which is misleading — a caller seeing error=0 might think the session is healthy. After EOPNOTSUPP from RESET, there should be a way to detect this via GET_STATE. Currently: no state transition occurs, finalized stays true, error stays false. A caller polling GET_STATE would see a perpetually 'finalized but not error' state with no path forward. Not a safety issue but a UAPI usability and documentation gap. Trigger: provider with sess_reset==NULL → INIT → write → FINALIZE → read → RESET → -EOPNOTSUPP → fd stuck finalized, not dead, no recovery path except close.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:41:54Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:08:24Z",
+  "closed_at": "2026-04-18T04:08:24Z",
+  "close_reason": "fixed: ioctl_reset now sets state-\u003eerror=true before returning -EOPNOTSUPP when sess_reset is NULL",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.40",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:41:54Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

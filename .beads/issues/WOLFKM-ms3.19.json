@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-ms3.19",
+  "title": "Kernel discipline: fips_gate called under spinlock in fips_aggregate",
+  "description": "crypto2dev_fips_aggregate() (registry.c:296) calls p-\u003ealgos[i]-\u003efips_gate() while holding read_lock(\u0026provider_lock), which is a spinlock-based rwlock. wolfssl_fips_gate() calls pr_err_ratelimited() on the non-operational path (wolfssl_provider.c:33), which acquires an internal ratelimit spinlock. On PREEMPT_RT kernels all spinlocks become sleeping locks, making this sleeping-in-atomic-context. Even on non-RT kernels, the API contract for fips_gate callbacks does not document the 'no-sleep, no-lock' requirement that holding a spinlock imposes on callees. Any future fips_gate implementation that uses a mutex, kmalloc, or other sleepable primitive will silently break. Fix: snapshot FIPS state before releasing the lock, or switch provider_lock to a mutex.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:13Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:22:04Z",
+  "closed_at": "2026-04-18T03:22:04Z",
+  "close_reason": "Fixed in this session",
+  "labels": [
+    "audit",
+    "correctness",
+    "kernel",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.19",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:13Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

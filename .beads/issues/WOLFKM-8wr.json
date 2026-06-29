@@ -1,0 +1,18 @@
+{
+  "id": "WOLFKM-8wr",
+  "title": "DO_AGREE: replace raw ECDH Z output with in-device KDF",
+  "description": "CRYPTO2DEV_IOC_DO_AGREE returns the raw X coordinate of the ECDH shared point (the raw 'Z value'). A comment in the header says 'The caller MUST apply a KDF (e.g. HKDF per SP 800-56A rev3 §5.8) before using the output as key material.'\n\nThis is wrong for a FIPS device:\n- NIST SP 800-56A rev3 §5.7.1 requires a key derivation step after the primitive agreement operation. Returning Z and hoping the caller runs a KDF is not FIPS-compliant key establishment — the KDF must occur within the FIPS boundary.\n- Even outside FIPS, raw Z is dangerous: it is distinguishable from random (the X coordinate of a point on a known curve has detectable structure). Using it directly as a key is a latent vulnerability.\n- The comment 'apply KDF before use' is documentation; the API enforces nothing.\n\nHUMAN DECISION NEEDED:\n\n(a) Should DO_AGREE run the KDF internally and return derived key material instead of raw Z?\n  Option A: Yes. DO_AGREE takes additional inputs (salt, info/context string, output key length) and returns HKDF-derived key bytes. Caller gets ready-to-use key material. FIPS-compliant.\n  Option B: No. Return raw Z as now. Add a separate DO_KDF ioctl. Caller must call DO_KDF explicitly after DO_AGREE to derive a key. Two-step but each primitive is independently useful.\n  Option C: Remove DO_AGREE and replace with DO_KEY_AGREE that requires a KDF specification inline. Old DO_AGREE is removed before public release.\n\n(b) If adding KDF to DO_AGREE, which KDF?\n  Option i: HKDF (RFC 5869) with SHA-256. Widely supported, simple, sufficient.\n  Option ii: SP 800-56C rev2 one-step KDF. Required by some FIPS profiles.\n  Option iii: Caller-specified hash for HKDF (pass hash_algo string).\n\n(c) What is the output semantics? The shared secret output buffer is currently CRYPTO2DEV_PUBKEY_MAXLEN (256 bytes). KDF output could be any length. Is 256 bytes sufficient for derived key material, or should the output length be caller-specified?\n\nWork items once decisions are made:\n- Update crypto2dev_agree_op struct (add salt, info, okm_len fields if KDF inline)\n- Implement KDF in wolfssl and kcapi providers\n- Update DESIGN.md and usage examples\n- Add test vectors: NIST ECDH test vectors exist; HKDF test vectors from RFC 5869 appendix",
+  "notes": "DECISION 2026-04-17: Option A — KDF inline in DO_AGREE. DO_AGREE runs ECDH then HKDF internally; raw Z never leaves kernel. Struct gains salt/info/okm_len fields. Provider key_agree() callback updated to accept salt, info, okm_len and return derived bytes. Output field renamed secret→okm. SP 800-56C rev2 one-step KDF semantics. Hash: HKDF-SHA-256 (caller-specified hash_algo string for future flexibility). okm_len capped at CRYPTO2DEV_PUBKEY_MAXLEN (256 B).",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T20:40:02Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-17T22:52:20Z",
+  "closed_at": "2026-04-17T22:52:20Z",
+  "close_reason": "DO_AGREE redesigned: runs ECDH + HKDF internally. New struct fields: salt/salt_len, info/info_len, okm_len, okm[]. Removed secret[]/secret_len. Provider agree() callback updated to take salt+info+okm_len, return derived bytes. Raw Z never written outside provider. ioctl_do_agree validates all lengths and zeroizes okm on error/success. No provider implements agree yet — callback signature is forward-only.",
+  "labels": [
+    "human-decision"
+  ]
+}

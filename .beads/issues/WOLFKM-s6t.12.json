@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-s6t.12",
+  "title": "Write-before-ioctl pattern for KEY_IMPORT avoids large kernel stack frames for PQ key sizes",
+  "description": "KEY_IMPORT requires the caller to write() raw key bytes into inbuf before calling the ioctl. The ioctl struct carries only metadata (algo, key_type, keylen, exportable). Key bytes are never embedded in the ioctl struct. This is correct because embedding key bytes in the struct would require a field large enough for the worst-case key (currently ML-DSA-87 = 4896 B, with headroom for future PQ schemes → 8192 B). That allocation lands on the kernel stack on every KEY_IMPORT call regardless of actual key size. Linux's stack frame guideline is ~1 KB; an 8 KB struct on the stack is a stack overflow risk on configs without stack-guard pages. The write-before-ioctl pattern allocates exactly what the key requires, on the heap, then zeroizes after import. A reviewer might suggest 'embed the key in the struct to simplify the caller protocol' — that change would cause stack overflows for PQ keys. The uapi header documents this with exact sizes.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T03:22:01Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T04:29:34Z",
+  "closed_at": "2026-04-20T04:29:34Z",
+  "close_reason": "Correct design per CLAUDE.md rule 5: write-before-ioctl pattern for KEY_IMPORT. ML-DSA-87 keys are 4896 bytes — embedding in ioctl struct would land 8192 bytes on the kernel stack on every KEY_IMPORT call including tiny EC key imports. Write-to-fd followed by KEY_IMPORT ioctl allocates exactly what's needed on the heap.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-s6t.12",
+      "depends_on_id": "WOLFKM-s6t",
+      "type": "parent-child",
+      "created_at": "2026-04-19T20:22:01Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

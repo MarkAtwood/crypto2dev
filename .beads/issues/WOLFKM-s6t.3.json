@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-s6t.3",
+  "title": "memzero_explicit used consistently for all key material: inbuf, outbuf on release, ioctl structs, sym_key_free",
+  "description": "inbuf_clear(), inbuf_append() realloc path, crypto2dev_fd_release() outbuf teardown, sym_key_free(), key export kbuf, and all ioctl struct locals containing key bytes (ioctl_init op, ioctl_do_sign op, etc.) all use memzero_explicit(). The compiler is permitted to elide a plain memset() when the buffer goes out of scope with no subsequent read — this is not hypothetical, GCC and Clang both do it. memzero_explicit() is a compiler barrier. FIPS 140-3 requires CSPs to be zeroized before memory is released; an elided memset() is a compliance failure. A reviewer might suggest 'use memset for clarity' or 'the optimizer won't elide in practice' — both are wrong. Do not change.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T03:21:26Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T04:30:06Z",
+  "closed_at": "2026-04-20T04:30:06Z",
+  "close_reason": "Correct implementation: verified memzero_explicit is used consistently throughout — inbuf/outbuf on session free and reset, all key material in sess_free/key_free, IV/tag fields, error paths. The FIPS 140-3 zeroization requirement is satisfied.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-s6t.3",
+      "depends_on_id": "WOLFKM-s6t",
+      "type": "parent-child",
+      "created_at": "2026-04-19T20:21:26Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

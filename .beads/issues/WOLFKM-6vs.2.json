@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-6vs.2",
+  "title": "Log: promote FIPS gate failures outside ioctl_init from pr_debug to pr_err_ratelimited",
+  "description": "fd.c: FIPS gate failures in write() (line 409-415), read() (570-575), set_iv() (840-844), gen_iv() (889-893), finalize() (1375-1380), and reset() (1448-1453) use pr_debug. In production kernels without CONFIG_DYNAMIC_DEBUG these are compiled out. Callers receive -EACCES with zero kernel log evidence. Only ioctl_init (line 759) uses pr_err. Fix: change all six pr_debug FIPS gate failure sites to pr_err_ratelimited to match ioctl_init behavior. Each already includes algo and provider name in the format — just change the log level.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T02:11:26Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T03:12:55Z",
+  "closed_at": "2026-04-20T03:12:55Z",
+  "close_reason": "Closed",
+  "labels": [
+    "fips",
+    "observability",
+    "support"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-6vs.2",
+      "depends_on_id": "WOLFKM-6vs",
+      "type": "parent-child",
+      "created_at": "2026-04-19T19:11:25Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

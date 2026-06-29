@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-dfn.25",
+  "title": "Decision: write-before-ioctl pattern for KEY_IMPORT",
+  "description": "KEY_IMPORT uses a two-phase pattern: write() accumulates raw key bytes in inbuf, then the ioctl carries only metadata. This is correct for three independent reasons: (1) asymmetric keys exceed the inline key cap (128 bytes) — RSA/ML-DSA keys are 256B-4896B; (2) the ioctl struct's fixed size works identically on 32/64-bit userspace with no compat_ioctl; (3) inbuf_clear() memzero_explicit zeroizes key bytes on every path after KEY_IMPORT. A reviewer suggesting 'embed key bytes directly in the ioctl struct like the inline INIT key' ignores that this would require 8KB stack allocations per ioctl call and a full 32/64-bit compat layer.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:05:05Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:42:56Z",
+  "closed_at": "2026-04-18T00:42:56Z",
+  "close_reason": "Reviewed, documented, and hardened in CLAUDE.md, DESIGN.md, and AGENTS.md",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.25",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:05:04Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

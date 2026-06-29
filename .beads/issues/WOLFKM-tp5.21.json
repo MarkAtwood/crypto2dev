@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-tp5.21",
+  "title": "Efficiency: inbuf_append is O(n^2) in write call count",
+  "description": "src/cdev/crypto2dev_fd.c inbuf_append() — every write() to an UNSET fd (key import path) allocates a new buffer of size old_len + new_len, copies all accumulated data, then frees the old buffer. For a caller that writes an ML-DSA-87 key (4896 bytes) in small chunks, total byte-copy work is O(total_key_size * num_writes / 2). Worst case: 8192 writes of 1 byte each yields ~33M byte-copies plus 8192 GFP_KERNEL allocations. Production concern at any scale where large PQ keys are written in sub-page chunks. Fix: pre-allocate inbuf at CRYPTO2DEV_KEY_IMPORT_MAXLEN on first write to UNSET fd, then copy directly into the fixed buffer.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:40:45Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:14:53Z",
+  "closed_at": "2026-04-18T04:14:53Z",
+  "close_reason": "fixed: inbuf_append replaced with capacity-doubling allocator (256B start, 2x growth, 8KiB cap at KEY_IMPORT_MAXLEN); inbuf_clear now zeroes inbuf_cap bytes",
+  "labels": [
+    "audit",
+    "efficiency",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.21",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:40:45Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

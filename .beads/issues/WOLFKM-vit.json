@@ -1,0 +1,26 @@
+{
+  "id": "WOLFKM-vit",
+  "title": "crypto2dev_aead.c: register gcm(aes), ccm(aes)",
+  "description": "Register AES-GCM and AES-CCM as kernel AEAD algorithms. .cra_name='gcm(aes)' and 'ccm(aes)', driver names 'wolfkm-gcm-aes' and 'wolfkm-ccm-aes', priority 300. Implement .setkey, .setauthsize, .encrypt (generate auth tag), .decrypt (verify tag — return -EBADMSG on failure). wolfCrypt's streaming API handles the scatterlist with AAD prepended. Only use sg_copy_to_buffer as fallback if wolfCrypt scatter API has a gap — cap at 64 KB, reject larger inputs with -EMSGSIZE.",
+  "design": "GCM tag sizes: 4, 8, 12, 16 bytes (setauthsize validates). CCM nonce sizes: 7-13 bytes. Decrypt MUST return -EBADMSG (not -EINVAL) on tag mismatch — kernel AF_ALG and IPsec/xfrm depend on this exact errno. AAD is passed via the scatterlist ahead of the ciphertext in the kernel AEAD API. Read include/crypto/aead.h carefully before implementation. See DESIGN.md §aead.",
+  "acceptance_criteria": "/proc/crypto shows gcm(aes) and ccm(aes) with wolfkm driver at priority 300. IPsec xfrm AES-GCM-128 tunnel test passes. Tampered ciphertext returns -EBADMSG. Variable tag sizes 4-16 bytes all work.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "feature",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T06:53:40Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T01:08:03Z",
+  "close_reason": "Stale: from abandoned kernel-crypto-API-registration design. crypto2dev does not register into kernel crypto API (wolfcrypt.ko does that). Current implementation uses chardev+provider model instead.",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-vit",
+      "depends_on_id": "WOLFKM-dvd",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:59:04Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

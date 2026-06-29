@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-con.24",
+  "title": "DO_SIGN returns -EINVAL for KEY_PUBLIC; header documents -EBADF",
+  "description": "Trigger: call CRYPTO2DEV_IOC_DO_SIGN with key_fd pointing to a KEY fd that has key_type == CRYPTO2DEV_KEY_PUBLIC. The ioctl.h comment documents: 'Returns -EBADF if key_fd is not a valid KEY fd.' But ioctl_do_sign line 1079-1082 checks (key_state-\u003ekey_type == CRYPTO2DEV_KEY_PUBLIC) and returns -EINVAL, not -EBADF. The documented errno for 'wrong key type' is -EINVAL (line 251 notes -EINVAL for 'digest_len is 0 or exceeds'), but -EBADF is documented for 'not a valid KEY fd'. The ABI mismatch means callers who check errno to distinguish 'bad fd' from 'wrong key type' cannot do so. Same bug exists in DO_AGREE (ioctl_do_agree line 1262-1265).",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:37:57Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T21:24:06Z",
+  "closed_at": "2026-04-19T21:24:06Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-con.24",
+      "depends_on_id": "WOLFKM-con",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:37:57Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

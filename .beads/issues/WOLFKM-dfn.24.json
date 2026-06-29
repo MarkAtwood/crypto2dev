@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-dfn.24",
+  "title": "Decision: memzero_explicit for all key material on all paths",
+  "description": "memzero_explicit() is used universally for key zeroization (fd.c:149,175,270,281,293,395,646-648; wolfssl_aes_cbc.c:140,193; wolfssl_aes_gcm.c:142,157,183,192) covering inline keys, inbuf accumulation, and provider context cleanup. This is correct and must not be 'cleaned up'. A compiler can prove a plain memset is dead (buffer goes out of scope after the call) and elide it entirely, leaving key bytes in the kernel heap free list. memzero_explicit() is barrier-protected against this. FIPS 140-3 auditors will flag plain memset as a compliance defect. Reviewers who suggest 'use memset — it's simpler' are wrong.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:04:59Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:42:54Z",
+  "closed_at": "2026-04-18T00:42:54Z",
+  "close_reason": "Reviewed, documented, and hardened in CLAUDE.md, DESIGN.md, and AGENTS.md",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.24",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:04:59Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

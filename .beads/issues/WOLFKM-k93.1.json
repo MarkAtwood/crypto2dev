@@ -1,0 +1,26 @@
+{
+  "id": "WOLFKM-k93.1",
+  "title": "wolfssl_ecdh_agree: dispatch WC_SHA384 for P-384",
+  "description": "Replace hardcoded WC_SHA256 in wolfssl_ecdh_agree() with curve-aware dispatch: if ctx-\u003ecurve_id == WOLFKM_ECC_P384, use WC_SHA384; else use WC_SHA256. Add comment citing SP 800-56C Rev 2 Table 2. Also add HKDF-SHA384 test vector to tests/vectors/ecdh_p384.h (IKM=ecdh_p384_shared_secret, salt=NULL, info=empty, OKM=48 bytes from Python cryptography oracle).",
+  "acceptance_criteria": "wc_HKDF called with WC_SHA384 for P-384; WC_SHA256 for P-256; zero new warnings; comment cites SP 800-56C Rev 2 Table 2",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-19T23:36:50Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T23:39:09Z",
+  "closed_at": "2026-04-19T23:39:09Z",
+  "close_reason": "Implemented: wc_HKDF dispatch on ctx-\u003ecurve_id; WC_SHA384 for P-384, WC_SHA256 for P-256; ecdh_p384_hkdf_sha384_okm vector added to ecdh_p384.h; stale Phase 1 comment updated",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-k93.1",
+      "depends_on_id": "WOLFKM-k93",
+      "type": "parent-child",
+      "created_at": "2026-04-19T16:36:49Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

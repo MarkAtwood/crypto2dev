@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-6ty.16",
+  "title": "[DECISION] WOLFSSL_CFLAGS factored in Kbuild",
+  "description": "Kbuild now defines WOLFSSL_CFLAGS once and applies it to all wolfssl provider CFLAGS_*.o targets. Previous commit had the full flag list repeated per-file. The new pattern is correct: adding a new provider file requires one line (CFLAGS_new_file.o := ) and adding it to crypto2dev_wolfssl-objs. No DRY violation.",
+  "status": "closed",
+  "priority": 4,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T22:10:21Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T22:23:29Z",
+  "closed_at": "2026-04-18T22:23:29Z",
+  "close_reason": "Closed",
+  "labels": [
+    "my-oss",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-6ty.16",
+      "depends_on_id": "WOLFKM-6ty",
+      "type": "parent-child",
+      "created_at": "2026-04-18T15:10:20Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

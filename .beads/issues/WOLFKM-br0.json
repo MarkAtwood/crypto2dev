@@ -1,0 +1,15 @@
+{
+  "id": "WOLFKM-br0",
+  "title": "Implement error state flag in fd_state",
+  "description": "Add bool error to crypto2dev_fd_state. Set on update() or finalize() failure. Check at top of write() and read() returning -EIO. Clear in ioctl_reset() on success. -EFAULT from copy_from_user/copy_to_user does not set error (handled before state touch or data still in outbuf).",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T22:05:13Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-17T22:06:24Z",
+  "closed_at": "2026-04-17T22:06:24Z",
+  "close_reason": "bool error in fd_state; set on update()/finalize() failure and WARN_ON overflow; checked at top of write() and read() OPERATION path returning -EIO; cleared in ioctl_reset() on success; -EFAULT carve-out implicit in code structure; documented in ioctl header."
+}

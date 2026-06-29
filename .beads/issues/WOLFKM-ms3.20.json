@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-ms3.20",
+  "title": "Observability: update/finalize failure logs omit provider name",
+  "description": "crypto2dev_fd_write() line 397 logs 'write(algo): update failed: errno' and ioctl_finalize() line 1168 logs 'finalize(algo): failed: errno'. Neither message includes the provider name. In a multi-provider deployment (e.g., wolfssl + kcapi both loaded), the support engineer cannot determine from the log which provider handled the failing session. state-\u003eprovider_name is available in the fd state at both call sites. File: src/cdev/crypto2dev_fd.c lines 397, 1168. Fix: include state-\u003eprovider_name in both log messages, e.g. 'write(algo/provider): update failed: errno'.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:15Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:25:53Z",
+  "closed_at": "2026-04-18T03:25:53Z",
+  "close_reason": "Fixed in this session",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.20",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:15Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

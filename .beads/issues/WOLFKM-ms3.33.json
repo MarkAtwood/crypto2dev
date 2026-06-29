@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-ms3.33",
+  "title": "write-before-ioctl pattern for KEY_IMPORT avoids stack blowout",
+  "description": "KEY_IMPORT takes key bytes via write() before the ioctl, not inline in the ioctl struct. The ioctl struct carries only metadata (algo, key_type, keylen, exportable — 100 bytes). This avoids embedding up to KEY_IMPORT_MAXLEN (8192 bytes) in the struct, which would land on the kernel stack on every KEY_IMPORT call including tiny EC key imports — violating the ~1 KB kernel stack frame guideline. The heap allocation via inbuf_append is exactly sized to the actual key. A reviewer might suggest 'simplify by embedding the key bytes in the ioctl struct' — do not do this. ML-DSA-87 private keys are 4896 bytes; future PQ schemes will be larger. The write-before-ioctl pattern scales correctly.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:40Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:27:15Z",
+  "closed_at": "2026-04-18T03:27:15Z",
+  "close_reason": "Acknowledged: already implemented correctly, no code change required",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.33",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:40Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

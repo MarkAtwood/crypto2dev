@@ -1,0 +1,18 @@
+{
+  "id": "WOLFKM-2p3",
+  "title": "CI: add Ubuntu FIPS kernel target",
+  "description": "The actual production deployment target: Ubuntu Pro + 5.15-fips kernel + CONFIG_MODULE_SIG_FORCE. This is the only CI target that exercises the FIPS code path end-to-end. build-test-wolfguard-aws.sh in ~/TICKETS/zScalar/ is a reference. Highest business value of all suggested targets.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-19T02:57:48Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T03:29:52Z",
+  "closed_at": "2026-04-19T03:29:52Z",
+  "close_reason": "Ubuntu 22.04 FIPS passes 21/0 on kernel 5.15.0-1105-aws-fips. Added FIPS_MODE=1 + PRO_TOKEN env vars; Phase 0.5 does pro attach + fips-updates + reboot.",
+  "labels": [
+    "distrotest"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-7b5.23",
+  "title": "Defend: fips_aggregate collects gate callbacks under lock, calls them after unlock",
+  "description": "crypto2dev_registry.c:crypto2dev_fips_aggregate — FIPS gate callbacks are snapshot (with try_module_get) under the read_lock into a stack array, then called after read_unlock. A reviewer might suggest 'just call fips_gate() inside the read_lock to keep the code simpler'. This is wrong on PREEMPT_RT kernels: fips_gate() calls wolfCrypt_GetStatus_fips(), which on degraded state calls pr_err_ratelimited(), which acquires a ratelimit spinlock. Acquiring a spinlock while holding provider_lock (also a spinlock via DEFINE_RWLOCK) creates a lock ordering dependency that is invisible to lockdep until it deadlocks in production. The snapshot-then-call pattern is the correct fix. The CRYPTO2DEV_MAX_FIPS_GATES=16 ceiling prevents unbounded stack use during the gate snapshot loop.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T05:20:40Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T17:36:04Z",
+  "closed_at": "2026-04-18T17:36:04Z",
+  "close_reason": "Code verified correct. Rationale comments present in source.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-7b5.23",
+      "depends_on_id": "WOLFKM-7b5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T22:20:40Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

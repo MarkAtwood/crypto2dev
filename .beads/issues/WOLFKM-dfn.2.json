@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-dfn.2",
+  "title": "NULL ops-\u003eupdate dereference on write",
+  "description": "Provider registers with NULL update callback. User calls INIT, then write(). Line src/cdev/crypto2dev_fd.c:372 calls ops-\u003eupdate() with no NULL check. Outcome: NULL function pointer dereference, kernel panic.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:03:03Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:53:08Z",
+  "closed_at": "2026-04-18T00:53:08Z",
+  "close_reason": "Added NULL guards for ops-\u003esess_init, ops-\u003eupdate, ops-\u003efinalize in crypto2dev_fd.c; returns -EOPNOTSUPP on NULL callback",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.2",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:03:03Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

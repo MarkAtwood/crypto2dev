@@ -1,0 +1,19 @@
+{
+  "id": "WOLFKM-643",
+  "title": "Fix audit P0 bugs: ikm_buf double-free + kcapi GCM tag",
+  "notes": "Fixes audit findings: WOLFKM-76h.1 (ikm_buf double-free), WOLFKM-76h.2 (kcapi GCM 12-byte tag)\nConfidence:\n  Double-free fix correctness: 98% — The ikm_buf = NULL after kfree at out_free_okm correctly breaks the double-free via out_zero on the normal exit path. All three goto targets that reach out_zero before the lock are safe: (a) early exits before ikm_buf is allocated go straight to out_zero with ikm_buf == NULL; (b) mid-path errors after allocation but before the ops-\u003ekdf call fall to out_zero with ikm_buf set and free it once; (c) normal exits through out_free_okm free-and-null before out_zero. The 2% residual: the out_free_okm block does not check for okm_buf non-NULL before calling memzero_explicit, it does — the if(okm_buf) guard is present. No real residual engineering concern.\n  GCM authsize fix correctness: 95% — set_tag now correctly sequences: validate taglen (12-16), call crypto_aead_setauthsize to update the kernel tfm, update ctx-\u003eauthsize = taglen, then store the tag bytes. This matches the kernel AEAD API contract (authsize is a tfm property, must be set before requests). sess_reset calls crypto_aead_setauthsize(ctx-\u003etfm, GCM_TAG_SIZE) and ignores the return — correct because 16 bytes is always valid for GCM and cannot fail, but ignoring a kernel function return is a style red flag that will attract review comments; it is not a bug. The 5% residual is the unchecked return in sess_reset, which is a real-but-minor engineering point, not opinion.\n  Test coverage completeness: 75% — v4 adds a 12-byte tag KAT from an independent oracle (python cryptography, not the code under test). Vectors 1-3 cover 16-byte tags. What is still not covered: (a) a decrypt-with-corrupted-tag test (EBADMSG path) to confirm authentication actually runs; (b) set_tag called with taglen \u003c 12 to verify the FIPS gate rejects it; (c) sess_reset-then-reuse with a different tag length to exercise the reset path end-to-end; (d) AES-192 key is not present (only 128 and 256 are covered, though AES-192 GCM is an approved mode). The missing negative test for bad tag is the most significant gap because the test suite currently cannot distinguish a GCM implementation that skips authentication from one that enforces it.\n  Running out of real complaints: NO — the unchecked crypto_aead_setauthsize return in sess_reset and the missing EBADMSG negative test are both genuine engineering points, not style preferences. Both would survive a code review comment thread.\n  Would raise confidence if: (1) sess_reset captures and logs the crypto_aead_setauthsize return (even if it cannot propagate it, a WARN_ON would make the invariant explicit); (2) test_aead adds a negative vector: encrypt with a valid tag, corrupt one byte, attempt decrypt, assert -EBADMSG — this is the only way to confirm the authentication tag is actually checked at runtime rather than just computed.\nReview converged after 3 rounds. Final review: WOLFKM-f7c.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T02:10:45Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-20T02:39:38Z",
+  "close_reason": "Closed",
+  "labels": [
+    "correctness",
+    "crypto"
+  ]
+}

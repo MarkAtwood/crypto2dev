@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-dfn.30",
+  "title": "Decision: raw ECDH shared secret Z never leaves kernel in agree()",
+  "description": "DO_AGREE computes ECDH and HKDF entirely inside the provider; only OKM is returned to userspace. Raw Z is never written to the fd's outbuf or any userspace-accessible buffer. This is required by FIPS 140-3: the validated module must not expose raw DH output. A reviewer suggesting 'return Z and let userspace run their KDF' would: (1) violate FIPS 140-3; (2) expose a secret of the same strength as the private key; (3) create an unapproved usage pattern where the KDF choice is uncontrolled. The HKDF parameters (salt, info, okm_len) in the ioctl give callers full control over derivation without exposing Z.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:05:33Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:43:07Z",
+  "closed_at": "2026-04-18T00:43:07Z",
+  "close_reason": "Reviewed, documented, and hardened in CLAUDE.md, DESIGN.md, and AGENTS.md",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.30",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:05:32Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

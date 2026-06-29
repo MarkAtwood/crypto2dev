@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-29j.11",
+  "title": "Crypto misuse: HMAC accepts key shorter than FIPS minimum",
+  "description": "src/providers/wolfssl/wolfssl_hmac.c:116-120 — hmac_sess_init rejects keylen==0 but accepts any keylen from 1 to WOLFSSL_HMAC_MAX_KEY_LEN (128). SP 800-107 Rev 1 §5.3.4 and SP 800-131A Rev 2 Table 3 require HMAC keys to be at least as long as the hash output (32 bytes for HMAC-SHA256, 48 for HMAC-SHA384, 64 for HMAC-SHA512) to achieve the claimed security strength. wolfCrypt does not enforce this. Trigger: caller supplies e.g. keylen=1 to hmac(sha256). Consequence: HMAC is computed with a trivially weak key, producing output with less than the claimed 128-bit security strength. FIPS 140-3 module boundary violation: the module accepts inputs that violate approved mode constraints without returning an error.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T04:48:41Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T05:05:40Z",
+  "closed_at": "2026-04-20T05:05:40Z",
+  "close_reason": "Added FIPS minimum key length check in hmac_sess_init: keylen \u003c WC_SHA256/384/512_DIGEST_SIZE returns -EINVAL, inside #ifdef CRYPTO2DEV_HAVE_WOLFCRYPT per SP 800-107 §5.3.4",
+  "labels": [
+    "audit",
+    "crypto",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-29j.11",
+      "depends_on_id": "WOLFKM-29j",
+      "type": "parent-child",
+      "created_at": "2026-04-19T21:48:41Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

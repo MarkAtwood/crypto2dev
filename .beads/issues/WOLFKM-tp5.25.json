@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-tp5.25",
+  "title": "Observability: successful provider dispatch logged only at pr_debug, invisible in production",
+  "description": "In ioctl_init() (crypto2dev_fd.c lines 685-687), successful provider dispatch is logged with pr_debug(), which is compiled out by default and invisible in production kernels. When two providers register the same algo, first-registered wins silently. A support engineer asked which provider is handling cbc(aes) on this system cannot answer the question from kernel logs without enabling dynamic debug. The algo and provider are available in GET_STATE, but that requires an active session. A pr_info at dispatch time would make the selection visible post-hoc in dmesg.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:41:05Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:15:11Z",
+  "closed_at": "2026-04-18T04:15:11Z",
+  "close_reason": "fixed: provider dispatch message promoted from pr_debug to pr_info in ioctl_init",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.25",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:41:04Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

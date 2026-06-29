@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-s6t.15",
+  "title": "String-based algorithm identification in UAPI — no integer IDs or enums",
+  "description": "All algorithm and provider identification in the UAPI uses null-terminated strings (algo[], provider[] in every ioctl struct), not integer IDs or enum values. This is correct for ABI stability: integer IDs require both kernel and userspace to be recompiled when a new algorithm is added, because the ID table is a shared closed universe. String names are an open namespace — a new algorithm like 'hkdf(sha3-256)' is added to a provider, and userspace binaries compiled before that addition can request it by name without recompile. Integer ID schemes also require a central registry that becomes ABI debt. A reviewer might suggest 'use integer IDs for efficiency and easy validation' — that suggestion should be rejected: validation of a string is a strncmp, not slower than a range check, and the ABI consequence of integer IDs is permanent closed-universe breakage. This is the same reason Linux /proc/crypto uses strings, not IDs.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T03:22:10Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T04:29:29Z",
+  "closed_at": "2026-04-20T04:29:29Z",
+  "close_reason": "Correct design per CLAUDE.md rule 4: string-based algorithm identification avoids ABI lockdown from integer ID assignment. Adding a new algorithm requires no header change. Userspace callers can probe for new algorithms without recompilation. This is the design constraint.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-s6t.15",
+      "depends_on_id": "WOLFKM-s6t",
+      "type": "parent-child",
+      "created_at": "2026-04-19T20:22:10Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

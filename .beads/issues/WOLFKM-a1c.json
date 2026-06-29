@@ -1,0 +1,27 @@
+{
+  "id": "WOLFKM-a1c",
+  "title": "wolfssl_ecdsa.c: ECDSA sign/verify for /dev/crypto2dev",
+  "description": "Implement src/providers/wolfssl/wolfssl_ecdsa.c — ECDSA sign and verify for P-256 and P-384.\n\n## Why this exists\nDO_SIGN/DO_VERIFY for EC keys return -EOPNOTSUPP today. wc_ecc_sign_hash and wc_ecc_verify_hash are exported by libwolfssl.ko. The sign callback receives a pre-computed digest (not raw message) which is exactly what wc_ecc_sign_hash expects — no intermediate hashing needed.\n\n## Algorithms to register\n  'ecdsa-p256' — sign, verify, key_import, key_generate, key_export_public, key_export_private\n  'ecdsa-p384' — same\n\n## Shared key context with wolfssl_ecdh.c\n  ECDH and ECDSA use the same underlying ecc_key struct and the same key import/export/generate/free logic. Options:\n  A. Shared wolfssl_ec_key.h with static helpers; both wolfssl_ecdh.c and wolfssl_ecdsa.c include it\n  B. wolfssl_ec.c registers both ecdh-p256 and ecdsa-p256 in one file\n  Recommendation: Option A — keeps ECDH agree and ECDSA sign/verify in separate files matching the existing per-algo-family pattern.\n\n## Context struct (same as wolfssl_ecdh.c)\n  struct wolfssl_ec_ctx { ecc_key key; WC_RNG rng; int curve_id; u32 key_type; bool rng_inited; bool key_inited; }\n  Factor into wolfssl_ec_key.h static helpers used by both files.\n\n## sign implementation\n  1. FIPS gate first\n  2. Verify key_type is PRIVATE or PAIR\n  3. sig_bufsz check: must be \u003e= wc_ecc_sig_size(\u0026ctx-\u003ekey) (DER-encoded max)\n  4. wc_ecc_sign_hash(digest, digest_len, sig, \u0026out_len, \u0026ctx-\u003erng, \u0026ctx-\u003ekey)\n     wc_ecc_sign_hash produces DER-encoded ECDSA signature (r || s in ASN.1 SEQUENCE)\n     Returns 0 on success; out_len set to actual DER signature length\n  5. *sig_len = out_len\n\n## verify implementation\n  1. FIPS gate first\n  2. int res = 0;\n     ret = wc_ecc_verify_hash(sig, sig_len, digest, digest_len, \u0026res, \u0026ctx-\u003ekey)\n  3. Check BOTH: ret != 0 → wolfCrypt error → -EINVAL; res != 1 → invalid signature → -EBADMSG\n  4. Return 0 only if ret == 0 AND res == 1\n\n## key_import, key_generate, key_export, key_free\n  Identical to wolfssl_ecdh.c. Share implementation via wolfssl_ec_key.h static helpers.\n  key_type for ECDSA sign: PRIVATE or PAIR; verify: PUBLIC or PAIR\n\n## Registration\n  Register 'ecdsa-p256' and 'ecdsa-p384' ops structs in wolfssl_provider.c algo_ops[] array\n\n## Tests needed\n  tests/userspace/test_ecdsa.c: KEY_IMPORT priv → DO_SIGN → DO_VERIFY → 0\n  Tampered sig → DO_VERIFY → -EBADMSG\n  Known-answer: ECDSA is non-deterministic (unless RFC 6979) so test verify-only against known vector;\n  sign→verify round-trip is the sign KAT",
+  "design": "Option A chosen: wolfssl_ec_key.h shared header with static inline helpers for key_import/free/generate/export. Avoids duplicate code without introducing a separate object file or cross-module linkage.",
+  "acceptance_criteria": "sign+verify round-trip passes; tampered sig returns -EBADMSG; verify against known ECDSA-P256 vector (from NIST FIPS 186-4 test vectors) returns 0; builds zero warnings",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "feature",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T18:37:46Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T19:07:30Z",
+  "close_reason": "wolfssl_ecdsa.c implemented; ecdsa-p256 and ecdsa-p384 sign/verify build clean",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-a1c",
+      "depends_on_id": "WOLFKM-epa",
+      "type": "blocks",
+      "created_at": "2026-04-18T11:38:11Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

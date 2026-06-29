@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-ms3.22",
+  "title": "UAPI: _pad fields in sign/verify/agree not validated",
+  "description": "crypto2dev_sign_op._pad[4], crypto2dev_verify_op._pad[4], and crypto2dev_agree_op._pad[4] are copied from userspace in ioctl_do_sign/do_verify/do_agree but never checked for zero. Without zero-validation these reserved bytes can never be repurposed: an old caller that passed garbage in _pad would not get -EINVAL, making it impossible to add semantics to those bytes in a future ioctl version without ambiguity about whether an old caller intended to set them. ioctl_init validates its _pad via memchr_inv; the same check is missing from the three asymmetric one-shot handlers. Fix: add memchr_inv(_pad, 0, sizeof(_pad)) checks in ioctl_do_sign, ioctl_do_verify, and ioctl_do_agree.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:18Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:22:08Z",
+  "closed_at": "2026-04-18T03:22:08Z",
+  "close_reason": "Fixed in this session",
+  "labels": [
+    "abi",
+    "audit",
+    "uapi",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.22",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:17Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

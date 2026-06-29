@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-qnv.4",
+  "title": "DO_KDF in UAPI header without implementation is ABI debt",
+  "description": "CRYPTO2DEV_IOC_DO_KDF is now a public header constant with a ioctl number (22) and a documented struct. Once this header ships in a release, the slot is reserved permanently whether or not the implementation arrives. Any downstream project that includes the header can write code against slot 22. If the implementation ever changes the struct layout (because it was designed before the implementation was written), that is an ABI break. The slot is tombstoned if DO_KDF is never implemented. Maintenance consequence: every issue 'DO_KDF returns -ENOTTY' from now until the implementation ships is a support cost that could have been avoided by not declaring the ioctl until it was implemented. Either implement DO_KDF now, or remove CRYPTO2DEV_IOC_DO_KDF and struct crypto2dev_kdf_op from this commit and put them back when implemented.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T06:14:30Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T06:19:41Z",
+  "closed_at": "2026-04-18T06:19:41Z",
+  "close_reason": "Closed",
+  "labels": [
+    "maintainer-burden",
+    "my-oss",
+    "review",
+    "risk"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-qnv.4",
+      "depends_on_id": "WOLFKM-qnv",
+      "type": "parent-child",
+      "created_at": "2026-04-17T23:14:29Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-29j.13",
+  "title": "Correctness: FIPS gate called AFTER copy_from_user in ioctl_set_iv/gen_iv/set_aad/get_tag/set_tag, not as first statement",
+  "description": "Trigger: call CRYPTO2DEV_IOC_SET_IV (or SET_AAD, GET_TAG, SET_TAG, GEN_IV) on an OPERATION fd after the FIPS provider enters a degraded state.\n\nIn ioctl_set_iv (and all other per-operation ioctls except INIT), the sequence is:\n  1. copy_from_user(\u0026op, ...) — reads user data into kernel op struct\n  2. validate op fields (ivlen bounds check, etc.)\n  3. mutex_lock(\u0026state-\u003elock)\n  4. if (state-\u003eops \u0026\u0026 state-\u003eops-\u003efips_gate) { ... }\n\nThe FIPS gate is the FOURTH step, not the first. Steps 1-2 happen before the FIPS gate is checked.\n\nFIPS 140-3 operational requirement and the project's own critical design rule (CLAUDE.md, DESIGN.md): the FIPS gate must be the very first line of every crypto entry point, before argument validation, before lock acquisition, before anything else.\n\nFor SET_IV specifically: the user buffer is read (step 1) and validated (step 2) before the gate fires. A FIPS violation can be detected only after consuming user data.\n\nContrast with ioctl_init, which checks the gate after copy_from_user and validation — this has the same problem.\n\nThe correct pattern per the paranoid checklist is: fips_gate() → if (ret) return ret — as the FIRST executable statement, with no preceding copy_from_user or field checks.\n\nThe practical consequence is minor (reading a valid user buffer is not a security boundary breach), but it is a documented violation of the FIPS 140-3 operational requirement as stated in the project's own design rules and the CMVP submission.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T04:49:24Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T05:05:55Z",
+  "closed_at": "2026-04-20T05:05:55Z",
+  "close_reason": "Added READ_ONCE(state-\u003eops) pre-gate before copy_from_user in all 5 handlers (set_iv, gen_iv, set_aad, get_tag, set_tag); gate rechecked under mutex for belt-and-suspenders",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-29j.13",
+      "depends_on_id": "WOLFKM-29j",
+      "type": "parent-child",
+      "created_at": "2026-04-19T21:49:23Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

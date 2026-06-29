@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-ms3.13",
+  "title": "Design violation: enum used in wolfssl_sha.c",
+  "description": "src/providers/wolfssl/wolfssl_sha.c lines 28-33 define 'enum wolfssl_sha_type { WOLFSSL_SHA256=0, WOLFSSL_SHA384, WOLFSSL_SHA512, WOLFSSL_SHA3_256 }'. CLAUDE.md design constraint states: 'Any patch that adds a typedef enum, an anonymous enum... to any header or source file in this repo will be rejected at review, regardless of how convenient it seems.' The sha variant is internal-only (not UAPI), but the no-enum rule applies to all source files. Replace with #define integer constants, which are explicitly permitted for small permanently-closed sets (the rule notes: 'Current examples: op direction (encrypt/decrypt), fd type, key type, FIPS state').",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:03:50Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:21:58Z",
+  "closed_at": "2026-04-18T03:21:58Z",
+  "close_reason": "Fixed in this session",
+  "labels": [
+    "audit",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.13",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:03:50Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

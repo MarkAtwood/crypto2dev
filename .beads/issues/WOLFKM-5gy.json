@@ -1,0 +1,26 @@
+{
+  "id": "WOLFKM-5gy",
+  "title": "crypto2dev_shash.c: register SHA-2/3, HMAC, CMAC",
+  "description": "Register nine shash algorithms as standalone composed names (NOT primitives for the kernel hmac template to wrap). Algorithms: sha256, sha384, sha512, sha3-256, sha3-512, hmac(sha256), hmac(sha384), hmac(sha512), cmac(aes). Each uses the wolfCrypt streaming API: wc_InitSha*/wc_Sha*Update/wc_Sha*Final for hashes; wc_HmacSetKey/wc_HmacUpdate/wc_HmacFinal for HMAC; wc_InitCmac/wc_CmacUpdate/wc_CmacFinal for CMAC. .descsize must equal sizeof the corresponding wolfCrypt context struct.",
+  "design": "CRITICAL: register 'hmac(sha256)' as a standalone algorithm with its own .setkey — do NOT register 'sha256' alone and rely on the kernel's hmac template. This ensures wolfCrypt's HMAC implementation is used end-to-end for FIPS. Same logic for cmac(aes). .cra_name must match exactly what /proc/crypto shows on a vanilla kernel. See DESIGN.md §shash.",
+  "acceptance_criteria": "All nine algorithms in /proc/crypto with wolfkm driver at priority 300. SHA-256 of empty string matches FIPS 180-4 vector. HMAC-SHA-256 RFC 4231 test case 1 passes. cmac(aes) SP 800-38B vector 1 passes.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "feature",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T06:53:44Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T01:08:01Z",
+  "close_reason": "Stale: from abandoned kernel-crypto-API-registration design. crypto2dev does not register into kernel crypto API (wolfcrypt.ko does that). Current implementation uses chardev+provider model instead.",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-5gy",
+      "depends_on_id": "WOLFKM-dvd",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:59:05Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

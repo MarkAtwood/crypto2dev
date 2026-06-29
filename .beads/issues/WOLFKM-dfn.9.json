@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-dfn.9",
+  "title": "Crypto misuse: kcapi AEAD set_tag accepts truncated auth tags",
+  "description": "kcapi_aead set_tag at src/providers/kcapi/kcapi_aead.c:189 accepts taglen from 1 to GCM_TAG_SIZE with no minimum enforcement. Same as wolfssl GCM finding. Trigger: caller sets taglen=4, kcapi accepts, GCM processes with 4-byte tag. Outcome: authentication strength reduced from 128 bits to 32 bits, enabling tag forgery attacks. Both wolfssl and kcapi must enforce taglen \u003e= 12.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:03:34Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:53:23Z",
+  "closed_at": "2026-04-18T00:53:23Z",
+  "close_reason": "Changed taglen minimum from \u003e0 to \u003e=12 in kcapi_aead_set_tag; FIPS 140-3 SP 800-38D requires 96-bit minimum",
+  "labels": [
+    "audit",
+    "crypto",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.9",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:03:33Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

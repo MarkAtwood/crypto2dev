@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-dud.3",
+  "title": "Missing negative GCM auth tag tests: corruption, reject, reset-reuse",
+  "description": "Test coverage gap: (1) no negative test corrupts the 12-byte tag and asserts -EBADMSG — without this the suite cannot distinguish an authenticating GCM from one that ignores the tag; (2) no set_tag rejection test for taglen \u003c 12; (3) no sess_reset-then-reuse sequence verifying authsize is restored. Add these to tests/userspace/test_chardev.c (for kcapi) and tests/kernel/test_aead.c.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T02:32:49Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T02:37:47Z",
+  "closed_at": "2026-04-20T02:37:47Z",
+  "close_reason": "3 new negative tests: 12-byte tag corruption→EBADMSG, set_tag(11)→EINVAL, reset restores authsize",
+  "labels": [
+    "correctness",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dud.3",
+      "depends_on_id": "WOLFKM-dud",
+      "type": "parent-child",
+      "created_at": "2026-04-19T19:32:48Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

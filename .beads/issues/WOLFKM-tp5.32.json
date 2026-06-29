@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-tp5.32",
+  "title": "FIPS operational risk: stub mode registers is_fips=1 but gate always returns 0",
+  "description": "In wolfssl_provider.c, the wolfssl_provider struct sets is_fips=1 unconditionally. In stub mode (CRYPTO2DEV_HAVE_WOLFCRYPT not defined), wolfssl_fips_gate() always returns 0 (lines 38-40). This means: (1) the stub provider registers as a FIPS provider and increments fips_provider_count, enabling FIPS enforcement that hides all non-FIPS providers, (2) every fips_gate() call returns 0-operational even though no actual wolfCrypt FIPS module is present, (3) userspace CRYPTO2DEV_IOC_STATUS returns FIPS_OPERATIONAL when the system is providing no real cryptographic security. A misconfigured build (missing wolfcrypt headers, CRYPTO2DEV_HAVE_WOLFCRYPT=0) silently presents as FIPS-operational. The pr_warn at module_init is the only protection — it is insufficient because it does not prevent registration.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:41:22Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:07:17Z",
+  "closed_at": "2026-04-18T04:07:17Z",
+  "close_reason": "fixed: wolfssl_provider.c now sets .is_fips=1 only under #ifdef CRYPTO2DEV_HAVE_WOLFCRYPT, .is_fips=0 in stub mode",
+  "labels": [
+    "audit",
+    "fips",
+    "operational",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.32",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:41:22Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

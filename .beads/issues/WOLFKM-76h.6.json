@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-76h.6",
+  "title": "FIPS gate rejection in ioctl_init discards gate return value before logging",
+  "description": "fd.c:756-764: ret = ops-\u003efips_gate() captures the gate return value, but the pr_err at line 759 does not include ret in its format string. Then ret = -EACCES overwrites the original value. The wolfCrypt-specific status (FIPS_DEGRADED_E, FIPS_FAILED_E, etc.) logged by wolfssl_provider.c:34 (rate-limited) may not appear together with the framework log in the ring buffer. At the framework level, the distinction between degraded and failed is lost. Fix: add %d for ret to the pr_err format at fd.c:759 before overwriting ret.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T02:05:40Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T03:14:22Z",
+  "closed_at": "2026-04-20T03:14:22Z",
+  "close_reason": "Fixed in WOLFKM-6vs: fips_ret saved before overwrite, included in log",
+  "labels": [
+    "audit",
+    "fips",
+    "observability",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-76h.6",
+      "depends_on_id": "WOLFKM-76h",
+      "type": "parent-child",
+      "created_at": "2026-04-19T19:05:39Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

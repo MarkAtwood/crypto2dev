@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-dfn.4",
+  "title": "Provider use-after-free: module unloads between lookup and dispatch",
+  "description": "ioctl_init: (1) thread A calls crypto2dev_lookup_algo() at line 604, gets ops+owner, try_module_get succeeds. (2) Before ops-\u003esess_init() executes at line 627, provider module completes rmmod (no active sessions yet — module refcount is 1 from try_module_get, but kmod will wait... actually try_module_get prevents unload). Re-examine: once try_module_get succeeds, rmmod blocks. NOT a UAF. HOWEVER: crypto2dev_lookup_algo() walks the provider list under rw_lock; once lock is released, a concurrent unregister_provider could remove the entry and kfree the ops struct if the module has already done module_put internally. Verify whether the ops struct lifetime is tied to the module or to the registered provider entry. If ops is on the module's stack or freed in module_exit before unregister_provider completes, use-after-free is possible.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T00:03:11Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T00:52:28Z",
+  "closed_at": "2026-04-18T00:52:28Z",
+  "close_reason": "False positive: try_module_get succeeds under read_lock (registry.c:190) before lock release; ops and provider structs are static module data — no heap free, no UAF possible",
+  "labels": [
+    "audit",
+    "correctness",
+    "kernel",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-dfn.4",
+      "depends_on_id": "WOLFKM-dfn",
+      "type": "parent-child",
+      "created_at": "2026-04-17T17:03:11Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

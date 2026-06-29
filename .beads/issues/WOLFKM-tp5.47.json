@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-tp5.47",
+  "title": "ioctl_key_import: does not validate op.algo is non-empty",
+  "description": "Same as KEY_GENERATE issue: ioctl_key_import() forces null-termination on op.algo but does not check if op.algo[0]=='\\0'. Empty algo string leads to -ENOENT (lookup miss) instead of -EINVAL (bad argument). ioctl_init() correctly returns -EINVAL for empty algo; ioctl_key_import and ioctl_key_generate do not. Trigger: KEY_IMPORT with algo[0]='\\0' → -ENOENT instead of -EINVAL.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:43:15Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:02:36Z",
+  "closed_at": "2026-04-18T04:02:36Z",
+  "close_reason": "fixed: added if (op.algo[0] == '\\0') return -EINVAL after null-termination in ioctl_key_import",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.47",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:43:14Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

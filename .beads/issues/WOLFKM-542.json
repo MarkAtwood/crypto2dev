@@ -1,0 +1,18 @@
+{
+  "id": "WOLFKM-542",
+  "title": "scripts/disable_builtin_crypto.sh: blacklist built-in crypto modules",
+  "description": "Script to blacklist the kernel's built-in crypto modules so wolfkm wins at priority 300 without competition. Writes entries to /etc/modprobe.d/wolfkm-override.conf blacklisting: aes-generic, aes-x86_64, ghash-clmulni-intel, sha256-generic, sha512-generic (and equivalents). Includes a restore script to undo. Documents which modules it blacklists and why.",
+  "design": "Some kernels load crypto modules on demand; blacklisting ensures wolfkm's priority 300 is the only contender. This is NOT required for correct operation (priority 300 should win anyway) but is useful for test environments that need deterministic provider selection. See DESIGN.md §scripts.",
+  "acceptance_criteria": "After running the script, /proc/crypto shows only wolfkm drivers for the affected algorithms. restore script undoes all changes. Script is idempotent.",
+  "notes": "This script is a diagnostic/test aid, not a deployment requirement. The HUMAN_TASK_003 (algorithm naming verification) should determine if blacklisting is ever actually needed.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T06:55:36Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T22:48:10Z",
+  "closed_at": "2026-04-18T22:48:10Z",
+  "close_reason": "Scripts/tools written and verified"
+}

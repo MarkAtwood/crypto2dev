@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-ms3.15",
+  "title": "FIPS gate missing: framework/key_export_private dispatch",
+  "description": "src/cdev/crypto2dev_fd.c:1509 — ioctl_key_export_private() dispatches ops-\u003ekey_export_private() at line 1509 without calling ops-\u003efips_gate() first. crypto2dev_provider.h explicitly lists key_export_private as a gated callback. No current provider implements key_export_private (all NULL), so this is not currently exploitable, but any provider that adds key_export_private will be called without the gate. The fix is to add the ops-\u003efips_gate() call in ioctl_key_export_private before the dispatch, consistent with all other ioctl handlers.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:06Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:13:14Z",
+  "closed_at": "2026-04-18T03:13:14Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "correctness",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.15",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:06Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

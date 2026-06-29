@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-533.8",
+  "title": "String-based algorithm identification prevents ABI lock-in",
+  "description": "Algorithm names are null-terminated strings throughout the UAPI (algo field in crypto2dev_init_op, crypto2dev_key_import_op, crypto2dev_kdf_op, etc.). Provider names are strings. There are no enum values or integer algorithm IDs in any ioctl struct. The UAPI header states this explicitly: 'No enums, no flags. Algorithm names are strings. New behaviors get new ioctls or new named fields, never a new bit in a flags word.' String-based identifiers allow new algorithms (including post-quantum) to be added without any change to the kernel header — existing userspace binaries continue to work, and new userspace binaries can request new algorithm names without recompiling the kernel or any other userspace binary. A reviewer might argue for an enum or integer ID for 'efficiency' or 'type safety.' That would freeze the algorithm namespace at compile time and create permanent ABI debt: any new algorithm requires a header change and recompile of every caller, including out-of-tree modules that cannot be recompiled. The string approach has negligible cost — strcmp on a 64-byte field at session open time is not on any hot path.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T05:28:47Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T05:49:09Z",
+  "closed_at": "2026-04-20T05:49:09Z",
+  "close_reason": "Design decision confirmed by code inspection — no code change required.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-533.8",
+      "depends_on_id": "WOLFKM-533",
+      "type": "parent-child",
+      "created_at": "2026-04-19T22:28:46Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

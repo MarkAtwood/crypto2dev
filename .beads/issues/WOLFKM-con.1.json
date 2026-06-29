@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-con.1",
+  "title": "FIPS gate missing: wolfssl/wolfssl_ec_key.c/key_export_public",
+  "description": "wolfssl_ec_key.c:274 wolfssl_ec_key_export_public() has no fips_gate() call. The ECDSA ops table wires this function directly as .key_export_public (wolfssl_ecdsa_p256_ops and wolfssl_ecdsa_p384_ops). The ECDH ops table goes through a per-algo wrapper (wolfssl_ecdh_key_export_public) that does call the gate, but the shared function itself has no gate. Since ecdsa plugs this in directly without a wrapper, both ecdsa-p256 and ecdsa-p384 key_export_public invocations bypass the gate. This is a CMVP compliance failure.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:35:51Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T21:23:27Z",
+  "closed_at": "2026-04-19T21:23:27Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "correctness",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-con.1",
+      "depends_on_id": "WOLFKM-con",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:35:50Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

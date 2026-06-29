@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-con.11",
+  "title": "fips_aggregate() calls gates outside the rwlock: correct PREEMPT_RT safety",
+  "description": "src/provider/crypto2dev_registry.c crypto2dev_fips_aggregate() — collects fips_gate function pointers and module refs under the read lock, releases the lock, then calls each gate outside the spinlock. This is correct because fips_gate() on wolfCrypt emits pr_err_ratelimited(), which acquires the ratelimit spinlock. Calling it under provider_lock (a rwlock) would be a lock ordering violation on PREEMPT_RT kernels where rwlocks are PI-aware. A reviewer might suggest holding the lock across the call for atomicity, but that is wrong: no guarantee is needed about the FIPS state remaining constant across multiple gate calls — the aggregate is a snapshot. Replacing this pattern with lock-held gate calls would cause PREEMPT_RT boot failures.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:37:10Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T21:30:44Z",
+  "closed_at": "2026-04-19T21:30:44Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-con.11",
+      "depends_on_id": "WOLFKM-con",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:37:09Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "WOLFKM-rki.2",
+  "title": "Implement provider registry in crypto2dev.ko",
+  "description": "Create src/provider/crypto2dev_registry.c implementing the provider list with rwlock protection.\n\nMust implement:\n- crypto2dev_register_provider(): add to list, pr_warn if algo collision (first-registered wins)\n- crypto2dev_unregister_provider(): remove from list safely\n- crypto2dev_lookup_algo(algo): walk list, return first ops that matches algo string\n- Export all three with EXPORT_SYMBOL_GPL\n- Thread safety: rwlock (readers for lookup, write lock for register/unregister)\n\nDepends on: WOLFKM issue for provider header",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T15:20:27Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-16T15:37:01Z",
+  "close_reason": "Closed",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-rki.2",
+      "depends_on_id": "WOLFKM-rki.1",
+      "type": "blocks",
+      "created_at": "2026-04-16T08:20:50Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-rki.2",
+      "depends_on_id": "WOLFKM-rki",
+      "type": "parent-child",
+      "created_at": "2026-04-16T08:20:26Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

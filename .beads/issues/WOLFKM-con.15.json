@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-con.15",
+  "title": "Observability: try_module_get failure in lookup_algo indistinguishable from no provider registered",
+  "description": "crypto2dev_lookup_algo returns NULL both when no provider is registered for an algo and when try_module_get() fails (provider module being removed). Both cases surface in ioctl_init as -ENOENT with the message 'no provider registered for this algo'. A support engineer cannot distinguish a mis-loaded provider from a racing module unload. The fix is a distinct log path in lookup_algo or the ioctl when module_get fails, but the current code merges the two into one indistinguishable message.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:37:21Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T21:31:05Z",
+  "closed_at": "2026-04-19T21:31:05Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-con.15",
+      "depends_on_id": "WOLFKM-con",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:37:21Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

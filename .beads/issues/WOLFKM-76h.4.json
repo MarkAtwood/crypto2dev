@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-76h.4",
+  "title": "FIPS gate failures in write/read/set_iv/gen_iv/finalize/reset logged at pr_debug only",
+  "description": "fd.c:409-415 (write), 570-575 (read), 840-844 (set_iv), 889-893 (gen_iv), 1375-1380 (finalize), 1448-1453 (reset): FIPS gate failures in these paths use pr_debug. In production kernels without CONFIG_DYNAMIC_DEBUG, pr_debug is compiled out entirely. A caller receives -EACCES with zero dmesg evidence. Only ioctl_init FIPS gate failure (fd.c:759) uses pr_err. Consequence: in a deployment where the wolfcrypt module goes FIPS-degraded mid-session, a caller sees write() return -EACCES with no kernel log to explain why. Support engineers will be handed a bug report with no kernel-side evidence. Fix: change FIPS gate failure logs in write/read/set_iv/gen_iv/finalize/reset to pr_err_ratelimited to match ioctl_init behavior.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T02:05:27Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T03:14:16Z",
+  "closed_at": "2026-04-20T03:14:16Z",
+  "close_reason": "Fixed in WOLFKM-6vs: all FIPS gate failures promoted to pr_err_ratelimited",
+  "labels": [
+    "audit",
+    "fips",
+    "observability",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-76h.4",
+      "depends_on_id": "WOLFKM-76h",
+      "type": "parent-child",
+      "created_at": "2026-04-19T19:05:26Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

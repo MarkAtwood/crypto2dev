@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-1js.7",
+  "title": "goto label structure in ioctl_do_kdf correctly prevents double-unlock and double-free",
+  "description": "Three-level goto (out_inbuf_clear → out_free_okm → out_zero) with the mutex only covering the first two labels correctly handles every exit path. IKM is always zeroized (inbuf_clear called on every path through out_inbuf_clear), okm_buf is always zeroized and freed (out_free_okm), and the mutex is never double-unlocked. A contributor might suggest 'simplifying' this into nested ifs or a single flat cleanup block — resist that. The current structure is correct precisely because each label owns exactly one resource level. Changing to a single label that checks 'did we take the lock?' introduces a conditional that is easy to get wrong.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T15:58:03Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T17:36:26Z",
+  "closed_at": "2026-04-18T17:36:26Z",
+  "close_reason": "Code verified correct. Design decisions implemented as described.",
+  "labels": [
+    "my-oss",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-1js.7",
+      "depends_on_id": "WOLFKM-1js",
+      "type": "parent-child",
+      "created_at": "2026-04-18T08:58:03Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

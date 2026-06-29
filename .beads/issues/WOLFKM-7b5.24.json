@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-7b5.24",
+  "title": "Defend: GCM decrypt batch accumulation is architecturally required",
+  "description": "wolfssl_aes_gcm.c — the decrypt path accumulates the entire ciphertext in ctx-\u003einbuf and only decrypts in finalize() after tag verification. A reviewer might suggest 'decrypt incrementally during update() and let the caller handle the tag mismatch error'. This is wrong: releasing unauthenticated plaintext before tag verification is a security vulnerability — callers that process the plaintext before read() returns (or before checking the return code from finalize()) would operate on potentially maliciously modified data. The batch-decrypt-then-verify model is the only safe design. The comment in wolfssl_aes_gcm_update documents this requirement explicitly. The AEAD SECURITY REQUIREMENT section in crypto2dev_provider.h §finalize also documents the constant-time tag comparison requirement.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T05:20:48Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T17:36:02Z",
+  "closed_at": "2026-04-18T17:36:02Z",
+  "close_reason": "Code verified correct. Rationale comments present in source.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-7b5.24",
+      "depends_on_id": "WOLFKM-7b5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T22:20:48Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

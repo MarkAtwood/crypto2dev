@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-yjf.4",
+  "title": "ec_key refactor from static-inline to .c is a real improvement, not cleanup",
+  "description": "Moving wolfssl_ec_key.* from static inline bodies in a shared header to a single compiled .c unit gives one shared pr_err_ratelimited rate-limit bucket across all callers and eliminates multiply-defined symbol risk if the header is ever included in a third .c file. A contributor may suggest reverting to static inline 'to avoid the extra .o.' Reject: the .c approach is correct by construction and the header-bodies approach was a maintenance debt waiting to happen.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:17:11Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T23:31:29Z",
+  "closed_at": "2026-04-18T23:31:29Z",
+  "close_reason": "Decision record — no code work required; preserved as review audit trail",
+  "labels": [
+    "my-oss",
+    "review"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-yjf.4",
+      "depends_on_id": "WOLFKM-yjf",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:17:11Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

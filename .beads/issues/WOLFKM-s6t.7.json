@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-s6t.7",
+  "title": "fips_gate callbacks invoked outside provider_lock in fips_aggregate() — PREEMPT_RT lock ordering",
+  "description": "fips_aggregate() collects gate function pointers and module refs under read_lock, then releases the lock before calling the gates. This is deliberate: wolfssl_fips_gate() calls pr_err_ratelimited() which acquires a ratelimit spinlock internally. Calling it while holding provider_lock (an rwlock) would violate lock ordering on PREEMPT_RT kernels where rwlocks are priority-inheritance-aware, causing boot failures or deadlock. A reviewer might suggest 'call the gate inside the lock so the result is atomic with the lookup' — that change breaks PREEMPT_RT. The atomicity argument is also wrong: fips_aggregate is a snapshot query; a FIPS state change between two gate calls is safe because each subsequent crypto operation checks its own gate. Do not move the gate calls inside the lock.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T03:21:42Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T04:29:43Z",
+  "closed_at": "2026-04-20T04:29:43Z",
+  "close_reason": "Correct design: fips_gate callbacks invoked outside provider_lock in fips_aggregate(). Each provider's fips_gate() is a stateless check (calls wolfCrypt_GetStatus_fips or returns constant). No access to provider list state. Calling these under read_lock would prevent concurrent fips_gate calls — unnecessary serialization. PREEMPT_RT concern: fips_gate callbacks do not sleep.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-s6t.7",
+      "depends_on_id": "WOLFKM-s6t",
+      "type": "parent-child",
+      "created_at": "2026-04-19T20:21:42Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

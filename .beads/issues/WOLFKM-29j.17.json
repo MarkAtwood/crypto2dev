@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-29j.17",
+  "title": "No enums anywhere: correct for ABI extensibility",
+  "description": "Algorithm and provider identification uses strings ('cbc(aes)', 'wolfssl'), never enum values or integer IDs. This allows new algorithms to be registered by out-of-tree providers without any header change or userspace recompile. An enum-based dispatch would freeze the algorithm namespace at compile time. No flag bits appear in any ioctl struct for the same reason: flags accumulate untestable combinations. A reviewer who suggests 'add an enum for efficiency' is wrong.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T04:52:01Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T05:08:06Z",
+  "closed_at": "2026-04-20T05:08:06Z",
+  "close_reason": "Decision recorded. No enums in UAPI — no code change needed.",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-29j.17",
+      "depends_on_id": "WOLFKM-29j",
+      "type": "parent-child",
+      "created_at": "2026-04-19T21:52:00Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

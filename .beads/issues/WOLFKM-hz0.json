@@ -1,0 +1,15 @@
+{
+  "id": "WOLFKM-hz0",
+  "title": "Kernel crypto API provider (crypto2dev_kcapi.ko)",
+  "description": "Add a second provider module that wraps the Linux kernel crypto API (crypto_alloc_skcipher, crypto_alloc_ahash, crypto_alloc_aead). Algo strings map 1:1 to kernel names. No wolfCrypt dependency. No FIPS gate (kernel handles it if CONFIG_CRYPTO_FIPS). Builds unconditionally alongside crypto2dev.ko.\\n\\nAlgorithms to register:\\n- skcipher: cbc(aes), ctr(aes), xts(aes)\\n- hash: sha256, sha384, sha512, sha3-256\\n- hmac: hmac(sha256), hmac(sha384), hmac(sha512)\\n- cmac: cmac(aes)\\n- AEAD: gcm(aes)\\n\\nAcceptance: crypto2dev_kcapi.ko builds, loads after crypto2dev.ko, and all 11 algos appear in CRYPTO2DEV_IOC_INIT without wolfssl provider loaded.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "feature",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T16:08:17Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-16T16:11:21Z",
+  "closed_at": "2026-04-16T16:11:21Z",
+  "close_reason": "All kcapi provider files written: kcapi_provider.h, kcapi_provider.c, kcapi_skcipher.c (cbc/ctr/xts), kcapi_hash.c (sha256/384/512/sha3-256/hmac-sha256/384/512/cmac), kcapi_aead.c (gcm). Kbuild updated to build crypto2dev_kcapi.ko unconditionally."
+}

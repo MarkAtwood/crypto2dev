@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-4l7.1",
+  "title": "Observability: fd-type mismatch returns -ENODEV without log in 7 handlers",
+  "description": "Seven ioctl handlers (ioctl_set_iv, ioctl_gen_iv, ioctl_set_aad, ioctl_get_tag, ioctl_set_tag, ioctl_finalize, ioctl_reset) all contain the check 'if (state-\u003efd_type != CRYPTO2DEV_FDTYPE_OPERATION) { ret = -ENODEV; goto out; }' with no log before the return. When an app calls SET_IV on an UNSET fd (e.g. forgot to call INIT first) or on a KEY fd (wrong fd type), it receives -ENODEV with zero context. Support engineer cannot distinguish: fd never initialized, fd is a KEY fd, device not present. Trigger: call any of the 7 ioctls on an UNSET or KEY fd. Bad outcome: -ENODEV returned silently, no log entry in ring buffer. Fix: add pr_info_ratelimited before each -ENODEV goto, logging state-\u003efd_type and the ioctl name. Locations: crypto2dev_fd.c lines 884, 948, 1032, 1090, 1151, 1499, 1585.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T11:46:39Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T11:51:20Z",
+  "closed_at": "2026-04-20T11:51:20Z",
+  "close_reason": "Closed",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-4l7.1",
+      "depends_on_id": "WOLFKM-4l7",
+      "type": "parent-child",
+      "created_at": "2026-04-20T04:46:39Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

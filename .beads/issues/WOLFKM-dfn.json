@@ -1,0 +1,19 @@
+{
+  "id": "WOLFKM-dfn",
+  "title": "Audit: crypto2dev 2026-04-17",
+  "notes": "Confidence calibration: FIPS gate coverage: 90% — 7 violations found, all in wolfssl (aes_cbc/aes_gcm update, all 5 sess_reset). Residual 10%: did not trace every callback in wolfssl_provider.c for sign/verify/agree key ops — those paths not audited for gate placement. Key material leak risk: 5% — memzero_explicit discipline is strong; main residual risk is partial sess_init failure leaving key in wolfCrypt internal state not visible to framework. UAPI stability: HIGH RISK — SET_AAD/GET_TAG/SET_TAG ioctls not dispatched is a critical regression; all AEAD is broken. Gaps: could not run lockdep to verify no sleeping-in-atomic violations; could not run wolfCrypt FIPS POST failure injection to verify gate behavior under degraded conditions; RSA/EC key ops in wolfssl_provider.c not audited for FIPS gate placement. Would raise confidence if: (1) lockdep run on a test kernel, (2) FIPS POST failure injected during an active session, (3) wolfssl RSA/EC key op callbacks audited for gate placement.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-17T23:59:22Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T03:27:31Z",
+  "close_reason": "all steps complete",
+  "labels": [
+    "audit",
+    "wolfkm"
+  ]
+}

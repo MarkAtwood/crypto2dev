@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-u2s.16",
+  "title": "Remove '(wolfCrypt code in preceding line)' from error messages",
+  "description": "Error messages in crypto2dev_fd.c were updated to include the phrase '(wolfCrypt code in preceding line)' inline in format strings. This phrase appears in log output and is problematic for three reasons:\n\n1. It clutters user-facing and support logs with implementation-specific details\n2. It's only meaningful to engineers with source code access\n3. It's inaccurate for non-wolfCrypt providers (e.g., kcapi AEAD)\n\nThe phrase should either be:\n- Removed entirely (preferred—the error code is sufficient)\n- Moved to a code comment above the pr_err_ratelimited() call (preserves intent without polluting logs)\n\nAffected lines in src/cdev/crypto2dev_fd.c:\n- Line ~438: write() update failed\n- Line ~856: set_iv() returned\n- Line ~1131: sign() returned\n- Line ~1137: verify() returned  \n- Line ~1143: agree() returned\n- Line ~1163: finalize() failed\n\nThe existing codebase establishes clean error messages without parenthetical runtime notes. Restore consistency with that pattern.",
+  "status": "closed",
+  "priority": 4,
+  "issue_type": "chore",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-19T21:38:49Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T23:32:41Z",
+  "closed_at": "2026-04-19T23:32:41Z",
+  "close_reason": "Fixed: removed '(wolfCrypt code in preceding line)' from 6 pr_err_ratelimited format strings in crypto2dev_fd.c",
+  "labels": [
+    "readability",
+    "review",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-u2s.16",
+      "depends_on_id": "WOLFKM-u2s",
+      "type": "parent-child",
+      "created_at": "2026-04-19T14:38:48Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

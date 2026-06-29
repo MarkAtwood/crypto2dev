@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-s6t.11",
+  "title": "Correctness: DO_KDF pad-fail leaves IKM in inbuf",
+  "description": "Trigger: (1) open fd, (2) write(fd, ikm_bytes, N) to accumulate IKM in inbuf, (3) ioctl(fd, DO_KDF, op) where op._pad contains non-zero bytes (or any pre-lock validation fails after the ikm_fd block). The goto out_early / out_zero path returns -EINVAL without acquiring state-\u003elock and without calling inbuf_clear(). Result: IKM key material persists in state-\u003einbuf. (4) User calls write(fd, key_bytes, M) — appends to existing inbuf; inbuf_len is now N+M. (5) User calls ioctl(fd, KEY_IMPORT, op) with op.keylen == N+M — the import succeeds but the imported key material is the old IKM concatenated with the new key bytes, not the intended key. FIPS 140-3 violation: CSP not zeroized when no longer needed. Fix: acquire state-\u003elock and call inbuf_clear() before returning on all pre-lock failure paths in ioctl_do_kdf, or restructure so inbuf_clear() is called unconditionally at out_zero.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T03:21:58Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T03:41:43Z",
+  "closed_at": "2026-04-20T03:41:43Z",
+  "close_reason": "out_early now acquires state-\u003elock and calls inbuf_clear before falling to out_zero; ikm_fd fget failures changed from goto out_zero to goto out_early",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-s6t.11",
+      "depends_on_id": "WOLFKM-s6t",
+      "type": "parent-child",
+      "created_at": "2026-04-19T20:21:58Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

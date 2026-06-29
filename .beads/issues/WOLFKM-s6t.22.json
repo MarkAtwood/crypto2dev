@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-s6t.22",
+  "title": "Correctness: FIPS gate not first in write() and read() OPERATION paths",
+  "description": "In crypto2dev_fd_write() (line 354), the ops-\u003efips_gate() call is at line 409, after: (1) count==0 early return (362), (2) count\u003eMAX_PAYLOAD check (365), (3) kmalloc+copy_from_user (369-376), (4) fd_type checks (380-401), (5) finalized check (393), (6) error check (398), (7) IV enforcement check (404). In crypto2dev_fd_read() OPERATION path, fips_gate() is at line 573, after error check (568). CLAUDE.md states the gate must be the first executable statement before argument validation and before anything else. The finalized, error, and iv_set checks at lines 393-407 in write() run before the FIPS gate — if FIPS is not operational, these branches execute before the gate fires, and in the iv_set case, write() returns -EINVAL (not -EACCES) masking the actual FIPS failure mode from the caller.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T03:22:34Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T03:41:33Z",
+  "closed_at": "2026-04-20T03:41:33Z",
+  "close_reason": "FIPS gate moved to immediately after mutex_lock() in ioctl_finalize, ioctl_reset, write(), read(), ioctl_set_iv, ioctl_gen_iv, ioctl_set_aad, ioctl_set_tag, ioctl_get_tag — using state-\u003eops null-guard",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-s6t.22",
+      "depends_on_id": "WOLFKM-s6t",
+      "type": "parent-child",
+      "created_at": "2026-04-19T20:22:34Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

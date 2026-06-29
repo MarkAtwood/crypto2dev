@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-29j.7",
+  "title": "FIPS operational risk: 'disable FIPS' search produces no result; operator finds no answer",
+  "description": "The registry.c comment (lines 31-43) documents that FIPS enforcement cannot be disabled at runtime and explains the only deactivation path (unload all FIPS provider modules). However the literal strings 'disable FIPS' and 'fips toggle' do not appear anywhere in the source. A support engineer who searches the source tree for these phrases finds nothing. The design intent IS documented (using 'deactivate' at line 38), but a standard support-triage search won't reach it. Before a CMVP audit, a site reliability engineer asking 'how do I disable FIPS mode temporarily for debugging?' should hit a comment that answers the question unambiguously. Current state: they get zero search results and escalate. Fix: add a comment in registry.c near the fips_provider_count declaration that contains the canonical search terms and restates the answer.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T04:47:54Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T05:05:48Z",
+  "closed_at": "2026-04-20T05:05:48Z",
+  "close_reason": "Added 'How to disable FIPS / turn off FIPS mode / fips toggle' comment to fips_provider_count declaration in registry.c with canonical search terms",
+  "labels": [
+    "audit",
+    "fips",
+    "operational",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-29j.7",
+      "depends_on_id": "WOLFKM-29j",
+      "type": "parent-child",
+      "created_at": "2026-04-19T21:47:54Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

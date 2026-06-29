@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-tp5.16",
+  "title": "Crypto misuse: GCM sess_init error paths missing memzero_explicit",
+  "description": "wolfssl_aes_gcm_sess_init has three error-unwind paths that call kfree(ctx) without first calling memzero_explicit(ctx, sizeof(*ctx)):\n\n1. wc_AesInit failure (line 112-114): ctx-\u003eop is set; no key material yet. Low severity but inconsistent with the pattern.\n\n2. wc_AesGcmSetKey failure (line 118-121): wc_AesFree is called but memzero_explicit is missing. After wc_AesGcmSetKey ran, ctx-\u003eaes holds partial or full AES key schedule in the kernel-expanded key tables. Freeing ctx without memzero_explicit leaves key schedule bits in freed memory — FIPS 140-3 zeroization violation.\n\n3. wc_InitRng_ex failure (line 124-128): wc_AesFree is called but memzero_explicit is missing. At this point wc_AesGcmSetKey succeeded, so ctx-\u003eaes holds the fully-expanded AES-GCM key schedule. Freeing without memzero_explicit is a FIPS 140-3 zeroization failure.\n\nTrigger: any failure of wc_InitRng_ex during sess_init (e.g. entropy source unavailable) leaves AES key schedule material in freed heap.\n\nCompare: wolfssl_aes_cbc_sess_init correctly calls memzero_explicit(ctx, sizeof(*ctx)) on all error paths (lines 103, 115, 124).\n\nFix: add memzero_explicit(ctx, sizeof(*ctx)) before kfree(ctx) on all three GCM error paths, matching the CBC pattern.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:40:23Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:59:47Z",
+  "closed_at": "2026-04-18T03:59:47Z",
+  "close_reason": "fixed: added goto err_free_ctx with memzero_explicit(ctx, sizeof(*ctx)) before kfree on all error paths in wolfssl_aes_gcm_sess_init",
+  "labels": [
+    "audit",
+    "crypto",
+    "fips",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.16",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:40:22Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

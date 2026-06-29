@@ -1,0 +1,34 @@
+{
+  "id": "WOLFKM-lnm",
+  "title": "crypto2dev_cdev.c: /dev/crypto2dev misc_register, ioctl dispatch",
+  "description": "Implement /dev/wolfcrypt file_operations in wolfkm_cdev.c.\n\nEach fd is an independent session. Streaming write()/read() model.\n\nfile_operations to implement:\n- .open: kzalloc wolfkm_fd_state, attach to file-\u003eprivate_data\n- .release: call wolfkm_fd_destroy() — memzero_explicit + kfree\n- .write: if !state-\u003einitialized return -ENODEV; wolfkm_fips_gate() first; copy_from_user; feed wolfCrypt streaming update; buffer output; increment bytes_written\n- .read: flush buffered output to userspace; for hashes, finalize on first read(); for AEAD decrypt, verify tag before returning plaintext (-EBADMSG on failure); increment bytes_read\n- .unlocked_ioctl: dispatch all ioctls; wolfkm_fips_gate() at top of every handler EXCEPT STATUS and GET_STATE (those do not invoke wolfCrypt); validate all input sizes; check all copy_from_user returns\n  - INIT: configure algo/key/op; reject if already initialized\n  - SET_IV / SET_AAD / GET_TAG / SET_TAG: forward to wolfkm_fd.c\n  - STATUS: copy module-level stats (no wolfCrypt call)\n  - GET_STATE: copy algo, op, initialized, bytes_written, bytes_read from fd state (no wolfCrypt call)\n- .compat_ioctl: 32-bit userspace on 64-bit kernel\n\nRegister as misc device: name='wolfcrypt', minor=MISC_DYNAMIC_MINOR.\n\nExported: wolfkm_cdev_init(), wolfkm_cdev_exit().",
+  "design": "CRYPT handler flow: copy wolfkm_crypt_op from user; look up session; validate op.len \u003c= WOLFKM_CRYPT_MAX_BYTES; copy src from user (kmalloc, kfree on exit); call wolfCrypt; copy dst/mac to user. Use goto for cleanup on error paths. STATUS handler reads wolfCrypt_GetStatus_fips(), session count from IDR, and MODULE_VERSION. .compat_ioctl: use compat_ptr() on all __user pointer fields in wolfkm_crypt_op. See DESIGN.md §file_operations.",
+  "acceptance_criteria": "/dev/wolfcrypt appears after insmod. AES-CBC encrypt+decrypt roundtrip via ioctl returns correct plaintext. STATUS ioctl returns correct fips_state. Bad algorithm ID returns -EINVAL. Input \u003e 1MB returns -EMSGSIZE.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "feature",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T06:54:50Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-18T01:08:39Z",
+  "close_reason": "Already implemented: src/cdev/crypto2dev_cdev.c exists with misc_register, ioctl dispatch, and full file_operations.",
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-lnm",
+      "depends_on_id": "WOLFKM-5ne",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:59:09Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    },
+    {
+      "issue_id": "WOLFKM-lnm",
+      "depends_on_id": "WOLFKM-blo",
+      "type": "blocks",
+      "created_at": "2026-04-15T23:59:09Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

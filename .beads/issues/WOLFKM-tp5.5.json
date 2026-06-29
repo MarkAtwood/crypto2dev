@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-tp5.5",
+  "title": "ioctl_gen_iv: iv_set set even if set_iv fails after gen_iv succeeds",
+  "description": "In ioctl_gen_iv(), the code calls gen_iv() to generate the IV, then calls set_iv() to program it into the provider session. If set_iv() fails, the goto goes to out_zeroize, which zeroizes the iv[] stack buffer and falls through to 'out:' — correctly not setting iv_set=true. The flow is: gen_iv() success → set_iv() failure → goto out_zeroize → memzero iv → mutex_unlock → return error. iv_set remains false. This is correct. HOWEVER: there is a subtle issue with the copy_to_user path. After set_iv() succeeds and memcpy(op.iv, iv, op.ivlen) is done, if copy_to_user fails, the function goes to out_zeroize without setting iv_set=true. This means: the IV IS programmed into the provider session (set_iv succeeded), but iv_set remains false. Subsequent write() calls will fail with -EINVAL because iv_set==false, even though the session actually has a valid IV. The session is in a partially-configured but unrecoverable state (can't call GEN_IV again without error since set_iv would program a DIFFERENT iv, can't call SET_IV to fix because caller doesn't know the generated IV bytes). Trigger: GEN_IV with valid ivlen but invalid uarg → set_iv succeeds (IV programmed in provider) → copy_to_user -EFAULT → iv_set=false → write() returns -EINVAL → session stuck.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:39:16Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:02:49Z",
+  "closed_at": "2026-04-18T04:02:49Z",
+  "close_reason": "false positive: existing code already gates iv_set after both set_iv() and copy_to_user() succeed",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.5",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:39:16Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

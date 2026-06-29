@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-tp5.46",
+  "title": "ioctl_key_generate: does not validate op.algo is non-empty",
+  "description": "ioctl_key_generate() forces null-termination on op.algo (op.algo[CRYPTO2DEV_ALGO_MAXLEN-1]='\\0') but does NOT check if op.algo[0]=='\\0' (empty string). It then calls crypto2dev_lookup_algo(op.algo, ...) with an empty string. crypto2dev_lookup_algo() does a strcmp against registered algo names — no registered algo has name '' (empty string), so lookup returns NULL and KEY_GENERATE returns -ENOENT. This is a correct outcome but the wrong error code: -ENOENT means 'no provider for this algo' whereas -EINVAL means 'bad argument'. An empty algo string is clearly a caller error (-EINVAL), not a lookup miss (-ENOENT). Compare ioctl_init() which explicitly checks 'if (op.algo[0] == 0) return -EINVAL' — ioctl_key_generate() lacks this check. Trigger: KEY_GENERATE with algo[0]='\\0' → returns -ENOENT instead of -EINVAL.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:43:09Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:02:32Z",
+  "closed_at": "2026-04-18T04:02:32Z",
+  "close_reason": "fixed: added if (op.algo[0] == '\\0') return -EINVAL after null-termination in ioctl_key_generate",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.46",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:43:08Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

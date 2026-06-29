@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-con.27",
+  "title": "UAPI stability: key_fd \u003c -1 not rejected in INIT",
+  "description": "crypto2dev_init_op.key_fd is documented as 'reserved; must be -1', but ioctl_init (crypto2dev_fd.c:641) only branches on key_fd \u003e= 0. Values \u003c -1 (e.g. -2, -42) silently pass through without error. This is an ABI liability: if a future kernel version assigns meaning to key_fd == -2, existing userspace binaries that accidentally pass -2 (e.g. from an uninitialized struct) will silently get the new behavior. Fix: add an explicit check after the copy_from_user in ioctl_init — if (op.key_fd \u003c -1) return -EINVAL; — before the key_fd \u003e= 0 branch. Compare to DO_KDF which correctly rejects ikm_fd \\!= -1 (line 1728) rather than only acting on ikm_fd \u003e= 0.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T23:38:37Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-19T21:24:17Z",
+  "closed_at": "2026-04-19T21:24:17Z",
+  "close_reason": "Closed",
+  "labels": [
+    "abi",
+    "audit",
+    "uapi",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-con.27",
+      "depends_on_id": "WOLFKM-con",
+      "type": "parent-child",
+      "created_at": "2026-04-18T16:38:36Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

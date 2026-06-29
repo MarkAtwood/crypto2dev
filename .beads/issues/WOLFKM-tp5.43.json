@@ -1,0 +1,30 @@
+{
+  "id": "WOLFKM-tp5.43",
+  "title": "ioctl_set_iv / set_aad / set_tag: no check for finalized state",
+  "description": "ioctl_set_iv(), ioctl_set_aad(), ioctl_set_tag(), and ioctl_get_tag() check that fd_type == OPERATION but do NOT check state-\u003efinalized or state-\u003eerror. A caller can: INIT → SET_IV → write → FINALIZE → SET_IV again. The second SET_IV after finalize will call ops-\u003eset_iv() on a finalized session. Whether this is harmful depends on the provider, but the framework should reject these calls after finalize since the session is logically complete. Similarly, GET_TAG after the session is in error state will still call ops-\u003eget_tag(). The UAPI header says SET_IV 'Must be called after CRYPTO2DEV_IOC_INIT and before write(2)' and SET_AAD 'before write(2)' — so calling them after FINALIZE violates the documented preconditions. The framework should enforce this with -EINVAL. Trigger: INIT → SET_IV → write → FINALIZE → SET_IV (succeeds, modifies provider session state post-finalization) → session in undefined state.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:42:34Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:08:30Z",
+  "closed_at": "2026-04-18T04:08:30Z",
+  "close_reason": "fixed: ioctl_set_iv, ioctl_set_aad, ioctl_set_tag all now check finalized||error and return -EINVAL early",
+  "labels": [
+    "audit",
+    "correctness",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.43",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:42:33Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

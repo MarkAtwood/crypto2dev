@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-3yg.4",
+  "title": "SEC1: Manual num_algos count has no validation",
+  "description": "wolfssl_provider.c and kcapi_provider.c each hardcode num_algos as a manual count (24 and 17 respectively). If someone adds/removes an algorithm and forgets to update num_algos, the module silently registers with wrong count. The kernel crypto API still works (null-terminated list), so the bug is invisible in functionality but breaks observability (module log message and monitoring). Counts are currently correct. Recommend: add compile-time assertion or build-time validation.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T00:45:51Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T00:48:34Z",
+  "closed_at": "2026-04-20T00:48:34Z",
+  "close_reason": "Closed",
+  "labels": [
+    "maintainer-burden",
+    "risk"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-3yg.4",
+      "depends_on_id": "WOLFKM-3yg",
+      "type": "parent-child",
+      "created_at": "2026-04-19T17:45:50Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

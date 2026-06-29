@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-7b5.3",
+  "title": "Efficiency: outbuf deferred allocation wastes 4096 bytes per session",
+  "description": "crypto2dev_fd.c — outbuf starts NULL at open() and is allocated lazily on first write() via outbuf_grow(). CRYPTO2DEV_OUTBUF_INIT=4096 bytes are only allocated when update() is first called. Sessions that call only KEY_IMPORT, KEY_GENERATE, DO_SIGN, DO_VERIFY, or DO_AGREE never touch outbuf at all; they pay zero bytes. This is correct and efficient. Not a real issue — confirm this is intentional so it is not flagged by a reviewer as 'uninitialized'.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T05:19:28Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T05:40:00Z",
+  "closed_at": "2026-04-18T05:40:00Z",
+  "close_reason": "Confirmed intentional: lazy outbuf allocation is correct and efficient; not a bug",
+  "labels": [
+    "audit",
+    "efficiency",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-7b5.3",
+      "depends_on_id": "WOLFKM-7b5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T22:19:27Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

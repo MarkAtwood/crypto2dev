@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-533.16",
+  "title": "UAPI stability: GET_STATE omits inbuf_pending for UNSET fds",
+  "description": "crypto2dev_fd_state_info.inbuf_pending is not populated by ioctl_get_state for CRYPTO2DEV_FDTYPE_UNSET fds. An UNSET fd can accumulate write() data in state-\u003einbuf (for subsequent KEY_IMPORT or DO_KDF). Userspace has no way to query how many bytes have been buffered via GET_STATE on an UNSET fd — inbuf_pending is left zero even when state-\u003einbuf_len \u003e 0. This matters for diagnostic tools and for callers that want to confirm their write() data was received before issuing KEY_IMPORT.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T05:29:23Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T05:43:17Z",
+  "closed_at": "2026-04-20T05:43:17Z",
+  "close_reason": "Closed",
+  "labels": [
+    "abi",
+    "audit",
+    "uapi",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-533.16",
+      "depends_on_id": "WOLFKM-533",
+      "type": "parent-child",
+      "created_at": "2026-04-19T22:29:23Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

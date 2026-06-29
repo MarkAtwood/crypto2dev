@@ -1,0 +1,17 @@
+{
+  "id": "WOLFKM-k7r",
+  "title": "tests/ci/Vagrantfile: multi-distro vagrant test environment",
+  "description": "Vagrantfile defining VMs for manual multi-distro testing. Define VMs for: ubuntu2204 (Ubuntu 22.04, kernel 5.15), ubuntu2404 (Ubuntu 24.04, kernel 6.8), debian12 (Debian 12, kernel 6.1). Each VM provisions: build dependencies, wolfSSL headers (or full build), and syncs the wolfkm repo. Running 'vagrant up ubuntu2204 \u0026\u0026 vagrant ssh ubuntu2204' gives a ready build environment.",
+  "design": "Use virtualbox or libvirt provider. Provisioning script mirrors the apt-get commands from test-on-aws.sh Phase 1. Synced folder: . =\u003e /wolfkm. Box images: ubuntu/jammy64, ubuntu/noble64, debian/bookworm64. Memory: 4096 MB, CPUs: 4.",
+  "acceptance_criteria": "vagrant up ubuntu2204 succeeds. vagrant ssh ubuntu2204 -c 'cd /wolfkm \u0026\u0026 make -C /lib/modules/$(uname -r)/build M=$(pwd)' succeeds in stub mode.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-16T06:56:10Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T22:51:37Z",
+  "closed_at": "2026-04-18T22:51:37Z",
+  "close_reason": "Written and verified"
+}

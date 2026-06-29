@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-643.2",
+  "title": "Fix: kcapi GCM authsize must match actual taglen at decrypt time",
+  "description": "In src/providers/kcapi/kcapi_aead.c, kcapi_aead_sess_init calls crypto_aead_setauthsize(tfm, GCM_TAG_SIZE=16) unconditionally. kcapi_aead_set_tag stores taglen in ctx-\u003etaglen but the kernel AEAD transform still has authsize=16. kcapi_aead_decrypt assembles src_buf with only ctx-\u003etaglen bytes of tag, but the kernel splits using authsize=16, reading garbage for the last (16-taglen) bytes. Every decrypt with a 12-byte tag returns -EBADMSG.\n\nFix: remove the crypto_aead_setauthsize call from kcapi_aead_sess_init. Call crypto_aead_setauthsize(ctx-\u003etfm, ctx-\u003etaglen) inside both kcapi_aead_encrypt and kcapi_aead_decrypt immediately before aead_request_set_crypt, using the taglen from set_tag. If ctx-\u003etaglen == 0 at that point, return -EINVAL.\n\nVerify: test all FIPS-permitted tag sizes (12-16 bytes). Confirm taglen=11 still rejected at set_tag (that check is correct and stays).\n\nTest: add a KAT in tests/userspace using an NIST CAVP AES-GCM vector with a 12-byte tag via the kcapi provider.",
+  "status": "closed",
+  "priority": 0,
+  "issue_type": "bug",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T02:11:12Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T02:25:18Z",
+  "closed_at": "2026-04-20T02:25:18Z",
+  "close_reason": "setauthsize+ctx-\u003eauthsize update in kcapi_aead_set_tag; 12-byte tag vector v4 added; test loop updated; build clean",
+  "labels": [
+    "correctness",
+    "crypto"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-643.2",
+      "depends_on_id": "WOLFKM-643",
+      "type": "parent-child",
+      "created_at": "2026-04-19T19:11:12Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

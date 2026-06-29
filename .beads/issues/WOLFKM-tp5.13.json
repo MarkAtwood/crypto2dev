@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-tp5.13",
+  "title": "UAPI stability: KEY_IMPORT and KEY_GENERATE structs have no reserved bytes",
+  "description": "crypto2dev_key_import_op and crypto2dev_key_generate_op have no _pad[] or _reserved[] fields. Any future extension (e.g., a key format hint, a flags-equivalent named field, or a __u64 sequence number) would require a new ioctl rather than adding a field to the existing struct. Contrast with crypto2dev_key_info which has _pad[4]. Adding _pad[8] to both structs now costs nothing and preserves extension headroom without breaking the frozen ABI. Once shipped, no padding can be added.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:40:09Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:12:42Z",
+  "closed_at": "2026-04-18T04:12:42Z",
+  "close_reason": "fixed: added __u8 _pad[4] to crypto2dev_key_import_op (112B) and crypto2dev_key_generate_op (104B); added memchr_inv _pad validation in both handlers",
+  "labels": [
+    "abi",
+    "audit",
+    "uapi",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.13",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:40:09Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

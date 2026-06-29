@@ -1,0 +1,31 @@
+{
+  "id": "WOLFKM-ms3.16",
+  "title": "Observability: wolfCrypt error code discarded before reaching framework log",
+  "description": "All provider xlat_err() functions (wolfssl_cbc_xlat_err, wolfssl_gcm_xlat_err, wolfssl_sha_xlat_err, wolfssl_hmac_xlat_err, wolfssl_cmac_xlat_err) silently translate the wolfCrypt error code and return without logging. The framework then logs only the translated kernel errno (e.g. -EIO or -EACCES). The original wolfCrypt error code (e.g. FIPS_DEGRADED_E, AES_BLOCK_SIZE_E) is permanently lost. A support engineer seeing 'update failed: -5' (EIO) cannot determine whether the root cause was a block-alignment error, a DRBG failure, or a late FIPS degradation without attaching a debugger. File: src/providers/wolfssl/wolfssl_aes_cbc.c wolfssl_cbc_xlat_err (and equivalent in gcm, sha, hmac, cmac). Fix: each xlat site that maps to EIO or EACCES should pr_err_ratelimited the original wc_err before translating.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "task",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:04:09Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T03:25:49Z",
+  "closed_at": "2026-04-18T03:25:49Z",
+  "close_reason": "Fixed in this session",
+  "labels": [
+    "audit",
+    "observability",
+    "support",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-ms3.16",
+      "depends_on_id": "WOLFKM-ms3",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:04:08Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

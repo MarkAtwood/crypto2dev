@@ -1,0 +1,29 @@
+{
+  "id": "WOLFKM-tp5.39",
+  "title": "FIPS gate on RESET — correct, touches crypto state",
+  "description": "Why it is right: ioctl_reset() calls ops-\u003efips_gate() before ops-\u003esess_reset(). sess_reset() touches algorithm-internal state: it clears digest state machines, zeroes IV slots, and resets key schedule tracking within the provider's ctx. Under FIPS 140-3, any operation that reads or modifies state within the FIPS cryptographic boundary must be gated. A reviewer might argue: 'RESET is administrative housekeeping, not a crypto operation — skip the gate for performance.' But sess_reset() operates on the same provider-managed ctx that holds the keying material and streaming state. Touching that ctx without gating is indistinguishable from a crypto operation from the FIPS boundary's perspective. The gate is cheap (an atomic read in the common case) and mandatory.",
+  "status": "closed",
+  "priority": 3,
+  "issue_type": "decision",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-18T03:41:47Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-18T04:09:57Z",
+  "closed_at": "2026-04-18T04:09:57Z",
+  "close_reason": "confirmed correct: FIPS gate on RESET is required — sess_reset touches provider ctx which contains keying material; skipping the gate on 'administrative' ops would be a FIPS 140-3 audit finding",
+  "labels": [
+    "audit",
+    "defend",
+    "wolfkm"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-tp5.39",
+      "depends_on_id": "WOLFKM-tp5",
+      "type": "parent-child",
+      "created_at": "2026-04-17T20:41:46Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}

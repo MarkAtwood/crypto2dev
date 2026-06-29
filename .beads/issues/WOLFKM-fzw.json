@@ -1,0 +1,16 @@
+{
+  "id": "WOLFKM-fzw",
+  "title": "SHA3 completeness: sha3-384 and sha3-512",
+  "description": "Add sha3-384 and sha3-512 to wolfssl and kcapi providers.\n\nwolfssl_sha.c currently supports sha3-256 (via wc_Sha3_256_*) but not sha3-384 or sha3-512. kcapi_hash.c has sha3-256 but not sha3-384/sha3-512. The DESIGN.md algorithm coverage table implicitly shows a gap; NIST FIPS 202 approves all four SHA-3 variants.\n\nWhat needs to be done:\n1. Add C2D_SHA3_384 and C2D_SHA3_512 type constants to wolfssl_sha.c; implement sess_init/update/final/free using wc_Sha3_384_*/wc_Sha3_512_*; register two new algo_ops structs\n2. Add sha3-384 and sha3-512 to kcapi_hash.c following the sha3-256 pattern\n3. Add SHA3-384 and SHA3-512 NIST FIPS 202 known-answer vectors to tests/vectors/sha3.h\n4. Add sha3-384 and sha3-512 test cases to test_chardev.c\n5. Update DESIGN.md algorithm coverage table",
+  "acceptance_criteria": "wolfssl sha3-384 and sha3-512 produce NIST FIPS 202 known-answer outputs. test_chardev runs clean with sha3-384 and sha3-512 test cases. make produces zero errors and zero new warnings.",
+  "status": "closed",
+  "priority": 2,
+  "issue_type": "epic",
+  "assignee": "Mark Atwood",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T00:32:00Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-06-26T20:29:29Z",
+  "closed_at": "2026-04-20T00:51:03Z",
+  "close_reason": "Closed"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "WOLFKM-3yg.3",
+  "title": "SEC1: Missing SHA3-256 test coverage",
+  "description": "Test vectors for SHA3-256 exist in tests/vectors/sha3.h (3 NIST FIPS 202 vectors) but test_chardev.c never calls them. SHA3-256 is registered and functional but zero userspace chardev test coverage. Without a test, future renames/refactors in wolfssl_sha.c could silently break SHA3-256 without detection.",
+  "status": "closed",
+  "priority": 1,
+  "issue_type": "task",
+  "owner": "mark@wolfssl.com",
+  "created_at": "2026-04-20T00:45:47Z",
+  "created_by": "Mark Atwood",
+  "updated_at": "2026-04-20T00:48:33Z",
+  "closed_at": "2026-04-20T00:48:33Z",
+  "close_reason": "Closed",
+  "labels": [
+    "maintainer-burden",
+    "risk"
+  ],
+  "dependencies": [
+    {
+      "issue_id": "WOLFKM-3yg.3",
+      "depends_on_id": "WOLFKM-3yg",
+      "type": "parent-child",
+      "created_at": "2026-04-19T17:45:47Z",
+      "created_by": "Mark Atwood",
+      "metadata": "{}"
+    }
+  ]
+}
