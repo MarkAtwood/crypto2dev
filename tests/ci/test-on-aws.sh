@@ -242,6 +242,18 @@ fi
 
 A="--profile $AWS_PROFILE --region $AWS_REGION"
 
+# Auto-terminate if idle: CPU <5% avg for 16 x 15min periods (4 hours)
+attach_idle_kill() {
+    local iid="$1" region="$2"
+    aws cloudwatch put-metric-alarm --profile "$AWS_PROFILE" --region "$region" \
+        --alarm-name "idle-kill-$iid" \
+        --namespace AWS/EC2 --metric-name CPUUtilization \
+        --dimensions Name=InstanceId,Value="$iid" \
+        --statistic Average --period 900 --evaluation-periods 16 \
+        --threshold 5 --comparison-operator LessThanThreshold \
+        --alarm-actions "arn:aws:automate:${region}:ec2:terminate"
+}
+
 # ── Run ID and ephemeral resource names ──────────────────────────────────────
 
 RUN_ID="wolfkm-${DISTRO}${RUN_ID_SUFFIX}-$(date +%Y%m%d-%H%M%S)"
@@ -350,6 +362,8 @@ cleanup() {
 
     if [[ -n "$INSTANCE_ID" ]]; then
         log "Terminating $INSTANCE_ID..."
+        aws cloudwatch delete-alarms $A \
+            --alarm-names "idle-kill-$INSTANCE_ID" 2>/dev/null || true
         aws ec2 terminate-instances $A --instance-ids "$INSTANCE_ID" \
             --query 'TerminatingInstances[0].CurrentState.Name' \
             --output text 2>/dev/null || true
@@ -423,6 +437,7 @@ INSTANCE_ID=$(aws ec2 run-instances $A \
         "ResourceType=instance,Tags=[{Key=Name,Value=$RUN_ID},{Key=Project,Value=wolfkm}]" \
     --query 'Instances[0].InstanceId' \
     --output text)
+attach_idle_kill "$INSTANCE_ID" "$AWS_REGION"
 log "Instance: $INSTANCE_ID"
 
 log "Waiting for instance to be running..."
