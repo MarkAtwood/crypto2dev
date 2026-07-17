@@ -242,6 +242,38 @@ algorithm name strings, and code examples, see:
 
 ---
 
+## wolfSSL-Side CryptoCb Port
+
+Applications built on wolfSSL can route wolfCrypt operations through
+`/dev/crypto2dev` automatically via wolfSSL's crypto callback (CryptoCb)
+framework, without calling the device API directly.
+
+The port lives on a wolfSSL fork branch, not in this repository:
+`github.com/MarkAtwood/wolfssl-wolfssl`, branch `feature/crypto2dev-shim`
+([compare view](https://github.com/wolfSSL/wolfssl/compare/master...MarkAtwood:wolfssl-wolfssl:feature/crypto2dev-shim)).
+
+**Configure flags**:
+
+- `--enable-crypto2dev` — build the CryptoCb shim (implies `--enable-cryptocb`)
+- `--enable-crypto2devsim` — userspace device simulator (requires `--enable-crypto2dev`)
+- `--enable-crypto2devtest` — shim test suite (requires `--enable-crypto2dev`)
+
+**Registration**: the shim registers as a crypto callback device:
+
+```c
+wc_CryptoCb_RegisterDevice(WOLF_CRYPTO2DEV_DEVID, wc_crypto2dev_cb, NULL);
+```
+
+where `WOLF_CRYPTO2DEV_DEVID` is `0x43324456`.
+
+**Wire-format sync invariant**: the branch's `crypto2dev_wire.h` and
+`crypto2dev_ioctl.h` mirror `include/uapi/` in this repository.
+`include/uapi/` is authoritative — wire-format changes land here first
+and are then mirrored to the wolfSSL branch. A mismatch between the two
+is a bug in the wolfSSL branch, not here.
+
+---
+
 ## Kernel Crypto API Consumers
 
 `dm-crypt`, IPsec, and other in-kernel consumers that use the kernel
