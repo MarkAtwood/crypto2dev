@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-con.13",
   "title": "FIPS mode deactivation path undocumented in registry.c",
-  "description": "fips_provider_count in crypto2dev_registry.c (line 36) has no comment explaining that the only way to exit FIPS enforcement mode is to rmmod all FIPS providers. A support engineer investigating a site where non-FIPS algorithms are returning -ENOENT would look at fips_provider_count and search for a toggle flag or sysctl knob — and find nothing. The absence of an explanatory comment means debugging time is wasted and there is risk that an engineer attempts workarounds instead of the correct procedure (rmmod crypto2dev_wolfssl.ko). The operational consequence at CMVP audit is that deployment documentation and incident-response runbooks may not describe the deactivation procedure, a gap reviewers will flag. Fix: add a block comment above fips_provider_count stating that FIPS enforcement is activated by the first is_fips provider registration and can only be deactivated by unloading all FIPS provider modules (rmmod crypto2dev_wolfssl.ko), and that there is intentionally no runtime toggle.",
+  "description": "fips_provider_count in crypto2dev_registry.c (line 36) has no comment explaining that the only way to exit FIPS enforcement mode is to rmmod all FIPS providers. A support engineer investigating a site where non-FIPS algorithms are returning -ENOENT would look at fips_provider_count and search for a toggle flag or sysctl knob \u2014 and find nothing. The absence of an explanatory comment means debugging time is wasted and there is risk that an engineer attempts workarounds instead of the correct procedure (rmmod crypto2dev_wolfssl.ko). The operational consequence at CMVP audit is that deployment documentation and incident-response runbooks may not describe the deactivation procedure, a gap reviewers will flag. Fix: add a block comment above fips_provider_count stating that FIPS enforcement is activated by the first is_fips provider registration and can only be deactivated by unloading all FIPS provider modules (rmmod crypto2dev_wolfssl.ko), and that there is intentionally no runtime toggle.",
   "status": "closed",
   "priority": 3,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:37:16Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:16Z",
   "updated_at": "2026-04-19T21:30:56Z",
   "closed_at": "2026-04-19T21:30:56Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "fips",
-    "operational",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.13",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:37:16Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:37:16Z"
     }
   ]
 }

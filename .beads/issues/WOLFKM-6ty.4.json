@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-6ty.4",
-  "title": "wolfssl_ecdsa_sign: accepts 20-byte digest (SHA-1) — FIPS 140-3 violation",
-  "description": "wolfssl_ecdsa_sign checks digest_len \u003c 20 and rejects. The comment reads 'SHA-1 minimum, though SHA-256+ is strongly preferred for new signatures'. FIPS 140-3 and NIST SP 800-186 do not approve ECDSA with SHA-1 for new signatures. Accepting a 20-byte digest allows callers to sign SHA-1 hashes through a FIPS-gated path. Minimum approved digest size for ECDSA is 32 bytes (SHA-256). Fix: change the check to digest_len \u003c 32, update comment to cite SP 800-186 Table 2.",
+  "title": "wolfssl_ecdsa_sign: accepts 20-byte digest (SHA-1) \u2014 FIPS 140-3 violation",
+  "description": "wolfssl_ecdsa_sign checks digest_len < 20 and rejects. The comment reads 'SHA-1 minimum, though SHA-256+ is strongly preferred for new signatures'. FIPS 140-3 and NIST SP 800-186 do not approve ECDSA with SHA-1 for new signatures. Accepting a 20-byte digest allows callers to sign SHA-1 hashes through a FIPS-gated path. Minimum approved digest size for ECDSA is 32 bytes (SHA-256). Fix: change the check to digest_len < 32, update comment to cite SP 800-186 Table 2.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T22:09:08Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:09:08Z",
   "updated_at": "2026-04-18T22:17:40Z",
   "closed_at": "2026-04-18T22:17:40Z",
-  "close_reason": "Closed",
-  "labels": [
-    "correctness",
-    "my-oss",
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-6ty.4",
       "depends_on_id": "WOLFKM-6ty",
-      "type": "parent-child",
-      "created_at": "2026-04-18T15:09:08Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T15:09:08Z"
     }
   ]
 }

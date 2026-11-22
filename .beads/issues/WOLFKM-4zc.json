@@ -1,27 +1,22 @@
 {
   "id": "WOLFKM-4zc",
   "title": "tools/crypto2dev_benchmark.c: throughput benchmark vs kernel built-in",
-  "description": "Benchmark tool comparing /dev/wolfcrypt vs kernel built-in crypto.\n\nTests via /dev/wolfcrypt streaming interface:\n1. AES-CBC-256: 1 MB encrypt, measure MB/s\n2. AES-GCM-256: 1 MB encrypt+auth, measure MB/s\n3. SHA-256: 1 MB hash, measure MB/s\n\nEach benchmark: open fd, INIT, then loop writing 64KB chunks + reading output, close fd. Repeat 100 times, report mean ± stddev.\n\nParallel comparison: same workloads via AF_ALG sockets (kernel built-in, if loaded).\n\nOutput table:\n  Algorithm          wolfkm (MB/s)   built-in (MB/s)   ratio\n  aes-cbc-256        1234            1100              1.12x\n  aes-gcm-256         890             820              1.09x\n  sha-256            2100            1900              1.11x\n\nCompile: gcc -O2 -o wolfkm_benchmark wolfkm_benchmark.c",
-  "design": "Use clock_gettime(CLOCK_MONOTONIC) for timing. AF_ALG interface: AF_ALG socket, bind, accept, setsockopt, send/recv. /dev/wolfcrypt interface: open, SESSION_NEW, CRYPT loop, SESSION_FREE. Both tests on same data buffer to minimize measurement noise. See DESIGN.md §tools.",
-  "acceptance_criteria": "Compiles and runs on Ubuntu 22.04 with wolfkm loaded. TSV output parseable by awk/python. AES-CBC 64KB throughput within 10% of AF_ALG (regression indicator).",
+  "description": "Benchmark tool comparing /dev/wolfcrypt vs kernel built-in crypto.\n\nTests via /dev/wolfcrypt streaming interface:\n1. AES-CBC-256: 1 MB encrypt, measure MB/s\n2. AES-GCM-256: 1 MB encrypt+auth, measure MB/s\n3. SHA-256: 1 MB hash, measure MB/s\n\nEach benchmark: open fd, INIT, then loop writing 64KB chunks + reading output, close fd. Repeat 100 times, report mean \u00b1 stddev.\n\nParallel comparison: same workloads via AF_ALG sockets (kernel built-in, if loaded).\n\nOutput table:\n  Algorithm          wolfkm (MB/s)   built-in (MB/s)   ratio\n  aes-cbc-256        1234            1100              1.12x\n  aes-gcm-256         890             820              1.09x\n  sha-256            2100            1900              1.11x\n\nCompile: gcc -O2 -o wolfkm_benchmark wolfkm_benchmark.c",
   "status": "closed",
   "priority": 3,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T06:55:11Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:55:11Z",
   "updated_at": "2026-04-18T22:48:11Z",
   "closed_at": "2026-04-18T22:48:11Z",
-  "close_reason": "Scripts/tools written and verified",
+  "design": "Use clock_gettime(CLOCK_MONOTONIC) for timing. AF_ALG interface: AF_ALG socket, bind, accept, setsockopt, send/recv. /dev/wolfcrypt interface: open, SESSION_NEW, CRYPT loop, SESSION_FREE. Both tests on same data buffer to minimize measurement noise. See DESIGN.md \u00a7tools.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-4zc",
       "depends_on_id": "WOLFKM-lnm",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:10Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:10Z"
     }
   ]
 }

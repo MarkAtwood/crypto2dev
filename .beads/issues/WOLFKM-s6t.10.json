@@ -6,26 +6,16 @@
   "priority": 1,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T03:21:53Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:21:53Z",
   "updated_at": "2026-04-20T04:23:28Z",
   "closed_at": "2026-04-20T04:23:28Z",
-  "close_reason": "Removed plaintext key copy (key_bytes/key_len fields) from wolfssl_aes_cbc_ctx. sess_reset now calls wc_AesSetIV(NULL) to zero the CBC chaining register — the key schedule in wc_Aes is unchanged between messages. No re-keying needed.",
-  "labels": [
-    "audit",
-    "crypto",
-    "fips",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-s6t.10",
       "depends_on_id": "WOLFKM-s6t",
-      "type": "parent-child",
-      "created_at": "2026-04-19T20:21:53Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T20:21:53Z"
     }
   ]
 }

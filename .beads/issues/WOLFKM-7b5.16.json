@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-7b5.16",
   "title": "Observability: ioctl_init silently returns -EOPNOTSUPP when sess_init is NULL",
-  "description": "crypto2dev_fd.c:688-692: when ops-\u003esess_init is NULL (a provider registered an algo_ops without a sess_init callback), ioctl_init calls module_put and returns -EOPNOTSUPP with no log message. There is no way to tell from the ring buffer that a provider was found but its sess_init vtable entry was absent. This is distinct from 'no provider found' (-ENOENT) and from 'fips_gate rejected' (-EACCES) but is the only ioctl_init failure path that emits no log. File:line: crypto2dev_fd.c:688.",
+  "description": "crypto2dev_fd.c:688-692: when ops->sess_init is NULL (a provider registered an algo_ops without a sess_init callback), ioctl_init calls module_put and returns -EOPNOTSUPP with no log message. There is no way to tell from the ring buffer that a provider was found but its sess_init vtable entry was absent. This is distinct from 'no provider found' (-ENOENT) and from 'fips_gate rejected' (-EACCES) but is the only ioctl_init failure path that emits no log. File:line: crypto2dev_fd.c:688.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T05:20:00Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:20:00Z",
   "updated_at": "2026-04-18T05:32:57Z",
   "closed_at": "2026-04-18T05:32:57Z",
-  "close_reason": "Fixed in fd.c, wolfssl_aes_gcm.c, kcapi_aead.c",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-7b5.16",
       "depends_on_id": "WOLFKM-7b5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T22:19:59Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T22:19:59Z"
     }
   ]
 }

@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-0az.1",
   "title": "ioctl_do_kdf: out_zero runs on every exit path, not just pre-lock",
-  "description": "In src/cdev/crypto2dev_fd.c ioctl_do_kdf(), the out_free_okm block (line 1892) calls mutex_unlock at line 1897 and then FALLS THROUGH to out_zero at line 1901, which immediately calls mutex_lock again.\n\nThe comment at line 1898 states: 'out_zero: reached only from pre-lock validation exits'. This is false. Every path through the locked section (both success and error) reaches out_zero after mutex_unlock, acquiring the mutex a second time.\n\nConsequences:\n1. Every ioctl_do_kdf call (success or error from the locked section) does an extra spurious mutex_lock/inbuf_clear/mutex_unlock cycle. inbuf_clear is called twice on error paths (out_inbuf_clear + out_zero), redundantly.\n2. The comment is actively misleading — the invariant 'lock is not held at out_zero' is only true for the goto-out_zero paths; for fall-through paths the lock was already released.\n3. This is NOT a deadlock since kernel mutexes are non-recursive and the lock was released before re-acquisition. But it is wrong behavior and the comment documents a false invariant.\n\nFix: add 'return ret;' between the mutex_unlock at line 1897 and the out_zero: label, so out_zero is truly only reached from pre-lock exits. Remove the lock/unlock from out_zero entirely for pre-lock paths by instead calling inbuf_clear under a fresh trylock, or document that inbuf may not yet exist. Alternatively, restructure to use a single cleanup path.",
+  "description": "In src/cdev/crypto2dev_fd.c ioctl_do_kdf(), the out_free_okm block (line 1892) calls mutex_unlock at line 1897 and then FALLS THROUGH to out_zero at line 1901, which immediately calls mutex_lock again.\n\nThe comment at line 1898 states: 'out_zero: reached only from pre-lock validation exits'. This is false. Every path through the locked section (both success and error) reaches out_zero after mutex_unlock, acquiring the mutex a second time.\n\nConsequences:\n1. Every ioctl_do_kdf call (success or error from the locked section) does an extra spurious mutex_lock/inbuf_clear/mutex_unlock cycle. inbuf_clear is called twice on error paths (out_inbuf_clear + out_zero), redundantly.\n2. The comment is actively misleading \u2014 the invariant 'lock is not held at out_zero' is only true for the goto-out_zero paths; for fall-through paths the lock was already released.\n3. This is NOT a deadlock since kernel mutexes are non-recursive and the lock was released before re-acquisition. But it is wrong behavior and the comment documents a false invariant.\n\nFix: add 'return ret;' between the mutex_unlock at line 1897 and the out_zero: label, so out_zero is truly only reached from pre-lock exits. Remove the lock/unlock from out_zero entirely for pre-lock paths by instead calling inbuf_clear under a fresh trylock, or document that inbuf may not yet exist. Alternatively, restructure to use a single cleanup path.",
   "status": "closed",
   "priority": 1,
   "issue_type": "bug",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-19T21:45:55Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:45:55Z",
   "updated_at": "2026-04-19T21:48:30Z",
   "closed_at": "2026-04-19T21:48:30Z",
-  "close_reason": "Comment corrected to describe both pre-lock and post-lock exit paths",
-  "labels": [
-    "correctness",
-    "review",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-0az.1",
       "depends_on_id": "WOLFKM-0az",
-      "type": "parent-child",
-      "created_at": "2026-04-19T14:45:55Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T14:45:55Z"
     }
   ]
 }

@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-con.17",
   "title": "atomic_dec_if_positive on FIPS provider unregister: correct underflow guard",
-  "description": "src/provider/crypto2dev_registry.c crypto2dev_unregister_provider() — uses atomic_dec_if_positive() rather than atomic_dec() to decrement fips_provider_count. If the counter is already 0 (double-unregister, provider bug), atomic_dec() would take it to -1, making the (count \u003e 0) FIPS mode check return false, silently disabling FIPS enforcement. atomic_dec_if_positive() returns -1 without decrementing, and WARN fires. A reviewer might call this defensive excess; it is not: a decrement to -1 would silently disable FIPS-only dispatch with no visible symptom, a CMVP compliance failure.",
+  "description": "src/provider/crypto2dev_registry.c crypto2dev_unregister_provider() \u2014 uses atomic_dec_if_positive() rather than atomic_dec() to decrement fips_provider_count. If the counter is already 0 (double-unregister, provider bug), atomic_dec() would take it to -1, making the (count > 0) FIPS mode check return false, silently disabling FIPS enforcement. atomic_dec_if_positive() returns -1 without decrementing, and WARN fires. A reviewer might call this defensive excess; it is not: a decrement to -1 would silently disable FIPS-only dispatch with no visible symptom, a CMVP compliance failure.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:37:28Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:28Z",
   "updated_at": "2026-04-19T21:31:10Z",
   "closed_at": "2026-04-19T21:31:10Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.17",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:37:28Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:37:28Z"
     }
   ]
 }

@@ -6,20 +6,16 @@
   "priority": 3,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T18:02:36Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:36Z",
   "updated_at": "2026-04-18T22:39:27Z",
   "closed_at": "2026-04-18T22:39:27Z",
-  "close_reason": "Added SP 800-56A Rev 3 §5.8 citation, explicit no-double-KDF warning in programmers_guide.md DO_AGREE section, expanded DESIGN.md rationale with why KDF is provider responsibility",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-7d6.1",
       "depends_on_id": "WOLFKM-7d6",
-      "type": "parent-child",
-      "created_at": "2026-04-17T11:02:36Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T11:02:36Z"
     }
   ]
 }

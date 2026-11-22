@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-tp5.44",
   "title": "ioctl_key_import: CRYPTO2DEV_KEY_SYMMETRIC not in valid key_type list",
-  "description": "ioctl_key_import() validates key_type with: 'if (op.key_type \\!= KEY_PRIVATE \u0026\u0026 op.key_type \\!= KEY_PUBLIC \u0026\u0026 op.key_type \\!= KEY_PAIR) return -EINVAL'. The UAPI header defines CRYPTO2DEV_KEY_PRIVATE=1, KEY_PUBLIC=2, KEY_PAIR=3. The DESIGN.md and UAPI docs state 'KEY fds are for asymmetric keys only. Symmetric keys (AES, HMAC, CMAC) are always supplied inline in INIT.' So there is no KEY_SYMMETRIC constant and symmetric key import via KEY fd is not supported — by design. The validation correctly rejects any key_type not in {1,2,3}. However: the internal state field is named 'key_type' and compared against the same constants in ioctl_do_sign (key_type == KEY_PUBLIC rejected) and ioctl_do_agree (same). These all work correctly. The UAPI comment for key_type in KEY_GET_INFO says 'CRYPTO2DEV_KEY_*' which is accurate. No bug — confirmed correct.",
+  "description": "ioctl_key_import() validates key_type with: 'if (op.key_type \\!= KEY_PRIVATE && op.key_type \\!= KEY_PUBLIC && op.key_type \\!= KEY_PAIR) return -EINVAL'. The UAPI header defines CRYPTO2DEV_KEY_PRIVATE=1, KEY_PUBLIC=2, KEY_PAIR=3. The DESIGN.md and UAPI docs state 'KEY fds are for asymmetric keys only. Symmetric keys (AES, HMAC, CMAC) are always supplied inline in INIT.' So there is no KEY_SYMMETRIC constant and symmetric key import via KEY fd is not supported \u2014 by design. The validation correctly rejects any key_type not in {1,2,3}. However: the internal state field is named 'key_type' and compared against the same constants in ioctl_do_sign (key_type == KEY_PUBLIC rejected) and ioctl_do_agree (same). These all work correctly. The UAPI comment for key_type in KEY_GET_INFO says 'CRYPTO2DEV_KEY_*' which is accurate. No bug \u2014 confirmed correct.",
   "status": "closed",
   "priority": 1,
   "issue_type": "bug",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:42:44Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:42:44Z",
   "updated_at": "2026-04-18T03:42:46Z",
   "closed_at": "2026-04-18T03:42:46Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.44",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:42:43Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:42:43Z"
     }
   ]
 }

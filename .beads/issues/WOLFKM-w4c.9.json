@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-w4c.9",
   "title": "DECISION: Write-before-ioctl for KEY_IMPORT avoids large stack frames",
-  "description": "KEY_IMPORT receives raw key bytes via write(2) (accumulated in inbuf), not embedded in the ioctl struct. The ioctl struct carries only metadata. Embedding key bytes would require an 8192-byte struct on the kernel stack for every call (worst case: ML-DSA-87 at 4896 bytes + headroom). The kernel has a ~1 KB stack frame guideline; a 8 KB ioctl struct violates it and causes stack overflow on PQ key imports. The write-before-ioctl pattern heap-allocates exactly what the key requires, then zeroizes and frees. If a future PQ key exceeds CRYPTO2DEV_KEY_IMPORT_MAXLEN, raise the constant — do not change the pattern.",
+  "description": "KEY_IMPORT receives raw key bytes via write(2) (accumulated in inbuf), not embedded in the ioctl struct. The ioctl struct carries only metadata. Embedding key bytes would require an 8192-byte struct on the kernel stack for every call (worst case: ML-DSA-87 at 4896 bytes + headroom). The kernel has a ~1 KB stack frame guideline; a 8 KB ioctl struct violates it and causes stack overflow on PQ key imports. The write-before-ioctl pattern heap-allocates exactly what the key requires, then zeroizes and frees. If a future PQ key exceeds CRYPTO2DEV_KEY_IMPORT_MAXLEN, raise the constant \u2014 do not change the pattern.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T15:01:12Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:01:12Z",
   "updated_at": "2026-04-20T15:24:27Z",
   "closed_at": "2026-04-20T15:24:27Z",
-  "close_reason": "Design decision recorded; no code change needed.",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-w4c.9",
       "depends_on_id": "WOLFKM-w4c",
-      "type": "parent-child",
-      "created_at": "2026-04-20T08:01:12Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-20T08:01:12Z"
     }
   ]
 }

@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-con.10",
   "title": "Observability: per-op fips_gate failure has no algo/operation context in log",
-  "description": "When wolfssl_fips_gate() fires during write(), read(), set_iv(), finalize(), reset(), get_tag(), set_tag(), or gen_iv(), it logs 'FIPS boundary not operational (wolfCrypt status %d)' but has no knowledge of the algorithm name, operation type, or provider. fd.c does not add any context log after the gate returns non-zero in these paths (unlike ioctl_init which does). A support engineer cannot determine from the gate message alone whether the FIPS failure was triggered by an AES-CBC encrypt write(), a GCM finalize(), or a hash update — all produce the same dmesg line with no distinguishing context.",
+  "description": "When wolfssl_fips_gate() fires during write(), read(), set_iv(), finalize(), reset(), get_tag(), set_tag(), or gen_iv(), it logs 'FIPS boundary not operational (wolfCrypt status %d)' but has no knowledge of the algorithm name, operation type, or provider. fd.c does not add any context log after the gate returns non-zero in these paths (unlike ioctl_init which does). A support engineer cannot determine from the gate message alone whether the FIPS failure was triggered by an AES-CBC encrypt write(), a GCM finalize(), or a hash update \u2014 all produce the same dmesg line with no distinguishing context.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:37:06Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:06Z",
   "updated_at": "2026-04-19T21:30:39Z",
   "closed_at": "2026-04-19T21:30:39Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.10",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:37:06Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:37:06Z"
     }
   ]
 }

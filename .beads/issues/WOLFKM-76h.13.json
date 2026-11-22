@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-76h.13",
   "title": "CORRECT: write-before-ioctl pattern for KEY_IMPORT; do not embed key bytes in ioctl struct",
-  "description": "KEY_IMPORT uses write(2) to deliver raw key bytes to the fd's inbuf, then the ioctl struct carries only metadata (algo, provider, keylen, exportable). Why it is right: embedding key bytes in the ioctl struct would require a struct large enough for the worst-case key (ML-DSA-87 at 4896 bytes, CRYPTO2DEV_KEY_IMPORT_MAXLEN=8192 with headroom). That allocation hits the kernel stack on every KEY_IMPORT call — including tiny EC key imports — and violates the ~1KB stack frame guideline. The write-before-ioctl pattern heap-allocates exactly what the key requires and zeroes on completion. What a reviewer might suggest: 'use a __user pointer in the ioctl struct to avoid the two-step.' That would require __user pointer handling, compat32 tracking, and a fixed-size maximum-case allocation. The current pattern is simpler and safer.",
+  "description": "KEY_IMPORT uses write(2) to deliver raw key bytes to the fd's inbuf, then the ioctl struct carries only metadata (algo, provider, keylen, exportable). Why it is right: embedding key bytes in the ioctl struct would require a struct large enough for the worst-case key (ML-DSA-87 at 4896 bytes, CRYPTO2DEV_KEY_IMPORT_MAXLEN=8192 with headroom). That allocation hits the kernel stack on every KEY_IMPORT call \u2014 including tiny EC key imports \u2014 and violates the ~1KB stack frame guideline. The write-before-ioctl pattern heap-allocates exactly what the key requires and zeroes on completion. What a reviewer might suggest: 'use a __user pointer in the ioctl struct to avoid the two-step.' That would require __user pointer handling, compat32 tracking, and a fixed-size maximum-case allocation. The current pattern is simpler and safer.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T02:06:37Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:06:37Z",
   "updated_at": "2026-04-20T03:14:45Z",
   "closed_at": "2026-04-20T03:14:45Z",
-  "close_reason": "Audit finding: correct behavior, no action needed",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-76h.13",
       "depends_on_id": "WOLFKM-76h",
-      "type": "parent-child",
-      "created_at": "2026-04-19T19:06:37Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T19:06:37Z"
     }
   ]
 }

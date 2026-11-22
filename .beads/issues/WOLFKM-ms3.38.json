@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-ms3.38",
   "title": "try_module_get/module_put prevents provider use-after-unload",
-  "description": "crypto2dev_lookup_algo calls try_module_get(p-\u003eowner) under read_lock before returning the ops pointer. If try_module_get fails (module is going away), the loop continues rather than returning the stale ops. The returned owner is stored in state-\u003eowner_module (OPERATION fd) or state-\u003ekey_owner_module (KEY fd) and released via module_put in crypto2dev_fd_release on close. This prevents rmmod of a provider module while any fd is open and dispatching into it. A reviewer might suggest removing try_module_get as 'unnecessary overhead' — do not do this. Without it, a provider can be unloaded while a write() is in progress inside its ops-\u003eupdate(), causing a kernel crash. The refcount is mandatory.",
+  "description": "crypto2dev_lookup_algo calls try_module_get(p->owner) under read_lock before returning the ops pointer. If try_module_get fails (module is going away), the loop continues rather than returning the stale ops. The returned owner is stored in state->owner_module (OPERATION fd) or state->key_owner_module (KEY fd) and released via module_put in crypto2dev_fd_release on close. This prevents rmmod of a provider module while any fd is open and dispatching into it. A reviewer might suggest removing try_module_get as 'unnecessary overhead' \u2014 do not do this. Without it, a provider can be unloaded while a write() is in progress inside its ops->update(), causing a kernel crash. The refcount is mandatory.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:04:55Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:04:55Z",
   "updated_at": "2026-04-18T03:27:08Z",
   "closed_at": "2026-04-18T03:27:08Z",
-  "close_reason": "Acknowledged: already implemented correctly, no code change required",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-ms3.38",
       "depends_on_id": "WOLFKM-ms3",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:04:54Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:04:54Z"
     }
   ]
 }

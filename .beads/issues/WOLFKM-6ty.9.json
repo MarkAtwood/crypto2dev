@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-6ty.9",
-  "title": "rsa_key_import shared across rsa-2048 and rsa-4096 — no size enforcement",
-  "description": "wolfssl_rsa_2048_ops and wolfssl_rsa_4096_ops both use wolfssl_rsa_key_import. That function sets ctx-\u003ekey_size_bytes from the actual decoded key (wc_RsaEncryptSize). So importing a 2048-bit key via the rsa-4096 handle succeeds: the handle is named rsa-4096 but produces 256-byte signatures, not 512-byte. FIPS 140-3 requires the algorithm boundary to be enforced. Fix: add a check in key_import that key_size_bytes equals the expected size for the algorithm. The expected size must be passed as a parameter (similar to how EC uses scalar_len/pubkey_len).",
+  "title": "rsa_key_import shared across rsa-2048 and rsa-4096 \u2014 no size enforcement",
+  "description": "wolfssl_rsa_2048_ops and wolfssl_rsa_4096_ops both use wolfssl_rsa_key_import. That function sets ctx->key_size_bytes from the actual decoded key (wc_RsaEncryptSize). So importing a 2048-bit key via the rsa-4096 handle succeeds: the handle is named rsa-4096 but produces 256-byte signatures, not 512-byte. FIPS 140-3 requires the algorithm boundary to be enforced. Fix: add a check in key_import that key_size_bytes equals the expected size for the algorithm. The expected size must be passed as a parameter (similar to how EC uses scalar_len/pubkey_len).",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T22:09:40Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:09:40Z",
   "updated_at": "2026-04-18T22:20:11Z",
   "closed_at": "2026-04-18T22:20:11Z",
-  "close_reason": "Added wolfssl_rsa_key_import_size with expected_key_bytes param; per-algo wrappers wolfssl_rsa_2048_key_import and wolfssl_rsa_4096_key_import enforce exact size match.",
-  "labels": [
-    "maintainer-burden",
-    "my-oss",
-    "review",
-    "risk"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-6ty.9",
       "depends_on_id": "WOLFKM-6ty",
-      "type": "parent-child",
-      "created_at": "2026-04-18T15:09:40Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T15:09:40Z"
     }
   ]
 }

@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-533.7",
   "title": "Observability: wolfCrypt error codes not logged before errno translation",
-  "description": "key_import (line 1797), key_generate (line 2190), do_kdf (line 2051), finalize (line 1522), write/update (line 443), sign (line 1233), verify (line 1325), agree (line 1428), and set_iv (line 890) log the raw wolfCrypt return code via %d in the pr_err call. However, these handlers do NOT translate the wolfCrypt code to a kernel errno before logging — they return the wolfCrypt integer directly to userspace, or they translate to -EINVAL/-EIO with no mapping comment. A support engineer cannot distinguish BAD_FUNC_ARG (-173), MEMORY_E (-125), LENGTH_E (-161), or FIPS_DEGRADED_E (-173 region) from the ring buffer alone. Specifically: finalize, write, and set_iv return the wolfCrypt error code directly as the ioctl return value rather than a mapped kernel errno. Returning a wolfCrypt negative number as a kernel errno is incorrect and makes dmesg useless for distinguishing failure classes.",
+  "description": "key_import (line 1797), key_generate (line 2190), do_kdf (line 2051), finalize (line 1522), write/update (line 443), sign (line 1233), verify (line 1325), agree (line 1428), and set_iv (line 890) log the raw wolfCrypt return code via %d in the pr_err call. However, these handlers do NOT translate the wolfCrypt code to a kernel errno before logging \u2014 they return the wolfCrypt integer directly to userspace, or they translate to -EINVAL/-EIO with no mapping comment. A support engineer cannot distinguish BAD_FUNC_ARG (-173), MEMORY_E (-125), LENGTH_E (-161), or FIPS_DEGRADED_E (-173 region) from the ring buffer alone. Specifically: finalize, write, and set_iv return the wolfCrypt error code directly as the ioctl return value rather than a mapped kernel errno. Returning a wolfCrypt negative number as a kernel errno is incorrect and makes dmesg useless for distinguishing failure classes.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T05:28:43Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:28:43Z",
   "updated_at": "2026-04-20T05:48:52Z",
   "closed_at": "2026-04-20T05:48:52Z",
-  "close_reason": "False positive: all providers translate wolfCrypt error codes to kernel errno before returning (wolfssl via xlat_err(), kcapi via direct kernel errno). The %d logged in fd.c is already a kernel errno, not a raw wolfCrypt code.",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-533.7",
       "depends_on_id": "WOLFKM-533",
-      "type": "parent-child",
-      "created_at": "2026-04-19T22:28:43Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T22:28:43Z"
     }
   ]
 }

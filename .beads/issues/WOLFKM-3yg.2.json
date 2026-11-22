@@ -5,20 +5,16 @@
   "status": "closed",
   "priority": 4,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T00:45:37Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:45:37Z",
   "updated_at": "2026-04-20T00:48:38Z",
   "closed_at": "2026-04-20T00:48:38Z",
-  "close_reason": "Closed",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-3yg.2",
       "depends_on_id": "WOLFKM-3yg",
-      "type": "parent-child",
-      "created_at": "2026-04-19T17:45:37Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T17:45:37Z"
     }
   ]
 }

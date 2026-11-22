@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-dfn.3",
-  "title": "NULL ops-\u003efinalize dereference on read",
-  "description": "Provider registers with NULL finalize callback. User calls INIT, then read(). Line src/cdev/crypto2dev_fd.c:505 calls ops-\u003efinalize() with no NULL check. Outcome: NULL function pointer dereference, kernel panic.",
+  "title": "NULL ops->finalize dereference on read",
+  "description": "Provider registers with NULL finalize callback. User calls INIT, then read(). Line src/cdev/crypto2dev_fd.c:505 calls ops->finalize() with no NULL check. Outcome: NULL function pointer dereference, kernel panic.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T00:03:04Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:03:04Z",
   "updated_at": "2026-04-18T00:53:11Z",
   "closed_at": "2026-04-18T00:53:11Z",
-  "close_reason": "Added NULL guards for ops-\u003esess_init, ops-\u003eupdate, ops-\u003efinalize in crypto2dev_fd.c; returns -EOPNOTSUPP on NULL callback",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-dfn.3",
       "depends_on_id": "WOLFKM-dfn",
-      "type": "parent-child",
-      "created_at": "2026-04-17T17:03:04Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T17:03:04Z"
     }
   ]
 }

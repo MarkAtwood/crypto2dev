@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-qnv.8",
   "title": "ioctl_key_export_private: outbuf not freed on copy_to_user failure",
-  "description": "When copy_to_user fails after installing the private key in outbuf: outbuf is zeroed (correct), outbuf_len/drained are reset to 0 (correct), but state-\u003eoutbuf remains non-NULL. The allocation persists until the next export attempt or fd close. The next export attempt will correctly free it via the stale-outbuf replacement path. But there is now a zeroed-but-not-freed allocation sitting in kernel memory until then. Suggested rewrite: after memzero_explicit, also kfree(state-\u003eoutbuf); state-\u003eoutbuf = NULL; state-\u003eoutbuf_cap = 0; — match the complete cleanup pattern used in the stale-outbuf replacement code above.",
+  "description": "When copy_to_user fails after installing the private key in outbuf: outbuf is zeroed (correct), outbuf_len/drained are reset to 0 (correct), but state->outbuf remains non-NULL. The allocation persists until the next export attempt or fd close. The next export attempt will correctly free it via the stale-outbuf replacement path. But there is now a zeroed-but-not-freed allocation sitting in kernel memory until then. Suggested rewrite: after memzero_explicit, also kfree(state->outbuf); state->outbuf = NULL; state->outbuf_cap = 0; \u2014 match the complete cleanup pattern used in the stale-outbuf replacement code above.",
   "status": "closed",
   "priority": 3,
   "issue_type": "chore",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T06:14:54Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T06:14:54Z",
   "updated_at": "2026-04-18T06:19:45Z",
   "closed_at": "2026-04-18T06:19:45Z",
-  "close_reason": "Closed",
-  "labels": [
-    "elegance",
-    "my-oss",
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-qnv.8",
       "depends_on_id": "WOLFKM-qnv",
-      "type": "parent-child",
-      "created_at": "2026-04-17T23:14:54Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T23:14:54Z"
     }
   ]
 }

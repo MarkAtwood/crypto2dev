@@ -1,26 +1,21 @@
 {
   "id": "WOLFKM-5ne",
   "title": "include/uapi/crypto2dev.h: userspace-visible ioctl API",
-  "description": "Define the public UAPI header for /dev/wolfcrypt. Write include/uapi/wolfkm_ioctl.h.\n\nEach fd is one session. ioctls configure the session; write()/read() stream data.\n\nStructs to define:\n- wolfkm_init_op: algo[64], op (ENCRYPT=1/DECRYPT=2/HASH=3), keylen, key[128]\n- wolfkm_iv_op: iv[32], ivlen\n- wolfkm_aad_op: aad __user *, aadlen (AEAD only)\n- wolfkm_tag_op: tag[16], taglen (AEAD auth tag)\n- wolfkm_fd_state_info: algo[64], op, initialized, bytes_written, bytes_read\n- wolfkm_status: fips_state, num_algorithms, version[32]\n\nIoctls:\n- WOLFKM_IOC_INIT      _IOW('W', 1, struct wolfkm_init_op)\n- WOLFKM_IOC_SET_IV    _IOW('W', 2, struct wolfkm_iv_op)\n- WOLFKM_IOC_SET_AAD   _IOW('W', 3, struct wolfkm_aad_op)\n- WOLFKM_IOC_GET_TAG   _IOR('W', 4, struct wolfkm_tag_op)\n- WOLFKM_IOC_SET_TAG   _IOW('W', 5, struct wolfkm_tag_op)\n- WOLFKM_IOC_STATUS    _IOR('W', 6, struct wolfkm_status)\n- WOLFKM_IOC_GET_STATE _IOR('W', 7, struct wolfkm_fd_state_info)\n\nGuard with #ifndef _UAPI_WOLFKM_IOCTL_H / #define / #endif.\nInclude \u003clinux/ioctl.h\u003e and \u003clinux/types.h\u003e.",
-  "design": "Use __u32/__u8 types (not u32/u8) since this header is shared with userspace. __user pointer annotation on all userspace pointer fields in wolfkm_crypt_op. WOLFKM_IOC_MAGIC='W'. Modeled on FreeBSD /dev/crypto OCF interface for portability. See DESIGN.md §UAPI.",
-  "acceptance_criteria": "Header compiles cleanly with both gcc (userspace) and the kernel build system. All four ioctl macros evaluate to distinct non-overlapping numbers. wolfkm_status.c tool (tools/) includes this header successfully.",
+  "description": "Define the public UAPI header for /dev/wolfcrypt. Write include/uapi/wolfkm_ioctl.h.\n\nEach fd is one session. ioctls configure the session; write()/read() stream data.\n\nStructs to define:\n- wolfkm_init_op: algo[64], op (ENCRYPT=1/DECRYPT=2/HASH=3), keylen, key[128]\n- wolfkm_iv_op: iv[32], ivlen\n- wolfkm_aad_op: aad __user *, aadlen (AEAD only)\n- wolfkm_tag_op: tag[16], taglen (AEAD auth tag)\n- wolfkm_fd_state_info: algo[64], op, initialized, bytes_written, bytes_read\n- wolfkm_status: fips_state, num_algorithms, version[32]\n\nIoctls:\n- WOLFKM_IOC_INIT      _IOW('W', 1, struct wolfkm_init_op)\n- WOLFKM_IOC_SET_IV    _IOW('W', 2, struct wolfkm_iv_op)\n- WOLFKM_IOC_SET_AAD   _IOW('W', 3, struct wolfkm_aad_op)\n- WOLFKM_IOC_GET_TAG   _IOR('W', 4, struct wolfkm_tag_op)\n- WOLFKM_IOC_SET_TAG   _IOW('W', 5, struct wolfkm_tag_op)\n- WOLFKM_IOC_STATUS    _IOR('W', 6, struct wolfkm_status)\n- WOLFKM_IOC_GET_STATE _IOR('W', 7, struct wolfkm_fd_state_info)\n\nGuard with #ifndef _UAPI_WOLFKM_IOCTL_H / #define / #endif.\nInclude <linux/ioctl.h> and <linux/types.h>.",
   "status": "closed",
   "priority": 1,
   "issue_type": "feature",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T06:54:28Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-16T06:54:28Z",
+  "updated_at": "2026-04-18T01:08:39Z",
   "closed_at": "2026-04-18T01:08:39Z",
-  "close_reason": "Superseded: include/uapi/crypto2dev_ioctl.h exists with full 20-slot ioctl API, current struct names, and write-before-ioctl key pattern. Old issue described wolfkm_ioctl.h with different struct names and key-in-ioctl design.",
+  "design": "Use __u32/__u8 types (not u32/u8) since this header is shared with userspace. __user pointer annotation on all userspace pointer fields in wolfkm_crypt_op. WOLFKM_IOC_MAGIC='W'. Modeled on FreeBSD /dev/crypto OCF interface for portability. See DESIGN.md \u00a7UAPI.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-5ne",
       "depends_on_id": "WOLFKM-bl1",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:07Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:07Z"
     }
   ]
 }

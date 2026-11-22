@@ -6,26 +6,16 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T00:04:15Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:04:15Z",
   "updated_at": "2026-04-18T01:02:32Z",
   "closed_at": "2026-04-18T01:02:32Z",
-  "close_reason": "Added pr_debug for no-provider case, pr_info_ratelimited for REQUIRE_FIPS rejection; fips_gate failure already logged by wolfssl_fips_gate",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-dfn.16",
       "depends_on_id": "WOLFKM-dfn",
-      "type": "parent-child",
-      "created_at": "2026-04-17T17:04:14Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T17:04:14Z"
     }
   ]
 }

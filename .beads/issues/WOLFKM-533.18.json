@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-533.18",
   "title": "FIPS gate: wolfssl_fips_gate compares \\!= FIPS_OPERATIONAL not \\!= 0; correctness unverifiable in stub build",
-  "description": "wolfssl_fips_gate() checks 'if (status \\!= FIPS_OPERATIONAL)' where FIPS_OPERATIONAL is the wolfCrypt FIPS enum value from \u003cwolfssl/wolfcrypt/fips.h\u003e. wolfCrypt's own linuxkm/module_hooks.c checks 'if (ret \\!= 0)' for the same wolfCrypt_GetStatus_fips() return value everywhere. The two idioms are only equivalent if wolfCrypt defines FIPS_OPERATIONAL == 0. In the current repo, wolfssl/wolfcrypt/fips.h is an empty stub (0 bytes), so FIPS_OPERATIONAL is undefined in non-FIPS builds; the gate is guarded by #if defined(HAVE_FIPS) so it compiles, but the assumption that FIPS_OPERATIONAL == 0 cannot be verified from the codebase. If a future wolfCrypt FIPS header defines FIPS_OPERATIONAL as a non-zero sentinel (e.g., an enum value), the gate would treat wolfCrypt's 0-return as non-operational and block all crypto. Consequence at audit or deployment: gate silently rejects all operations in a correctly-operational FIPS module. Fix: use 'if (status \\!= 0)' to match wolfCrypt's own convention, and add a BUILD_BUG_ON or static_assert verifying FIPS_OPERATIONAL == 0 if the constant must be referenced.",
+  "description": "wolfssl_fips_gate() checks 'if (status \\!= FIPS_OPERATIONAL)' where FIPS_OPERATIONAL is the wolfCrypt FIPS enum value from <wolfssl/wolfcrypt/fips.h>. wolfCrypt's own linuxkm/module_hooks.c checks 'if (ret \\!= 0)' for the same wolfCrypt_GetStatus_fips() return value everywhere. The two idioms are only equivalent if wolfCrypt defines FIPS_OPERATIONAL == 0. In the current repo, wolfssl/wolfcrypt/fips.h is an empty stub (0 bytes), so FIPS_OPERATIONAL is undefined in non-FIPS builds; the gate is guarded by #if defined(HAVE_FIPS) so it compiles, but the assumption that FIPS_OPERATIONAL == 0 cannot be verified from the codebase. If a future wolfCrypt FIPS header defines FIPS_OPERATIONAL as a non-zero sentinel (e.g., an enum value), the gate would treat wolfCrypt's 0-return as non-operational and block all crypto. Consequence at audit or deployment: gate silently rejects all operations in a correctly-operational FIPS module. Fix: use 'if (status \\!= 0)' to match wolfCrypt's own convention, and add a BUILD_BUG_ON or static_assert verifying FIPS_OPERATIONAL == 0 if the constant must be referenced.",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T05:34:22Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:34:22Z",
   "updated_at": "2026-04-20T05:43:14Z",
   "closed_at": "2026-04-20T05:43:14Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "fips",
-    "operational",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-533.18",
       "depends_on_id": "WOLFKM-533",
-      "type": "parent-child",
-      "created_at": "2026-04-19T22:34:22Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T22:34:22Z"
     }
   ]
 }

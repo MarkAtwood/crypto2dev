@@ -6,26 +6,16 @@
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:44:30Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:44:30Z",
   "updated_at": "2026-04-19T00:01:07Z",
   "closed_at": "2026-04-19T00:01:07Z",
-  "close_reason": "Added KASAN_BUILD=1 support to test-on-aws.sh: Phase 1.5 builds custom kernel with CONFIG_KASAN=y+CONFIG_PROVE_LOCKING=y+CONFIG_DEBUG_ATOMIC_SLEEP=y from Ubuntu source, reboots, updates KVER/KGCC, continues testing under KASAN kernel. Phase 10 adds KASAN/lockdep splat check. Bash syntax verified.",
-  "labels": [
-    "audit",
-    "derisk",
-    "testing",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.29",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:44:30Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:44:30Z"
     }
   ]
 }

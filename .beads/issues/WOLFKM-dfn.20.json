@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-dfn.20",
   "title": "FIPS operational: FIPS mode irreversibility not documented",
-  "description": "Once any provider with is_fips=1 registers, fips_provider_count \u003e 0, and all non-FIPS providers become invisible. The only way to restore non-FIPS algorithm availability is rmmod of the FIPS provider. If active sessions hold module references, rmmod fails. This is correct FIPS behavior, but it is not documented in DESIGN.md or in any code comment. A support engineer will search for a flag or ioctl to disable FIPS mode. Add a comment in registry.c and a note in DESIGN.md explaining that FIPS enforcement is one-way without provider unload.",
+  "description": "Once any provider with is_fips=1 registers, fips_provider_count > 0, and all non-FIPS providers become invisible. The only way to restore non-FIPS algorithm availability is rmmod of the FIPS provider. If active sessions hold module references, rmmod fails. This is correct FIPS behavior, but it is not documented in DESIGN.md or in any code comment. A support engineer will search for a flag or ioctl to disable FIPS mode. Add a comment in registry.c and a note in DESIGN.md explaining that FIPS enforcement is one-way without provider unload.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T00:04:35Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:04:35Z",
   "updated_at": "2026-04-18T01:00:11Z",
   "closed_at": "2026-04-18T01:00:11Z",
-  "close_reason": "Added FIPS one-way activation note to DESIGN.md Layer 1 section",
-  "labels": [
-    "audit",
-    "fips",
-    "operational",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-dfn.20",
       "depends_on_id": "WOLFKM-dfn",
-      "type": "parent-child",
-      "created_at": "2026-04-17T17:04:35Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T17:04:35Z"
     }
   ]
 }

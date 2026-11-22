@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-con.20",
   "title": "do_kdf pre-lock validation exits skip inbuf_clear",
-  "description": "Trigger: user writes IKM bytes to an UNSET fd, then calls DO_KDF with invalid parameters that trigger the pre-lock validation exit (out_zero). Failing cases: ikm_fd != -1 (line 1728-1731), nonzero _pad (line 1733-1737), algo/out_algo empty (line 1695-1698), okm_len invalid (1700-1707), salt_len/info_len out of range, hkdf iterations != 0. Bad outcome: ioctl returns -EINVAL via out_zero without ever acquiring state-\u003elock, so inbuf_clear() is never called. Sensitive IKM bytes written by the user remain in state-\u003einbuf. The FIPS 140-3 zeroization requirement applies as soon as IKM enters the kernel; it must be destroyed on every failure path, not just the in-lock paths.",
+  "description": "Trigger: user writes IKM bytes to an UNSET fd, then calls DO_KDF with invalid parameters that trigger the pre-lock validation exit (out_zero). Failing cases: ikm_fd != -1 (line 1728-1731), nonzero _pad (line 1733-1737), algo/out_algo empty (line 1695-1698), okm_len invalid (1700-1707), salt_len/info_len out of range, hkdf iterations != 0. Bad outcome: ioctl returns -EINVAL via out_zero without ever acquiring state->lock, so inbuf_clear() is never called. Sensitive IKM bytes written by the user remain in state->inbuf. The FIPS 140-3 zeroization requirement applies as soon as IKM enters the kernel; it must be destroyed on every failure path, not just the in-lock paths.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:37:41Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:41Z",
   "updated_at": "2026-04-19T21:23:54Z",
   "closed_at": "2026-04-19T21:23:54Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.20",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:37:41Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:37:41Z"
     }
   ]
 }

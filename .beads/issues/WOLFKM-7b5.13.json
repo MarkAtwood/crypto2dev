@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-7b5.13",
   "title": "Efficiency: per-write kmalloc for copy_from_user bounce buffer",
-  "description": "crypto2dev_fd.c:crypto2dev_fd_write — every write() allocates a fresh kernel buffer (kmalloc(count)), copies user data into it, then releases it after update() returns. For a workload that calls write() in 4KB chunks over a 1MB payload, this is 256 kmalloc/kfree pairs per operation. This is correct (copy_from_user cannot be done under a mutex; pre-copying is required), but the allocation could be replaced by reusing the inbuf or a per-session bounce buffer sized to the session's typical chunk. This is a micro-optimization and only matters at very high throughput (\u003e10K writes/sec). Not worth changing now; document for future profiling.",
+  "description": "crypto2dev_fd.c:crypto2dev_fd_write \u2014 every write() allocates a fresh kernel buffer (kmalloc(count)), copies user data into it, then releases it after update() returns. For a workload that calls write() in 4KB chunks over a 1MB payload, this is 256 kmalloc/kfree pairs per operation. This is correct (copy_from_user cannot be done under a mutex; pre-copying is required), but the allocation could be replaced by reusing the inbuf or a per-session bounce buffer sized to the session's typical chunk. This is a micro-optimization and only matters at very high throughput (>10K writes/sec). Not worth changing now; document for future profiling.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T05:19:50Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:19:50Z",
   "updated_at": "2026-04-18T05:39:51Z",
   "closed_at": "2026-04-18T05:39:51Z",
-  "close_reason": "Confirmed not worth changing per description: micro-optimization only matters at \u003e10K writes/sec which is not a current concern",
-  "labels": [
-    "audit",
-    "efficiency",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-7b5.13",
       "depends_on_id": "WOLFKM-7b5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T22:19:49Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T22:19:49Z"
     }
   ]
 }

@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-6ty.8",
-  "title": "ECDH P-384: SHA-256 for HKDF is Phase 1 placeholder — needs tracking",
-  "description": "wolfssl_ecdh_agree uses WC_SHA256 for HKDF regardless of curve. Comment says 'Phase 1: curve-agnostic'. SP 800-56C Rev 2 Table 2 recommends hash strength \u003e= curve security level: P-384 (192-bit security) should use SHA-384 or SHA-512, not SHA-256 (128-bit security). When ECDH-P384 is used for anything approaching its design security level, this design gap matters. The 'Phase 1' label indicates this is known but deferred — it needs a beads issue and human_task so it doesn't get forgotten.",
+  "title": "ECDH P-384: SHA-256 for HKDF is Phase 1 placeholder \u2014 needs tracking",
+  "description": "wolfssl_ecdh_agree uses WC_SHA256 for HKDF regardless of curve. Comment says 'Phase 1: curve-agnostic'. SP 800-56C Rev 2 Table 2 recommends hash strength >= curve security level: P-384 (192-bit security) should use SHA-384 or SHA-512, not SHA-256 (128-bit security). When ECDH-P384 is used for anything approaching its design security level, this design gap matters. The 'Phase 1' label indicates this is known but deferred \u2014 it needs a beads issue and human_task so it doesn't get forgotten.",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T22:09:35Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:09:35Z",
   "updated_at": "2026-04-18T22:19:20Z",
   "closed_at": "2026-04-18T22:19:20Z",
-  "close_reason": "Created human_tasks/HUMAN_TASK_011_ecdh_p384_hkdf_sha384.md with implementation sketch and acceptance criteria.",
-  "labels": [
-    "maintainer-burden",
-    "my-oss",
-    "review",
-    "risk"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-6ty.8",
       "depends_on_id": "WOLFKM-6ty",
-      "type": "parent-child",
-      "created_at": "2026-04-18T15:09:34Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T15:09:34Z"
     }
   ]
 }

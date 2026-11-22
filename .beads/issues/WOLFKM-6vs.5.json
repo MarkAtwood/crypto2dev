@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-6vs.5",
   "title": "Log: include skipped non-FIPS provider name in FIPS mode lookup rejection",
-  "description": "fd.c:737-740 (and matching sites in ioctl_key_import:1651, ioctl_do_kdf:1858, ioctl_key_generate:2024): when FIPS mode is active and a lookup returns NULL because the only matching provider is non-FIPS, the log says 'not found — FIPS mode active' but does not name which non-FIPS provider was skipped. Support engineers must manually cross-reference sysfs algorithms to diagnose.\n\nFix option A (simpler): add a second pass in crypto2dev_lookup_algo that runs after the FIPS-filtered pass, walks the same list with FIPS filtering disabled, and returns the first-matched provider name separately (out param). If the second pass finds something, include it in the rejection log: 'not found in FIPS mode (kcapi has this algo but is non-FIPS)'.\n\nFix option B (cheaper): add a pr_debug inside the FIPS-skip branch of crypto2dev_lookup_algo (registry.c) that names the provider being skipped. Visible only with dynamic debug but no API change needed.\n\nPrefer option A for production observability.",
+  "description": "fd.c:737-740 (and matching sites in ioctl_key_import:1651, ioctl_do_kdf:1858, ioctl_key_generate:2024): when FIPS mode is active and a lookup returns NULL because the only matching provider is non-FIPS, the log says 'not found \u2014 FIPS mode active' but does not name which non-FIPS provider was skipped. Support engineers must manually cross-reference sysfs algorithms to diagnose.\n\nFix option A (simpler): add a second pass in crypto2dev_lookup_algo that runs after the FIPS-filtered pass, walks the same list with FIPS filtering disabled, and returns the first-matched provider name separately (out param). If the second pass finds something, include it in the rejection log: 'not found in FIPS mode (kcapi has this algo but is non-FIPS)'.\n\nFix option B (cheaper): add a pr_debug inside the FIPS-skip branch of crypto2dev_lookup_algo (registry.c) that names the provider being skipped. Visible only with dynamic debug but no API change needed.\n\nPrefer option A for production observability.",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T02:11:49Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:11:49Z",
   "updated_at": "2026-04-20T03:12:58Z",
   "closed_at": "2026-04-20T03:12:58Z",
-  "close_reason": "Closed",
-  "labels": [
-    "fips",
-    "observability",
-    "support"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-6vs.5",
       "depends_on_id": "WOLFKM-6vs",
-      "type": "parent-child",
-      "created_at": "2026-04-19T19:11:49Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T19:11:49Z"
     }
   ]
 }

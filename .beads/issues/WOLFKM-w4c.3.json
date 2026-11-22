@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-w4c.3",
   "title": "UAPI: crypto2dev_status._reserved not validated on input",
-  "description": "ioctl_status (crypto2dev_fd.c) does not check that crypto2dev_status._reserved[24] is all-zero before processing. Any nonzero value should return -EINVAL. Without this check, future semantics cannot be assigned to these bytes — any caller that sets them will be silently accepted today and may produce unexpected behavior when the field is given meaning in a future version.",
+  "description": "ioctl_status (crypto2dev_fd.c) does not check that crypto2dev_status._reserved[24] is all-zero before processing. Any nonzero value should return -EINVAL. Without this check, future semantics cannot be assigned to these bytes \u2014 any caller that sets them will be silently accepted today and may produce unexpected behavior when the field is given meaning in a future version.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T15:00:33Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:00:33Z",
   "updated_at": "2026-04-20T15:21:40Z",
   "closed_at": "2026-04-20T15:21:40Z",
-  "close_reason": "False positive. CRYPTO2DEV_IOC_STATUS is _IOR (kernel writes to userspace, not the reverse). ioctl_status() contains only copy_to_user — there is no copy_from_user and therefore no user-supplied reserved field to validate. The _reserved bytes in crypto2dev_status are written as zero by the zero-initialized local struct.",
-  "labels": [
-    "abi",
-    "audit",
-    "uapi",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-w4c.3",
       "depends_on_id": "WOLFKM-w4c",
-      "type": "parent-child",
-      "created_at": "2026-04-20T08:00:32Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-20T08:00:32Z"
     }
   ]
 }

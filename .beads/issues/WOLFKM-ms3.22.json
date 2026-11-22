@@ -6,26 +6,16 @@
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:04:18Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:04:18Z",
   "updated_at": "2026-04-18T03:22:08Z",
   "closed_at": "2026-04-18T03:22:08Z",
-  "close_reason": "Fixed in this session",
-  "labels": [
-    "abi",
-    "audit",
-    "uapi",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-ms3.22",
       "depends_on_id": "WOLFKM-ms3",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:04:17Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:04:17Z"
     }
   ]
 }

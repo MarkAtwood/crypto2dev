@@ -1,50 +1,39 @@
 {
   "id": "WOLFKM-fzw.4",
   "title": "tests + docs: sha3-384 and sha3-512 test cases and DESIGN.md update",
-  "description": "Add sha3-384 and sha3-512 test cases to test_chardev.c and update DESIGN.md algorithm coverage.\n\n**What:** Wire known-answer test cases for sha3-384 and sha3-512 into the userspace test suite, and update the DESIGN.md algorithm coverage table.\n\n**Algorithm (test_chardev.c):**\n1. Add #include \"../vectors/sha3.h\" (already included for sha3-256 vectors — verify before adding)\n2. Add test_sha3_384_vectors() function: same structure as test_sha256_vectors(), using SHA3_384_VECTOR_COUNT, sha3_384_vectors[i].input/input_len/digest, read size = 48 bytes, algo = \"sha3-384\"\n3. Add test_sha3_512_vectors() function: same pattern, SHA3_512_VECTOR_COUNT, 64 bytes\n4. Add both functions to the test table: { \"SHA3-384 known-answer vectors\", test_sha3_384_vectors }, { \"SHA3-512 known-answer vectors\", test_sha3_512_vectors }\n5. Position both entries near the existing sha256 vector test entries\n\n**Algorithm (DESIGN.md):**\n1. In the Algorithm Coverage table (after sha3-256 row), add:\n   | `sha3-384` | FIPS | yes | wolfssl wins when loaded |\n   | `sha3-512` | FIPS | yes | wolfssl wins when loaded |\n\n**Defensive programming rules:**\n- Test function must check return of ioctl and read separately, reporting which step failed\n- Digest comparison must use memcmp, not strcmp\n- Each test case must print the test vector source on failure (sha3_384_vectors[i].source)\n- No modification to existing tests; new functions only",
-  "acceptance_criteria": "test_chardev.c compiles without warnings. sha3-384 and sha3-512 entries appear in DESIGN.md coverage table. Test functions exist and follow the established pattern.",
+  "description": "Add sha3-384 and sha3-512 test cases to test_chardev.c and update DESIGN.md algorithm coverage.\n\n**What:** Wire known-answer test cases for sha3-384 and sha3-512 into the userspace test suite, and update the DESIGN.md algorithm coverage table.\n\n**Algorithm (test_chardev.c):**\n1. Add #include \"../vectors/sha3.h\" (already included for sha3-256 vectors \u2014 verify before adding)\n2. Add test_sha3_384_vectors() function: same structure as test_sha256_vectors(), using SHA3_384_VECTOR_COUNT, sha3_384_vectors[i].input/input_len/digest, read size = 48 bytes, algo = \"sha3-384\"\n3. Add test_sha3_512_vectors() function: same pattern, SHA3_512_VECTOR_COUNT, 64 bytes\n4. Add both functions to the test table: { \"SHA3-384 known-answer vectors\", test_sha3_384_vectors }, { \"SHA3-512 known-answer vectors\", test_sha3_512_vectors }\n5. Position both entries near the existing sha256 vector test entries\n\n**Algorithm (DESIGN.md):**\n1. In the Algorithm Coverage table (after sha3-256 row), add:\n   | `sha3-384` | FIPS | yes | wolfssl wins when loaded |\n   | `sha3-512` | FIPS | yes | wolfssl wins when loaded |\n\n**Defensive programming rules:**\n- Test function must check return of ioctl and read separately, reporting which step failed\n- Digest comparison must use memcmp, not strcmp\n- Each test case must print the test vector source on failure (sha3_384_vectors[i].source)\n- No modification to existing tests; new functions only",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T00:36:11Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:36:11Z",
   "updated_at": "2026-04-20T00:44:14Z",
   "closed_at": "2026-04-20T00:44:14Z",
-  "close_reason": "Closed",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-fzw.4",
-      "depends_on_id": "WOLFKM-fzw.2",
-      "type": "blocks",
-      "created_at": "2026-04-19T17:36:13Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-fzw.4",
-      "depends_on_id": "WOLFKM-fzw.3",
-      "type": "blocks",
-      "created_at": "2026-04-19T17:36:14Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-fzw.4",
       "depends_on_id": "WOLFKM-fzw",
-      "type": "parent-child",
-      "created_at": "2026-04-19T17:36:11Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T17:36:11Z"
     },
     {
-      "issue_id": "WOLFKM-fzw.4",
       "depends_on_id": "WOLFKM-fzw.1",
-      "type": "blocks",
-      "created_at": "2026-04-19T17:36:12Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T17:36:12Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-fzw.2",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:36:13Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-fzw.3",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-19T17:36:14Z"
     }
   ]
 }

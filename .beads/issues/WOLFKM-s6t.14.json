@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-s6t.14",
   "title": "Correctness: DO_KDF ikm_fd fget-fail leaves inbuf uncleared",
-  "description": "Trigger: (1) open fd, (2) write(fd, bytes, N) accumulates N bytes in state-\u003einbuf, (3) ioctl(fd, DO_KDF, op) where op.ikm_fd points to a non-crypto2dev fd or a closed fd. Path: ikm_fd != -1 branch allocates ikm_buf, then fget() returns NULL or f_op mismatch fires (lines 1819-1827), code does goto out_zero. out_zero frees ikm_buf but does NOT acquire state-\u003elock and does NOT call inbuf_clear(). Result: state-\u003einbuf retains the previously-written bytes. (4) User calls write(fd, more_bytes, M) — inbuf now holds N+M bytes. (5) User calls KEY_IMPORT with keylen == N+M — import proceeds with corrupted key material (old write data prepended). Same FIPS 140-3 zeroization violation as WOLFKM-s6t.11. Fix: add inbuf_clear() at out_zero (under state-\u003elock), or restructure so out_zero always clears inbuf regardless of lock state.",
+  "description": "Trigger: (1) open fd, (2) write(fd, bytes, N) accumulates N bytes in state->inbuf, (3) ioctl(fd, DO_KDF, op) where op.ikm_fd points to a non-crypto2dev fd or a closed fd. Path: ikm_fd != -1 branch allocates ikm_buf, then fget() returns NULL or f_op mismatch fires (lines 1819-1827), code does goto out_zero. out_zero frees ikm_buf but does NOT acquire state->lock and does NOT call inbuf_clear(). Result: state->inbuf retains the previously-written bytes. (4) User calls write(fd, more_bytes, M) \u2014 inbuf now holds N+M bytes. (5) User calls KEY_IMPORT with keylen == N+M \u2014 import proceeds with corrupted key material (old write data prepended). Same FIPS 140-3 zeroization violation as WOLFKM-s6t.11. Fix: add inbuf_clear() at out_zero (under state->lock), or restructure so out_zero always clears inbuf regardless of lock state.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T03:22:07Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:22:07Z",
   "updated_at": "2026-04-20T03:41:47Z",
   "closed_at": "2026-04-20T03:41:47Z",
-  "close_reason": "out_early now acquires state-\u003elock and calls inbuf_clear before falling to out_zero; ikm_fd fget failures changed from goto out_zero to goto out_early",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-s6t.14",
       "depends_on_id": "WOLFKM-s6t",
-      "type": "parent-child",
-      "created_at": "2026-04-19T20:22:07Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T20:22:07Z"
     }
   ]
 }

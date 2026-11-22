@@ -1,30 +1,20 @@
 {
   "id": "WOLFKM-u2s.1",
   "title": "ioctl_do_kdf: out_zero re-locks without a comment explaining why",
-  "notes": "In ioctl_do_kdf (crypto2dev_fd.c lines 1895-1898), the out_zero label acquires the mutex, calls inbuf_clear, then releases it. All goto-out_zero paths exit BEFORE mutex_lock at line 1776, so the lock is never held when out_zero is reached. The re-acquire is intentional: these are pre-lock validation failures that still need to zeroize any IKM written via write() before the ioctl. The problem: (1) no comment explains WHY out_zero needs its own lock — a reader sees mutex_lock in a cleanup label and must trace every goto path to understand the invariant; (2) a future maintainer consolidating cleanup paths could easily collapse out_zero and out_inbuf_clear, creating a double-lock if reached from a post-lock path, or omitting the zeroize if reached from a pre-lock path. Recommended fix: add a comment at out_zero: '/* Reached only from pre-lock validation paths — lock not held; re-acquire to zeroize any pending IKM written before this ioctl. */' This is the only P1 maintainer-burden finding from SEC1 review.",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-19T21:33:15Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:33:15Z",
   "updated_at": "2026-04-19T21:43:47Z",
   "closed_at": "2026-04-19T21:43:47Z",
-  "close_reason": "Closed",
-  "labels": [
-    "maintainer-burden",
-    "review",
-    "risk",
-    "wolfkm"
-  ],
+  "notes": "In ioctl_do_kdf (crypto2dev_fd.c lines 1895-1898), the out_zero label acquires the mutex, calls inbuf_clear, then releases it. All goto-out_zero paths exit BEFORE mutex_lock at line 1776, so the lock is never held when out_zero is reached. The re-acquire is intentional: these are pre-lock validation failures that still need to zeroize any IKM written via write() before the ioctl. The problem: (1) no comment explains WHY out_zero needs its own lock \u2014 a reader sees mutex_lock in a cleanup label and must trace every goto path to understand the invariant; (2) a future maintainer consolidating cleanup paths could easily collapse out_zero and out_inbuf_clear, creating a double-lock if reached from a post-lock path, or omitting the zeroize if reached from a pre-lock path. Recommended fix: add a comment at out_zero: '/* Reached only from pre-lock validation paths \u2014 lock not held; re-acquire to zeroize any pending IKM written before this ioctl. */' This is the only P1 maintainer-burden finding from SEC1 review.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-u2s.1",
       "depends_on_id": "WOLFKM-u2s",
-      "type": "parent-child",
-      "created_at": "2026-04-19T14:33:15Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T14:33:15Z"
     }
   ]
 }

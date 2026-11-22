@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-533.5",
   "title": "Observability: early fips_gate failure emits no log",
-  "description": "Five ioctl handlers (set_iv, gen_iv, set_aad, get_tag, set_tag) perform a pre-lock 'early_ops' fips_gate check and return the wolfCrypt error code raw with no log message whatsoever (lines 847-850, 908-911, 989-992, 1047-1050, 1101-1104 of crypto2dev_fd.c). A support engineer cannot determine from the ring buffer that a FIPS POST failure caused the ioctl to fail — they see only a raw wolfCrypt negative return from ioctl(2), no algo name, no provider name, no indication it is a FIPS failure rather than an argument error.",
+  "description": "Five ioctl handlers (set_iv, gen_iv, set_aad, get_tag, set_tag) perform a pre-lock 'early_ops' fips_gate check and return the wolfCrypt error code raw with no log message whatsoever (lines 847-850, 908-911, 989-992, 1047-1050, 1101-1104 of crypto2dev_fd.c). A support engineer cannot determine from the ring buffer that a FIPS POST failure caused the ioctl to fail \u2014 they see only a raw wolfCrypt negative return from ioctl(2), no algo name, no provider name, no indication it is a FIPS failure rather than an argument error.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T05:28:32Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:28:32Z",
   "updated_at": "2026-04-20T05:48:45Z",
   "closed_at": "2026-04-20T05:48:45Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-533.5",
       "depends_on_id": "WOLFKM-533",
-      "type": "parent-child",
-      "created_at": "2026-04-19T22:28:31Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T22:28:31Z"
     }
   ]
 }

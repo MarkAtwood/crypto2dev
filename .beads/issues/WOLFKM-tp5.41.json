@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-tp5.41",
   "title": "ioctl_key_export_private: second call replaces outbuf without draining first",
-  "description": "ioctl_key_export_private() unconditionally replaces state-\u003eoutbuf with a new kmalloc buffer containing the private key bytes, even if outbuf already contains data from a previous KEY_EXPORT_PRIVATE call that was not fully drained. The old outbuf is zeroized and freed (correct for key material), but if it contained partially-drained private key bytes, those bytes are permanently lost. A userspace caller who calls KEY_EXPORT_PRIVATE, reads partial bytes, calls KEY_EXPORT_PRIVATE again (perhaps by accident), loses the unread portion of the first export. This is a data loss scenario for key material. The second export produces fresh bytes from key_export_private(), so the caller gets the full key from the second call — but they may not realize the first partial read was invalidated. More subtly: the outbuf replacement also discards any bytes from a public key that was being read (since KEY fd read() first drains outbuf if non-empty). After KEY_EXPORT_PRIVATE, subsequent read() calls that were expecting to get the public key will instead get the (partially drained) private key bytes. Trigger: KEY_GENERATE → read(partial public key) → KEY_EXPORT_PRIVATE → outbuf replaced with private key → subsequent read() returns private key bytes, not remaining public key bytes.",
+  "description": "ioctl_key_export_private() unconditionally replaces state->outbuf with a new kmalloc buffer containing the private key bytes, even if outbuf already contains data from a previous KEY_EXPORT_PRIVATE call that was not fully drained. The old outbuf is zeroized and freed (correct for key material), but if it contained partially-drained private key bytes, those bytes are permanently lost. A userspace caller who calls KEY_EXPORT_PRIVATE, reads partial bytes, calls KEY_EXPORT_PRIVATE again (perhaps by accident), loses the unread portion of the first export. This is a data loss scenario for key material. The second export produces fresh bytes from key_export_private(), so the caller gets the full key from the second call \u2014 but they may not realize the first partial read was invalidated. More subtly: the outbuf replacement also discards any bytes from a public key that was being read (since KEY fd read() first drains outbuf if non-empty). After KEY_EXPORT_PRIVATE, subsequent read() calls that were expecting to get the public key will instead get the (partially drained) private key bytes. Trigger: KEY_GENERATE \u2192 read(partial public key) \u2192 KEY_EXPORT_PRIVATE \u2192 outbuf replaced with private key \u2192 subsequent read() returns private key bytes, not remaining public key bytes.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:42:04Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:42:04Z",
   "updated_at": "2026-04-18T04:03:51Z",
   "closed_at": "2026-04-18T04:03:51Z",
-  "close_reason": "fixed: added EBUSY guard (outbuf \u0026\u0026 outbuf_drained \u003c outbuf_len) before allowing second export in ioctl_key_export_private",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.41",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:42:04Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:42:04Z"
     }
   ]
 }

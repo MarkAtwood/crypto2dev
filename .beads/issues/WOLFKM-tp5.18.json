@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-tp5.18",
-  "title": "Observability: wolfCrypt error codes silently discarded — -EINVAL used for all provider failures",
-  "description": "When provider callbacks (key_import, key_generate, sign, verify, agree, sess_reset, set_iv) fail, the wolfCrypt error code is returned raw to the caller or silently mapped to the kernel errno with no logging of the original code. wolfCrypt error codes carry specific diagnostic meaning (BAD_FUNC_ARG=-173, MEMORY_E=-125, MP_EXPTMOD_E, etc.) that is destroyed at the ioctl boundary. Additionally, the fips_gate() failure path in ioctl_init (lines 655-661 of crypto2dev_fd.c) emits no log at all — the caller receives -EACCES with no kernel log entry identifying which algo/provider triggered the gate failure.",
+  "title": "Observability: wolfCrypt error codes silently discarded \u2014 -EINVAL used for all provider failures",
+  "description": "When provider callbacks (key_import, key_generate, sign, verify, agree, sess_reset, set_iv) fail, the wolfCrypt error code is returned raw to the caller or silently mapped to the kernel errno with no logging of the original code. wolfCrypt error codes carry specific diagnostic meaning (BAD_FUNC_ARG=-173, MEMORY_E=-125, MP_EXPTMOD_E, etc.) that is destroyed at the ioctl boundary. Additionally, the fips_gate() failure path in ioctl_init (lines 655-661 of crypto2dev_fd.c) emits no log at all \u2014 the caller receives -EACCES with no kernel log entry identifying which algo/provider triggered the gate failure.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:40:29Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:40:29Z",
   "updated_at": "2026-04-18T04:15:23Z",
   "closed_at": "2026-04-18T04:15:23Z",
-  "close_reason": "fixed: wolfCrypt error codes logged via pr_err_ratelimited before translation in wolfssl_aes_cbc, wolfssl_aes_gcm, wolfssl_cmac, wolfssl_hmac, wolfssl_sha",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.18",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:40:28Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:40:28Z"
     }
   ]
 }

@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-dfn.7",
   "title": "FIPS gate missing: wolfssl sess_reset (all 5 algorithms)",
-  "description": "sess_reset is a gated callback per crypto2dev_provider.h. All 5 wolfssl sess_reset implementations call no fips_gate(). Affected: wolfssl_aes_cbc_sess_reset (aes_cbc.c:130), wolfssl_aes_gcm_sess_reset (aes_gcm.c:129), wolfssl_cmac_sess_reset (cmac.c:105), wolfssl_hmac_sess_reset (hmac.c:171), wolfssl_sha_sess_reset (sha.c:177). Each begins with context validity checks before any gate call. Trigger: user calls RESET ioctl on an active session while FIPS module is degraded. Outcome: session state re-initializes (reinitializing wolfCrypt state) without operational status check — FIPS compliance violation.",
+  "description": "sess_reset is a gated callback per crypto2dev_provider.h. All 5 wolfssl sess_reset implementations call no fips_gate(). Affected: wolfssl_aes_cbc_sess_reset (aes_cbc.c:130), wolfssl_aes_gcm_sess_reset (aes_gcm.c:129), wolfssl_cmac_sess_reset (cmac.c:105), wolfssl_hmac_sess_reset (hmac.c:171), wolfssl_sha_sess_reset (sha.c:177). Each begins with context validity checks before any gate call. Trigger: user calls RESET ioctl on an active session while FIPS module is degraded. Outcome: session state re-initializes (reinitializing wolfCrypt state) without operational status check \u2014 FIPS compliance violation.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T00:03:24Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:03:24Z",
   "updated_at": "2026-04-18T00:53:18Z",
   "closed_at": "2026-04-18T00:53:18Z",
-  "close_reason": "Added wolfssl_fips_gate() as first statement in all 5 wolfssl sess_reset implementations",
-  "labels": [
-    "audit",
-    "correctness",
-    "fips",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-dfn.7",
       "depends_on_id": "WOLFKM-dfn",
-      "type": "parent-child",
-      "created_at": "2026-04-17T17:03:24Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T17:03:24Z"
     }
   ]
 }

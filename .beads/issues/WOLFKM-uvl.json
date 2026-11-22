@@ -1,14 +1,12 @@
 {
   "id": "WOLFKM-uvl",
   "title": "WOLFKM-8ii impl: RESET state machine + GEN_IV provider callback",
-  "description": "Implement decisions from WOLFKM-8ii: (a) Option A: add iv_set tracking; after RESET, write() returns -EINVAL if ops-\u003eset_iv is non-NULL but iv_set is false. (b) Option A: add gen_iv callback to algo_ops; wolfssl providers use wc_RNG_GenerateBlock, kcapi falls back to get_random_bytes. (c) Option B: no framework change for GCM nonce length.",
+  "description": "Implement decisions from WOLFKM-8ii: (a) Option A: add iv_set tracking; after RESET, write() returns -EINVAL if ops->set_iv is non-NULL but iv_set is false. (b) Option A: add gen_iv callback to algo_ops; wolfssl providers use wc_RNG_GenerateBlock, kcapi falls back to get_random_bytes. (c) Option B: no framework change for GCM nonce length.",
   "status": "closed",
   "priority": 0,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T23:09:18Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T23:09:18Z",
   "updated_at": "2026-04-17T23:14:41Z",
-  "closed_at": "2026-04-17T23:14:41Z",
-  "close_reason": "Implemented: iv_set flag in fd_state, SET_IV/GEN_IV/RESET all update iv_set, write() enforces IV before crypto, gen_iv callback added to algo_ops, wolfssl AES providers implement gen_iv via wc_RNG_GenerateBlock with WC_RNG in ctx, kcapi providers use get_random_bytes, example provider documented, DESIGN.md state machine added"
+  "closed_at": "2026-04-17T23:14:41Z"
 }

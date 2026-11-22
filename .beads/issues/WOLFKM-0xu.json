@@ -2,42 +2,33 @@
   "id": "WOLFKM-0xu",
   "title": "tests/kernel/test_akcipher.c: in-kernel tests for RSA",
   "description": "Kernel module testing the RSA akcipher registration. Tests: (1) RSA-2048 sign a known message hash with a test private key (from tests/vectors/rsa.h), verify the signature with the corresponding public key; (2) RSA-2048 public encrypt, private decrypt roundtrip; (3) tampered signature (flip one byte) must return an error from verify; (4) verify that .max_size returns 256 for RSA-2048. Print pass/fail per check.",
-  "design": "Use crypto_alloc_akcipher(). Key loading: akcipher_request_set_crypt with DER-encoded key bytes. .set_pub_key / .set_priv_key are called via crypto_akcipher_set_pub_key / crypto_akcipher_set_priv_key. The test DER keys must come from tests/vectors/rsa.h — generated with OpenSSL and hardcoded, never generated at test runtime. See tests/vectors/rsa.h.",
-  "acceptance_criteria": "Sign+verify roundtrip passes. Tampered signature returns error. .max_size == 256 for RSA-2048. Module loads and unloads cleanly.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T06:56:13Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-16T06:56:13Z",
+  "updated_at": "2026-04-18T18:09:26Z",
   "closed_at": "2026-04-18T18:09:26Z",
-  "close_reason": "All 5 RSA tests implemented in test_akcipher.c: sign KAT, verify KAT, tamper rejection, encrypt+decrypt roundtrip, maxsize check. Uses crypto_sig API for pkcs1(rsa,sha256) and crypto_akcipher for raw RSA. Vectors in rsa.h.",
+  "design": "Use crypto_alloc_akcipher(). Key loading: akcipher_request_set_crypt with DER-encoded key bytes. .set_pub_key / .set_priv_key are called via crypto_akcipher_set_pub_key / crypto_akcipher_set_priv_key. The test DER keys must come from tests/vectors/rsa.h \u2014 generated with OpenSSL and hardcoded, never generated at test runtime. See tests/vectors/rsa.h.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-0xu",
-      "depends_on_id": "WOLFKM-r2l",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:17Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-0xu",
-      "depends_on_id": "WOLFKM-8lq",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:18Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-0xu",
       "depends_on_id": "WOLFKM-2c4",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:17Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:17Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-8lq",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:18Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-r2l",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:17Z"
     }
   ]
 }

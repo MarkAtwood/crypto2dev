@@ -5,24 +5,16 @@
   "status": "closed",
   "priority": 4,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T22:10:21Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T22:10:21Z",
   "updated_at": "2026-04-18T22:23:29Z",
   "closed_at": "2026-04-18T22:23:29Z",
-  "close_reason": "Closed",
-  "labels": [
-    "my-oss",
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-6ty.16",
       "depends_on_id": "WOLFKM-6ty",
-      "type": "parent-child",
-      "created_at": "2026-04-18T15:10:20Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T15:10:20Z"
     }
   ]
 }

@@ -2,25 +2,21 @@
   "id": "WOLFKM-ely",
   "title": "UAPI: crypto2dev_kdf_op struct and CRYPTO2DEV_IOC_DO_KDF",
   "description": "Add to include/uapi/crypto2dev_ioctl.h:\n- #define CRYPTO2DEV_KDF_SALT_MAXLEN  64\n- #define CRYPTO2DEV_KDF_INFO_MAXLEN  256\n- struct crypto2dev_kdf_op with fields per design issue\n- CRYPTO2DEV_IOC_DO_KDF = _IOWR(CRYPTO2DEV_IOC_MAGIC, 20, struct crypto2dev_kdf_op)\n- Full field-by-field comment block explaining HKDF vs PBKDF2 inputs\n- Document that fd becomes a KEY fd on success; write() data is consumed and zeroized\n- Document PBKDF2 iterations minimum (1000) and recommended minimum (600000 per OWASP 2023)",
-  "notes": "Struct restored with out_algo[CRYPTO2DEV_ALGO_MAXLEN] added per WOLFKM-nid design. Slot 22 is live; dispatch returns -ENOSYS until providers implement kdf callback.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T22:22:54Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-17T22:22:54Z",
+  "updated_at": "2026-04-18T06:28:21Z",
   "closed_at": "2026-04-18T06:02:55Z",
-  "close_reason": "Closed",
+  "notes": "Struct restored with out_algo[CRYPTO2DEV_ALGO_MAXLEN] added per WOLFKM-nid design. Slot 22 is live; dispatch returns -ENOSYS until providers implement kdf callback.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-ely",
       "depends_on_id": "WOLFKM-nid",
-      "type": "blocks",
-      "created_at": "2026-04-17T15:26:10Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T15:26:10Z"
     }
   ]
 }

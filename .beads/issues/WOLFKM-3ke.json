@@ -2,26 +2,21 @@
   "id": "WOLFKM-3ke",
   "title": "tests/userspace/Makefile: build all userspace test binaries",
   "description": "Makefile for tests/userspace/ that compiles test_chardev, test_concurrent, and test_af_alg as standalone C binaries. Links against pthread for concurrent tests. Includes ../../../include/uapi/wolfkm_ioctl.h. Supports CFLAGS override. Also installs test scripts (test_dm_crypt.sh, test_luks.sh, test_ipsec.sh) as executable.",
-  "design": "Standard GNU Makefile. CC variable. test_chardev and test_concurrent compile from their respective .c files. test_af_alg uses AF_ALG sockets (no external deps). Shell test scripts just need chmod +x. Clean target removes binaries.",
-  "acceptance_criteria": "make in tests/userspace/ produces three binaries and three executable shell scripts with zero warnings.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T06:56:40Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:56:40Z",
   "updated_at": "2026-04-18T05:52:33Z",
   "closed_at": "2026-04-18T05:52:33Z",
-  "close_reason": "Closed",
+  "design": "Standard GNU Makefile. CC variable. test_chardev and test_concurrent compile from their respective .c files. test_af_alg uses AF_ALG sockets (no external deps). Shell test scripts just need chmod +x. Clean target removes binaries.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-3ke",
       "depends_on_id": "WOLFKM-5ne",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:26Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:26Z"
     }
   ]
 }

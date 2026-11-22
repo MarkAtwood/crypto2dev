@@ -1,30 +1,20 @@
 {
   "id": "WOLFKM-con.8",
   "title": "Crypto misuse: GCM inbuf reset zeros inbuf_len not inbuf_cap",
-  "description": "wolfssl_aes_gcm_sess_reset (wolfssl_aes_gcm.c:183) and kcapi_aead_sess_reset (kcapi_aead.c:106) call memzero_explicit(ctx-\u003einbuf, ctx-\u003einbuf_len) but not memzero_explicit(ctx-\u003einbuf, ctx-\u003einbuf_cap). After RESET, stale ciphertext bytes remain in inbuf[inbuf_len..inbuf_cap). FIPS 140-3 zeroization requires all sensitive data to be wiped before the memory is repurposed. The region [inbuf_len..inbuf_cap) contains ciphertext from the previous decrypt session and is not cleared. Fix: zero inbuf_cap bytes, not inbuf_len bytes, in both sess_reset implementations.",
+  "description": "wolfssl_aes_gcm_sess_reset (wolfssl_aes_gcm.c:183) and kcapi_aead_sess_reset (kcapi_aead.c:106) call memzero_explicit(ctx->inbuf, ctx->inbuf_len) but not memzero_explicit(ctx->inbuf, ctx->inbuf_cap). After RESET, stale ciphertext bytes remain in inbuf[inbuf_len..inbuf_cap). FIPS 140-3 zeroization requires all sensitive data to be wiped before the memory is repurposed. The region [inbuf_len..inbuf_cap) contains ciphertext from the previous decrypt session and is not cleared. Fix: zero inbuf_cap bytes, not inbuf_len bytes, in both sess_reset implementations.",
   "status": "closed",
   "priority": 1,
   "issue_type": "bug",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:37:01Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:01Z",
   "updated_at": "2026-04-18T23:39:52Z",
   "closed_at": "2026-04-18T23:39:52Z",
-  "close_reason": "duplicate of WOLFKM-con.26",
-  "labels": [
-    "audit",
-    "crypto",
-    "fips",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.8",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:37:00Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:37:00Z"
     }
   ]
 }

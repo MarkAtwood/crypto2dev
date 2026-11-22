@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-s6t.9",
-  "title": "No non-FIPS fallback in crypto2dev_lookup_algo when FIPS mode is active — hard failure is correct",
-  "description": "When any FIPS provider is loaded, crypto2dev_lookup_algo() skips all non-FIPS providers unconditionally and returns NULL if no FIPS provider handles the requested algorithm. There is no 'prefer FIPS, fall back to non-FIPS' path. This is correct because a fallback path would allow silent use of unvalidated crypto when a FIPS provider is loaded but does not handle a given algorithm — the caller receives unvalidated output with no error signal. The correct failure mode is -ENOENT, which tells the caller the algorithm is not available in the current security policy. A reviewer might suggest 'fall back to non-FIPS if no FIPS provider handles this algo, to maximize compatibility' — that suggestion must be rejected. Any such fallback path voids the CMVP certification for that operation. The comment in registry.c documents this explicitly.",
+  "title": "No non-FIPS fallback in crypto2dev_lookup_algo when FIPS mode is active \u2014 hard failure is correct",
+  "description": "When any FIPS provider is loaded, crypto2dev_lookup_algo() skips all non-FIPS providers unconditionally and returns NULL if no FIPS provider handles the requested algorithm. There is no 'prefer FIPS, fall back to non-FIPS' path. This is correct because a fallback path would allow silent use of unvalidated crypto when a FIPS provider is loaded but does not handle a given algorithm \u2014 the caller receives unvalidated output with no error signal. The correct failure mode is -ENOENT, which tells the caller the algorithm is not available in the current security policy. A reviewer might suggest 'fall back to non-FIPS if no FIPS provider handles this algo, to maximize compatibility' \u2014 that suggestion must be rejected. Any such fallback path voids the CMVP certification for that operation. The comment in registry.c documents this explicitly.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T03:21:51Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:21:51Z",
   "updated_at": "2026-04-20T04:29:38Z",
   "closed_at": "2026-04-20T04:29:38Z",
-  "close_reason": "Correct design: no non-FIPS fallback in crypto2dev_lookup_algo when FIPS mode is active. Hard failure (-ENOENT) prevents silent downgrade when FIPS provider does not handle an algorithm. Any non-FIPS fallback path would void CMVP certification for that operation. CLAUDE.md and registry.c comments document this explicitly.",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-s6t.9",
       "depends_on_id": "WOLFKM-s6t",
-      "type": "parent-child",
-      "created_at": "2026-04-19T20:21:50Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T20:21:50Z"
     }
   ]
 }

@@ -1,34 +1,27 @@
 {
   "id": "WOLFKM-blo",
   "title": "Implement per-fd session state (crypto2dev_fd.c)",
-  "description": "Manage per-fd state for /dev/wolfcrypt streaming sessions. Rename wolfkm_session.c → wolfkm_fd.c.\n\nEach open() gets its own wolfkm_fd_state. No IDR, no session IDs.\n\nstruct wolfkm_fd_state:\n- spinlock_t lock\n- bool initialized (set after WOLFKM_IOC_INIT)\n- u32 algo_type (CRYPTO_ALG_TYPE_* from cra_flags)\n- u32 op (ENCRYPT/DECRYPT/HASH)\n- union { skcipher_request*, aead_request*, shash_desc* }\n- u8 *inbuf, size_t inbuf_len (staging for write())\n- u8 *outbuf, size_t outbuf_len (staging for read())\n- u8 tag[16], u32 taglen (AEAD)\n\nFunctions:\n- wolfkm_fd_init(file): kzalloc state, attach to file-\u003eprivate_data\n- wolfkm_fd_configure(state, init_op): resolve algo via crypto_find_alg(), alloc wolfCrypt context, import key, memzero_explicit key buf after use\n- wolfkm_fd_write(state, ubuf, len): copy_from_user, feed wolfCrypt update\n- wolfkm_fd_read(state, ubuf, len): flush buffered output or finalize hash; for AEAD decrypt verify tag first, return -EBADMSG on failure\n- wolfkm_fd_destroy(state): wolfCrypt Free for algo type, memzero_explicit entire struct, kfree\n\nclose() must memzero_explicit the full struct before kfree — FIPS requirement.",
-  "design": "Use struct idr per open fd (allocated in wolfkm_cdev.c's .open). Session IDs are small positive integers from idr_alloc. A session struct contains: algorithm ID, union of wolfCrypt context structs (Aes, Hmac, Cmac, RsaKey, ecc_key, WC_RNG), and a spinlock for concurrent ioctl calls on the same fd. See DESIGN.md §Session management.",
-  "acceptance_criteria": "1000 sessions created and destroyed without memory leak (check /proc/slabinfo or kmemleak). Double-free of a session ID returns -EINVAL. Key material is zeroed (observable via /proc/pid/mem inspection in test).",
+  "description": "Manage per-fd state for /dev/wolfcrypt streaming sessions. Rename wolfkm_session.c \u2192 wolfkm_fd.c.\n\nEach open() gets its own wolfkm_fd_state. No IDR, no session IDs.\n\nstruct wolfkm_fd_state:\n- spinlock_t lock\n- bool initialized (set after WOLFKM_IOC_INIT)\n- u32 algo_type (CRYPTO_ALG_TYPE_* from cra_flags)\n- u32 op (ENCRYPT/DECRYPT/HASH)\n- union { skcipher_request*, aead_request*, shash_desc* }\n- u8 *inbuf, size_t inbuf_len (staging for write())\n- u8 *outbuf, size_t outbuf_len (staging for read())\n- u8 tag[16], u32 taglen (AEAD)\n\nFunctions:\n- wolfkm_fd_init(file): kzalloc state, attach to file->private_data\n- wolfkm_fd_configure(state, init_op): resolve algo via crypto_find_alg(), alloc wolfCrypt context, import key, memzero_explicit key buf after use\n- wolfkm_fd_write(state, ubuf, len): copy_from_user, feed wolfCrypt update\n- wolfkm_fd_read(state, ubuf, len): flush buffered output or finalize hash; for AEAD decrypt verify tag first, return -EBADMSG on failure\n- wolfkm_fd_destroy(state): wolfCrypt Free for algo type, memzero_explicit entire struct, kfree\n\nclose() must memzero_explicit the full struct before kfree \u2014 FIPS requirement.",
   "status": "closed",
   "priority": 1,
   "issue_type": "feature",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T06:54:39Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-16T06:54:39Z",
+  "updated_at": "2026-04-18T01:08:07Z",
   "closed_at": "2026-04-18T01:08:07Z",
-  "close_reason": "Stale: per-fd session state already implemented in src/cdev/crypto2dev_fd.c. Old issue used wolfkm naming and assumed IDR/session-ID design that was abandoned.",
+  "design": "Use struct idr per open fd (allocated in wolfkm_cdev.c's .open). Session IDs are small positive integers from idr_alloc. A session struct contains: algorithm ID, union of wolfCrypt context structs (Aes, Hmac, Cmac, RsaKey, ecc_key, WC_RNG), and a spinlock for concurrent ioctl calls on the same fd. See DESIGN.md \u00a7Session management.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-blo",
-      "depends_on_id": "WOLFKM-dvd",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:08Z",
+      "depends_on_id": "WOLFKM-5ne",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:07Z"
     },
     {
-      "issue_id": "WOLFKM-blo",
-      "depends_on_id": "WOLFKM-5ne",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:07Z",
+      "depends_on_id": "WOLFKM-dvd",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:08Z"
     }
   ]
 }

@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-tp5.2",
   "title": "write() zeroizes kbuf using count after partial copy_from_user",
-  "description": "In crypto2dev_fd_write(), after copy_from_user fails the function returns -EFAULT immediately and calls kfree(kbuf) — correct. But on the success path (all other returns), the cleanup at 'out:' does memzero_explicit(kbuf, count) then kfree(kbuf). This is after the mutex_unlock but using 'count' (the user-requested size) not 'outlen'. That is fine for the kbuf itself. However: the function returns 'ret' (= count on success) via 'out:' path. The wake_up check 'if (ret \u003e 0 \u0026\u0026 outlen \u003e 0)' can be reached with outlen==0 (e.g. UNSET fd path where outlen is never set from its initial 0, yet ret==count\u003e0). The wake_up is then skipped, which is correct for UNSET. But the same issue applies to OPERATION path where update() produced zero output bytes and outlen==0: wake_up is correctly skipped. No bug here on wake_up — recording as checked. REAL BUG: if the goto out path is taken from the UNSET branch (fd_type==UNSET), outlen remains 0 from its initializer; then 'memzero_explicit(kbuf, count)' runs after unlock — but kbuf still points to the kmalloc'd buffer, which is correct. ACTUAL CONFIRMED BUG: on the UNSET path, the inbuf_append() may fail (-ENOMEM or -EMSGSIZE). In that case ret\u003c0 and kbuf is freed. But kbuf is memzero'd with 'count' bytes before kfree regardless of whether inbuf_append succeeded — this is correct zeroization behavior. No bug in write(). Closing this investigation — no issue found here.",
+  "description": "In crypto2dev_fd_write(), after copy_from_user fails the function returns -EFAULT immediately and calls kfree(kbuf) \u2014 correct. But on the success path (all other returns), the cleanup at 'out:' does memzero_explicit(kbuf, count) then kfree(kbuf). This is after the mutex_unlock but using 'count' (the user-requested size) not 'outlen'. That is fine for the kbuf itself. However: the function returns 'ret' (= count on success) via 'out:' path. The wake_up check 'if (ret > 0 && outlen > 0)' can be reached with outlen==0 (e.g. UNSET fd path where outlen is never set from its initial 0, yet ret==count>0). The wake_up is then skipped, which is correct for UNSET. But the same issue applies to OPERATION path where update() produced zero output bytes and outlen==0: wake_up is correctly skipped. No bug here on wake_up \u2014 recording as checked. REAL BUG: if the goto out path is taken from the UNSET branch (fd_type==UNSET), outlen remains 0 from its initializer; then 'memzero_explicit(kbuf, count)' runs after unlock \u2014 but kbuf still points to the kmalloc'd buffer, which is correct. ACTUAL CONFIRMED BUG: on the UNSET path, the inbuf_append() may fail (-ENOMEM or -EMSGSIZE). In that case ret<0 and kbuf is freed. But kbuf is memzero'd with 'count' bytes before kfree regardless of whether inbuf_append succeeded \u2014 this is correct zeroization behavior. No bug in write(). Closing this investigation \u2014 no issue found here.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:38:28Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:38:28Z",
   "updated_at": "2026-04-18T03:38:29Z",
   "closed_at": "2026-04-18T03:38:29Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.2",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:38:28Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:38:28Z"
     }
   ]
 }

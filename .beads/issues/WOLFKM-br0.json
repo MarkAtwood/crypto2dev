@@ -6,10 +6,8 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T22:05:13Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:05:13Z",
   "updated_at": "2026-04-17T22:06:24Z",
-  "closed_at": "2026-04-17T22:06:24Z",
-  "close_reason": "bool error in fd_state; set on update()/finalize() failure and WARN_ON overflow; checked at top of write() and read() OPERATION path returning -EIO; cleared in ioctl_reset() on success; -EFAULT carve-out implicit in code structure; documented in ioctl header."
+  "closed_at": "2026-04-17T22:06:24Z"
 }

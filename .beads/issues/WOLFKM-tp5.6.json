@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-tp5.6",
   "title": "read() on OPERATION fd not FIPS-gated before checking outbuf",
-  "description": "In crypto2dev_fd_read() on an OPERATION fd, the FIPS gate is checked AFTER the error state check but BEFORE draining outbuf. The comment in CLAUDE.md says 'The very first line of every crypto entry point calls crypto2dev_fips_gate()'. The read() function checks state-\u003eerror first, then ops-\u003efips_gate(). More critically: if the FIPS gate has failed after data was already placed in outbuf by a previous (successful) update(), a subsequent read() call will return -EACCES from the FIPS gate — which is correct and prevents draining output produced under a now-failed FIPS boundary. This is actually CORRECT behavior. However: the FIPS gate is called with the session mutex held, and the fips_gate check happens on every read() even for hash output that was already computed and is sitting in outbuf. This is the intended design per the provider.h comment 'Called by the framework before every provider callback that touches cryptographic state'. The DESIGN requirement in CLAUDE.md says FIPS gate is entry #0, but in read(), error check (line 520) comes before fips_gate (line 525). The error check is not a crypto operation, and it avoids calling fips_gate after a session is already dead, which is a minor defense-in-depth violation but not a FIPS compliance failure since no crypto occurs. ACTUAL BUG: The FIPS gate on read() is called even when outbuf was filled before the FIPS module failed — this correctly blocks output, but means output data can sit in outbuf indefinitely if FIPS keeps failing. No mechanism to recover this buffered output. The session is effectively dead. This is probably correct behavior per FIPS 140-3 — once the boundary fails, no output should be released.",
+  "description": "In crypto2dev_fd_read() on an OPERATION fd, the FIPS gate is checked AFTER the error state check but BEFORE draining outbuf. The comment in CLAUDE.md says 'The very first line of every crypto entry point calls crypto2dev_fips_gate()'. The read() function checks state->error first, then ops->fips_gate(). More critically: if the FIPS gate has failed after data was already placed in outbuf by a previous (successful) update(), a subsequent read() call will return -EACCES from the FIPS gate \u2014 which is correct and prevents draining output produced under a now-failed FIPS boundary. This is actually CORRECT behavior. However: the FIPS gate is called with the session mutex held, and the fips_gate check happens on every read() even for hash output that was already computed and is sitting in outbuf. This is the intended design per the provider.h comment 'Called by the framework before every provider callback that touches cryptographic state'. The DESIGN requirement in CLAUDE.md says FIPS gate is entry #0, but in read(), error check (line 520) comes before fips_gate (line 525). The error check is not a crypto operation, and it avoids calling fips_gate after a session is already dead, which is a minor defense-in-depth violation but not a FIPS compliance failure since no crypto occurs. ACTUAL BUG: The FIPS gate on read() is called even when outbuf was filled before the FIPS module failed \u2014 this correctly blocks output, but means output data can sit in outbuf indefinitely if FIPS keeps failing. No mechanism to recover this buffered output. The session is effectively dead. This is probably correct behavior per FIPS 140-3 \u2014 once the boundary fails, no output should be released.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:39:30Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:39:30Z",
   "updated_at": "2026-04-18T03:39:31Z",
   "closed_at": "2026-04-18T03:39:31Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.6",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:39:29Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:39:29Z"
     }
   ]
 }

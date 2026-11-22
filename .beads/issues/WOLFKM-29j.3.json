@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-29j.3",
   "title": "Observability: KEY_IMPORT/KEY_GENERATE/DO_KDF FIPS gate failure omits raw status code",
-  "description": "In fd.c, ioctl_key_import, ioctl_key_generate, and ioctl_do_kdf all call ops-\u003efips_gate() and on failure log a message that omits the raw return value from fips_gate(). Examples: 'KEY_IMPORT: FIPS not operational' and 'KEY_GENERATE: FIPS not operational' and 'DO_KDF: FIPS not operational' — none include the fips_gate() return code. Compare with ioctl_init which correctly logs fips_ret: 'init: FIPS gate rejected — provider not operational (%d)'. Without the raw code a support engineer cannot distinguish a wolfCrypt status code (e.g., FIPS_DEGRADED_E=-152, FIPS_NOT_ALLOWED_E=-181) without attaching a debugger. Fix: capture and log fips_ret in all three callsites, matching the ioctl_init pattern.",
+  "description": "In fd.c, ioctl_key_import, ioctl_key_generate, and ioctl_do_kdf all call ops->fips_gate() and on failure log a message that omits the raw return value from fips_gate(). Examples: 'KEY_IMPORT: FIPS not operational' and 'KEY_GENERATE: FIPS not operational' and 'DO_KDF: FIPS not operational' \u2014 none include the fips_gate() return code. Compare with ioctl_init which correctly logs fips_ret: 'init: FIPS gate rejected \u2014 provider not operational (%d)'. Without the raw code a support engineer cannot distinguish a wolfCrypt status code (e.g., FIPS_DEGRADED_E=-152, FIPS_NOT_ALLOWED_E=-181) without attaching a debugger. Fix: capture and log fips_ret in all three callsites, matching the ioctl_init pattern.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T04:47:34Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T04:47:34Z",
   "updated_at": "2026-04-20T05:07:53Z",
   "closed_at": "2026-04-20T05:07:53Z",
-  "close_reason": "Added raw gate return code (%d) to FIPS gate failure messages in KEY_IMPORT, DO_KDF, and KEY_GENERATE — matches the pattern used by ioctl_init",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-29j.3",
       "depends_on_id": "WOLFKM-29j",
-      "type": "parent-child",
-      "created_at": "2026-04-19T21:47:33Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T21:47:33Z"
     }
   ]
 }

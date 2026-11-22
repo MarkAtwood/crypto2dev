@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-con.28",
   "title": "UAPI stability: crypto2dev_status has no reserved bytes",
-  "description": "struct crypto2dev_status (ioctl slot 9, CRYPTO2DEV_IOC_STATUS) has zero reserved bytes: fips_state(u32) + num_algorithms(u32) + version[32] = 40 bytes total, no _pad. Because _IOR encodes sizeof(struct) into the ioctl command number, any future field addition changes the ioctl number, breaking ABI compatibility with existing userspace. The struct is a natural candidate for future extension (e.g. num_providers, fips_algorithm_count, build_version). Add __u8 _reserved[24] (or similar) at the end of the struct and validate in ioctl_status that all reserved bytes are zero on the input struct before writing the output — this reserves room for future fields within the current struct size without an ABI break. All other extensible structs already have _pad fields; status is the only output-only introspection struct that has none.",
+  "description": "struct crypto2dev_status (ioctl slot 9, CRYPTO2DEV_IOC_STATUS) has zero reserved bytes: fips_state(u32) + num_algorithms(u32) + version[32] = 40 bytes total, no _pad. Because _IOR encodes sizeof(struct) into the ioctl command number, any future field addition changes the ioctl number, breaking ABI compatibility with existing userspace. The struct is a natural candidate for future extension (e.g. num_providers, fips_algorithm_count, build_version). Add __u8 _reserved[24] (or similar) at the end of the struct and validate in ioctl_status that all reserved bytes are zero on the input struct before writing the output \u2014 this reserves room for future fields within the current struct size without an ABI break. All other extensible structs already have _pad fields; status is the only output-only introspection struct that has none.",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:38:46Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:38:46Z",
   "updated_at": "2026-04-19T21:24:22Z",
   "closed_at": "2026-04-19T21:24:22Z",
-  "close_reason": "Closed",
-  "labels": [
-    "abi",
-    "audit",
-    "uapi",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.28",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:38:45Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:38:45Z"
     }
   ]
 }

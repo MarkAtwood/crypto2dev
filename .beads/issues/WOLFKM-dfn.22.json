@@ -6,25 +6,16 @@
   "priority": 2,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T00:04:43Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:04:43Z",
   "updated_at": "2026-04-18T00:59:58Z",
   "closed_at": "2026-04-18T00:59:58Z",
-  "close_reason": "Added algo[0]==0 check before mutex lock in ioctl_init; returns -EINVAL",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-dfn.22",
       "depends_on_id": "WOLFKM-dfn",
-      "type": "parent-child",
-      "created_at": "2026-04-17T17:04:43Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T17:04:43Z"
     }
   ]
 }

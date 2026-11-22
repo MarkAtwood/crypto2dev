@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-w4c.8",
-  "title": "DECISION: Single-pass FIPS-only lookup — no silent downgrade",
-  "description": "crypto2dev_lookup_algo() uses a single pass through the provider list with a fips_mode filter (skip non-FIPS providers when fips_provider_count \u003e 0). There is NO fallback to non-FIPS providers. A two-pass design — try FIPS first, fall back to non-FIPS if no FIPS provider handles the algo — would enable silent algorithm downgrade to unvalidated crypto. An algorithm not served by any FIPS provider returns -ENOENT with an explanatory log message. A reviewer who suggests 'try non-FIPS as fallback for compatibility' is suggesting a CMVP compliance violation.",
+  "title": "DECISION: Single-pass FIPS-only lookup \u2014 no silent downgrade",
+  "description": "crypto2dev_lookup_algo() uses a single pass through the provider list with a fips_mode filter (skip non-FIPS providers when fips_provider_count > 0). There is NO fallback to non-FIPS providers. A two-pass design \u2014 try FIPS first, fall back to non-FIPS if no FIPS provider handles the algo \u2014 would enable silent algorithm downgrade to unvalidated crypto. An algorithm not served by any FIPS provider returns -ENOENT with an explanatory log message. A reviewer who suggests 'try non-FIPS as fallback for compatibility' is suggesting a CMVP compliance violation.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T15:01:05Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:01:05Z",
   "updated_at": "2026-04-20T15:24:26Z",
   "closed_at": "2026-04-20T15:24:26Z",
-  "close_reason": "Design decision recorded; no code change needed.",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-w4c.8",
       "depends_on_id": "WOLFKM-w4c",
-      "type": "parent-child",
-      "created_at": "2026-04-20T08:01:05Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-20T08:01:05Z"
     }
   ]
 }

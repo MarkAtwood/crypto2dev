@@ -1,25 +1,21 @@
 {
   "id": "WOLFKM-325.3",
-  "title": "kcapi hash buffers all input; wolfssl hash streams — inconsistent 1MB cap",
+  "title": "kcapi hash buffers all input; wolfssl hash streams \u2014 inconsistent 1MB cap",
   "description": "kcapi_hash.c uses an inbuf accumulator and calls crypto_ahash_digest() in finalize. wolfssl_sha.c calls wc_Sha256Update on every write(). This means: with wolfssl provider, hash of 500MB data works fine (incremental). With kcapi provider, same code hits the 1MB cap silently. Fix kcapi_hash.c to use the incremental ahash API: sess_init allocates ahash_request and calls crypto_ahash_init(); update() calls crypto_ahash_update(); finalize() calls crypto_ahash_final(). Remove inbuf accumulator from kcapi_hash_ctx. This makes kcapi hash behaviour consistent with wolfssl hash.",
   "status": "closed",
   "priority": 2,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T18:02:23Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:23Z",
   "updated_at": "2026-04-17T18:31:30Z",
   "closed_at": "2026-04-17T18:31:30Z",
-  "close_reason": "Closed",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-325.3",
       "depends_on_id": "WOLFKM-325",
-      "type": "parent-child",
-      "created_at": "2026-04-17T11:02:22Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T11:02:22Z"
     }
   ]
 }

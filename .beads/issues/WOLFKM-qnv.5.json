@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-qnv.5",
   "title": "pr_info on every successful INIT dispatch will spam dmesg at scale",
-  "description": "ioctl_init changed 'pr_debug(init dispatched to provider)' to 'pr_info'. Every crypto2dev session open now emits a pr_info line. An application doing AES-CBC streaming at any reasonable throughput — even a few hundred sessions/second — will flood /var/log/kern.log. pr_info is not ratelimited. This is 2025 usage of dmesg as a chatty session log, not a kernel info event. Trigger: application opens many crypto2dev sessions. Expected impact: dmesg/kern.log rotation on heavily loaded systems; pr_info messages per session are not rate-limited so they are not suppressed under load.",
+  "description": "ioctl_init changed 'pr_debug(init dispatched to provider)' to 'pr_info'. Every crypto2dev session open now emits a pr_info line. An application doing AES-CBC streaming at any reasonable throughput \u2014 even a few hundred sessions/second \u2014 will flood /var/log/kern.log. pr_info is not ratelimited. This is 2025 usage of dmesg as a chatty session log, not a kernel info event. Trigger: application opens many crypto2dev sessions. Expected impact: dmesg/kern.log rotation on heavily loaded systems; pr_info messages per session are not rate-limited so they are not suppressed under load.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T06:14:35Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T06:14:35Z",
   "updated_at": "2026-04-18T06:19:42Z",
   "closed_at": "2026-04-18T06:19:42Z",
-  "close_reason": "Closed",
-  "labels": [
-    "efficiency",
-    "my-oss",
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-qnv.5",
       "depends_on_id": "WOLFKM-qnv",
-      "type": "parent-child",
-      "created_at": "2026-04-17T23:14:35Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T23:14:35Z"
     }
   ]
 }

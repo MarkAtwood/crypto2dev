@@ -2,26 +2,21 @@
   "id": "WOLFKM-8pn",
   "title": "tests/userspace/test_dm_crypt.sh: dm-crypt loopback encryption test",
   "description": "Shell script that creates a loopback block device, sets up dm-crypt with aes-xts-plain64 (the dm-crypt cipher string), writes a known pattern, reads it back, and verifies data integrity. Also verifies via /proc/crypto that the xts(aes) operation used the wolfkm driver. Requires root. Uses losetup, cryptsetup, mkfs.ext4. Cleans up loop device and dm device on exit.",
-  "design": "Steps: dd if=/dev/urandom of=/tmp/wolfkm-test.img bs=1M count=64; losetup /dev/loop99 /tmp/wolfkm-test.img; cryptsetup luksFormat --type plain --cipher aes-xts-plain64 --key-size 256 /dev/loop99; cryptsetup open --type plain ...; mkfs.ext4 /dev/mapper/wolfkm-test; mount; write 10MB file; sha256sum; umount; cryptsetup close; reopen; remount; sha256sum; compare. See DESIGN.md §test_dm_crypt.",
-  "acceptance_criteria": "Round-trip sha256sum matches. /proc/crypto shows wolfkm-xts-aes driver for xts(aes). Cleanup removes all loop devices and temp files even on failure (trap-based).",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T06:57:09Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T06:57:09Z",
   "updated_at": "2026-04-18T17:18:43Z",
   "closed_at": "2026-04-18T17:18:43Z",
-  "close_reason": "Closed",
+  "design": "Steps: dd if=/dev/urandom of=/tmp/wolfkm-test.img bs=1M count=64; losetup /dev/loop99 /tmp/wolfkm-test.img; cryptsetup luksFormat --type plain --cipher aes-xts-plain64 --key-size 256 /dev/loop99; cryptsetup open --type plain ...; mkfs.ext4 /dev/mapper/wolfkm-test; mount; write 10MB file; sha256sum; umount; cryptsetup close; reopen; remount; sha256sum; compare. See DESIGN.md \u00a7test_dm_crypt.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-8pn",
       "depends_on_id": "WOLFKM-t6k",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:30Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:30Z"
     }
   ]
 }

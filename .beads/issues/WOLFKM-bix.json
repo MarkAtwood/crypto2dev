@@ -2,42 +2,33 @@
   "id": "WOLFKM-bix",
   "title": "tests/kernel/test_kpp.c: in-kernel tests for ECDH and DH",
   "description": "Kernel module testing ECDH P-256, ECDH P-384, and DH key agreement. For ECDH: load a known private key (from tests/vectors), generate public key, compute shared secret with a known peer public key, compare against expected shared secret from NIST test vectors. For DH: use RFC 3526 group 14 (2048-bit MODP) with known private key and peer public key, compute shared secret, compare. Print pass/fail per check.",
-  "design": "Use crypto_alloc_kpp(). ECDH secret blob format: struct ecdh from include/crypto/ecdh.h (curve_id, key, key_size). DH secret blob: struct dh from include/crypto/dh.h. Use crypto_kpp_set_secret(). kpp_request_alloc and crypto_kpp_generate_public_key / crypto_kpp_compute_shared_secret. NIST test vectors for ECDH P-256 KAS from SP 800-56A.",
-  "acceptance_criteria": "ECDH P-256 shared secret matches NIST SP 800-56A known-answer vector. ECDH P-384 known-answer vector passes. DH RFC 3526 group 14 shared secret matches.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T06:56:13Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-16T06:56:13Z",
+  "updated_at": "2026-04-18T18:09:27Z",
   "closed_at": "2026-04-18T18:09:27Z",
-  "close_reason": "ECDH P-256 and P-384 KAT tests in test_kpp.c. P-256 uses ecdh_a_raw_priv/ecdh_b_raw_pub from ecdh.h; P-384 uses ecdh_p384_a_raw_priv/ecdh_p384_b_raw_pub from ecdh_p384.h. struct ecdh has no curve_id on kernel 6.17; curve via algo name. DH vectors in dh.h for future test.",
+  "design": "Use crypto_alloc_kpp(). ECDH secret blob format: struct ecdh from include/crypto/ecdh.h (curve_id, key, key_size). DH secret blob: struct dh from include/crypto/dh.h. Use crypto_kpp_set_secret(). kpp_request_alloc and crypto_kpp_generate_public_key / crypto_kpp_compute_shared_secret. NIST test vectors for ECDH P-256 KAS from SP 800-56A.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-bix",
-      "depends_on_id": "WOLFKM-8lq",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:20Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-bix",
       "depends_on_id": "WOLFKM-2c4",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:19Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:19Z"
     },
     {
-      "issue_id": "WOLFKM-bix",
-      "depends_on_id": "WOLFKM-cyn",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:19Z",
+      "depends_on_id": "WOLFKM-8lq",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:20Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-cyn",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:19Z"
     }
   ]
 }

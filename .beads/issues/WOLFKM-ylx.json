@@ -6,10 +6,8 @@
   "priority": 3,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T22:00:33Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:00:33Z",
   "updated_at": "2026-04-17T22:02:52Z",
-  "closed_at": "2026-04-17T22:02:52Z",
-  "close_reason": "poll() implemented: wait_queue_head_t in fd_state, init in open(), EPOLLOUT when not finalized, EPOLLIN when outbuf has data, wake_up in fd_write and ioctl_reset, wired into file_operations, O_NONBLOCK limitation documented in ioctl header."
+  "closed_at": "2026-04-17T22:02:52Z"
 }

@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-dfn.11",
   "title": "FIPS operational: fips_provider_count underflow on double-unregister",
-  "description": "atomic_dec(\u0026fips_provider_count) in crypto2dev_unregister_provider() (src/provider/crypto2dev_registry.c:116) is called unconditionally when p-\u003eis_fips. If a provider module calls unregister_provider twice (module_exit bug or double-free), count goes negative. crypto2dev_fips_provider_loaded() reads the counter and returns false when count \u003c= 0, silently disabling FIPS enforcement for all subsequent lookups. No guard or detection. Fix: use atomic_dec_if_positive or BUG_ON(atomic_read(\u0026fips_provider_count) == 0) before decrement.",
+  "description": "atomic_dec(&fips_provider_count) in crypto2dev_unregister_provider() (src/provider/crypto2dev_registry.c:116) is called unconditionally when p->is_fips. If a provider module calls unregister_provider twice (module_exit bug or double-free), count goes negative. crypto2dev_fips_provider_loaded() reads the counter and returns false when count <= 0, silently disabling FIPS enforcement for all subsequent lookups. No guard or detection. Fix: use atomic_dec_if_positive or BUG_ON(atomic_read(&fips_provider_count) == 0) before decrement.",
   "status": "closed",
   "priority": 1,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T00:03:45Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:03:45Z",
   "updated_at": "2026-04-18T00:55:48Z",
   "closed_at": "2026-04-18T00:55:48Z",
-  "close_reason": "Replaced atomic_dec with atomic_dec_if_positive in crypto2dev_unregister_provider; WARN emitted on underflow attempt",
-  "labels": [
-    "audit",
-    "fips",
-    "operational",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-dfn.11",
       "depends_on_id": "WOLFKM-dfn",
-      "type": "parent-child",
-      "created_at": "2026-04-17T17:03:45Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T17:03:45Z"
     }
   ]
 }

@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-1js.2",
-  "title": "sym_key_export_private is dead code — key_exportable always 0",
-  "description": "fd.c:1800: ioctl_do_kdf hardcodes state-\u003ekey_exportable = 0 for SYMMETRIC KEY fds. There is no UAPI path to set exportable=1 — the struct crypto2dev_kdf_op has no 'exportable' field. Therefore sym_key_export_private() (fd.c:1513) is unreachable: ioctl_key_export_private checks \\!state-\u003ekey_exportable and returns -EACCES. Dead code violates project policy (CLAUDE.md). Fix: either add 'exportable' field to struct crypto2dev_kdf_op and wire it up, or remove sym_key_export_private and NULL the ops slot.",
+  "title": "sym_key_export_private is dead code \u2014 key_exportable always 0",
+  "description": "fd.c:1800: ioctl_do_kdf hardcodes state->key_exportable = 0 for SYMMETRIC KEY fds. There is no UAPI path to set exportable=1 \u2014 the struct crypto2dev_kdf_op has no 'exportable' field. Therefore sym_key_export_private() (fd.c:1513) is unreachable: ioctl_key_export_private checks \\!state->key_exportable and returns -EACCES. Dead code violates project policy (CLAUDE.md). Fix: either add 'exportable' field to struct crypto2dev_kdf_op and wire it up, or remove sym_key_export_private and NULL the ops slot.",
   "status": "closed",
   "priority": 1,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T15:57:15Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T15:57:15Z",
   "updated_at": "2026-04-18T17:06:51Z",
   "closed_at": "2026-04-18T17:06:51Z",
-  "close_reason": "Closed",
-  "labels": [
-    "correctness",
-    "my-oss",
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-1js.2",
       "depends_on_id": "WOLFKM-1js",
-      "type": "parent-child",
-      "created_at": "2026-04-18T08:57:15Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T08:57:15Z"
     }
   ]
 }

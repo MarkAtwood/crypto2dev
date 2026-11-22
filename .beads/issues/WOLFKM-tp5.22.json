@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-tp5.22",
   "title": "Observability: FIPS gate failure during ioctl_init emits no log",
-  "description": "In ioctl_init() (crypto2dev_fd.c lines 655-661), when ops-\u003efips_gate() returns non-zero the handler silently calls module_put() and returns the gate error code with no pr_err identifying the algo or provider. The CRYPTO2DEV_IOC_STATUS path correctly logs the provider name on gate failure, but the per-session ioctl_init path does not. A support engineer diagnosing why INIT returns -EACCES for a given algo gets no kernel log to work from.",
+  "description": "In ioctl_init() (crypto2dev_fd.c lines 655-661), when ops->fips_gate() returns non-zero the handler silently calls module_put() and returns the gate error code with no pr_err identifying the algo or provider. The CRYPTO2DEV_IOC_STATUS path correctly logs the provider name on gate failure, but the per-session ioctl_init path does not. A support engineer diagnosing why INIT returns -EACCES for a given algo gets no kernel log to work from.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:40:50Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:40:50Z",
   "updated_at": "2026-04-18T04:14:59Z",
   "closed_at": "2026-04-18T04:14:59Z",
-  "close_reason": "fixed: FIPS gate failure in ioctl_init now emits pr_err naming algo and provider; explicitly returns -EACCES",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.22",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:40:49Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:40:49Z"
     }
   ]
 }

@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-ms3.34",
   "title": "Crypto misuse: AES-CBC sess_init error path kfree without memzero_explicit on key_bytes",
-  "description": "In wolfssl_aes_cbc_sess_init() (src/providers/wolfssl/wolfssl_aes_cbc.c line 96): memcpy(ctx-\u003ekey_bytes, key, keylen) stores the key before wc_AesSetKey is called. If wc_AesSetKey fails (line 111-115): wc_AesFree() is called, then kfree(ctx) — WITHOUT memzero_explicit(ctx, sizeof(*ctx)) first. The AES key bytes remain in the freed heap slab. FIPS 140-3 requirement: key material must be zeroized before memory is released. Fix: replace 'kfree(ctx)' on the wc_AesSetKey error path with 'memzero_explicit(ctx, sizeof(*ctx)); kfree(ctx);'. Same issue applies at wc_InitRng_ex failure (line 119-123): same path through kfree without zeroizing ctx.",
+  "description": "In wolfssl_aes_cbc_sess_init() (src/providers/wolfssl/wolfssl_aes_cbc.c line 96): memcpy(ctx->key_bytes, key, keylen) stores the key before wc_AesSetKey is called. If wc_AesSetKey fails (line 111-115): wc_AesFree() is called, then kfree(ctx) \u2014 WITHOUT memzero_explicit(ctx, sizeof(*ctx)) first. The AES key bytes remain in the freed heap slab. FIPS 140-3 requirement: key material must be zeroized before memory is released. Fix: replace 'kfree(ctx)' on the wc_AesSetKey error path with 'memzero_explicit(ctx, sizeof(*ctx)); kfree(ctx);'. Same issue applies at wc_InitRng_ex failure (line 119-123): same path through kfree without zeroizing ctx.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:04:42Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:04:42Z",
   "updated_at": "2026-04-18T03:13:37Z",
   "closed_at": "2026-04-18T03:13:37Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "crypto",
-    "fips",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-ms3.34",
       "depends_on_id": "WOLFKM-ms3",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:04:42Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:04:42Z"
     }
   ]
 }

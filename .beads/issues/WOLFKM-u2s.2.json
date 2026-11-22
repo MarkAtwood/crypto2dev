@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-u2s.2",
   "title": "ioctl_do_kdf: redundant lock-cycle on success path",
-  "notes": "In ioctl_do_kdf (crypto2dev_fd.c), the goto label layout causes out_zero to be reached by two paths: (1) early exits before the mutex_lock at line 1776, which arrive unlocked and need the lock, and (2) fall-through from out_free_okm, which exits with the lock already released. The result on the normal success path is: unlock at out_free_okm, then immediately re-lock at out_zero, call inbuf_clear (no-op since inbuf was already cleared at line 1855), then unlock again. Fix: add an early return after the mutex_unlock in out_free_okm to avoid falling into out_zero on the already-unlocked paths.",
   "status": "closed",
   "priority": 3,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-19T21:33:26Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:33:26Z",
   "updated_at": "2026-04-19T23:32:39Z",
   "closed_at": "2026-04-19T23:32:39Z",
-  "close_reason": "Fixed: restructured ioctl_do_kdf goto labels to eliminate redundant lock cycle on success path; out_early label handles pre-lock exits, out_inbuf_clear/out_free_okm handle post-lock exits",
-  "labels": [
-    "efficiency",
-    "review",
-    "wolfkm"
-  ],
+  "notes": "In ioctl_do_kdf (crypto2dev_fd.c), the goto label layout causes out_zero to be reached by two paths: (1) early exits before the mutex_lock at line 1776, which arrive unlocked and need the lock, and (2) fall-through from out_free_okm, which exits with the lock already released. The result on the normal success path is: unlock at out_free_okm, then immediately re-lock at out_zero, call inbuf_clear (no-op since inbuf was already cleared at line 1855), then unlock again. Fix: add an early return after the mutex_unlock in out_free_okm to avoid falling into out_zero on the already-unlocked paths.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-u2s.2",
       "depends_on_id": "WOLFKM-u2s",
-      "type": "parent-child",
-      "created_at": "2026-04-19T14:33:25Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T14:33:25Z"
     }
   ]
 }

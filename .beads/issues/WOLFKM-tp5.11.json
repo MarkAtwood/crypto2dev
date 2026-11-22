@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-tp5.11",
   "title": "ioctl_finalize: finalize called with zero-length output but outbuf_grow called",
-  "description": "ioctl_finalize() calls outbuf_grow(state, CRYPTO2DEV_HASH_MAXLEN) before calling ops-\u003efinalize(). CRYPTO2DEV_HASH_MAXLEN is 64 bytes (SHA-512 digest size). For AEAD encryption with large GCM tags or for XTS/CBC with large final blocks, the finalize output might exceed 64 bytes. The DESIGN.md comment says 'at most one cipher block (16 bytes) for CBC, or the full digest for hash/HMAC/CMAC (up to CRYPTO2DEV_HASH_MAXLEN = 64 bytes)'. For CBC the extra=16 bytes suffices. For hash/MAC extra=64 bytes suffices. But for AEAD finalize (GCM), the finalize may produce the final ciphertext block(s) plus trigger writing the auth tag internally. If a provider's finalize() writes more than 64 bytes beyond current outbuf_len, the WARN_ON fires and the session is marked dead. This is a documentation/contract issue: the outbuf_grow with CRYPTO2DEV_HASH_MAXLEN may be insufficient if a provider's finalize() produces more than 64 bytes. Since providers are supposed to respect the outbuf_size parameter passed to finalize(), this is enforced at the provider level, but the 64-byte guarantee baked into ioctl_finalize is a latent bug for any future algorithm with large finalize output. Trigger: implement a provider whose finalize() produces 128 bytes (e.g. XTS with 128-byte final output) → WARN_ON fires → session dead.",
+  "description": "ioctl_finalize() calls outbuf_grow(state, CRYPTO2DEV_HASH_MAXLEN) before calling ops->finalize(). CRYPTO2DEV_HASH_MAXLEN is 64 bytes (SHA-512 digest size). For AEAD encryption with large GCM tags or for XTS/CBC with large final blocks, the finalize output might exceed 64 bytes. The DESIGN.md comment says 'at most one cipher block (16 bytes) for CBC, or the full digest for hash/HMAC/CMAC (up to CRYPTO2DEV_HASH_MAXLEN = 64 bytes)'. For CBC the extra=16 bytes suffices. For hash/MAC extra=64 bytes suffices. But for AEAD finalize (GCM), the finalize may produce the final ciphertext block(s) plus trigger writing the auth tag internally. If a provider's finalize() writes more than 64 bytes beyond current outbuf_len, the WARN_ON fires and the session is marked dead. This is a documentation/contract issue: the outbuf_grow with CRYPTO2DEV_HASH_MAXLEN may be insufficient if a provider's finalize() produces more than 64 bytes. Since providers are supposed to respect the outbuf_size parameter passed to finalize(), this is enforced at the provider level, but the 64-byte guarantee baked into ioctl_finalize is a latent bug for any future algorithm with large finalize output. Trigger: implement a provider whose finalize() produces 128 bytes (e.g. XTS with 128-byte final output) \u2192 WARN_ON fires \u2192 session dead.",
   "status": "closed",
   "priority": 1,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:40:06Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:40:06Z",
   "updated_at": "2026-04-18T04:08:05Z",
   "closed_at": "2026-04-18T04:08:05Z",
-  "close_reason": "fixed: added produced \u003e CRYPTO2DEV_HASH_MAXLEN check setting state-\u003eerror=true and -EOVERFLOW in ioctl_finalize",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.11",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:40:06Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:40:06Z"
     }
   ]
 }

@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-qnv.1",
-  "title": "DO_KDF ioctl declared in UAPI but not implemented — returns -ENOTTY",
+  "title": "DO_KDF ioctl declared in UAPI but not implemented \u2014 returns -ENOTTY",
   "description": "CRYPTO2DEV_IOC_DO_KDF (slot 22) is added to crypto2dev_ioctl.h with full struct and documentation. The ioctl dispatch in crypto2dev_fd.c has no case for it; the default: branch returns -ENOTTY. Comments in fd.c even say inbuf accumulates for 'KEY_IMPORT or DO_KDF'. Any caller that includes the header and calls the ioctl gets -ENOTTY with no indication this is a stub. This is a shipped broken UAPI: the header is a promise, and the promise is not kept. Trigger: any process calls CRYPTO2DEV_IOC_DO_KDF on an UNSET fd. Bad behavior: returns -ENOTTY instead of performing KDF.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T06:14:09Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T06:14:09Z",
   "updated_at": "2026-04-18T06:19:38Z",
   "closed_at": "2026-04-18T06:19:38Z",
-  "close_reason": "Closed",
-  "labels": [
-    "correctness",
-    "my-oss",
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-qnv.1",
       "depends_on_id": "WOLFKM-qnv",
-      "type": "parent-child",
-      "created_at": "2026-04-17T23:14:08Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T23:14:08Z"
     }
   ]
 }

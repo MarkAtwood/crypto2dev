@@ -4,25 +4,16 @@
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T02:26:51Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:26:51Z",
   "updated_at": "2026-04-20T02:30:32Z",
   "closed_at": "2026-04-20T02:30:32Z",
-  "close_reason": "kcapi_aead_sess_reset now resets ctx-\u003eauthsize=GCM_TAG_SIZE and calls setauthsize; comment added to set_tag",
-  "labels": [
-    "maintainer-burden",
-    "review",
-    "risk"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-5ws.1",
       "depends_on_id": "WOLFKM-5ws",
-      "type": "parent-child",
-      "created_at": "2026-04-19T19:26:51Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T19:26:51Z"
     }
   ]
 }

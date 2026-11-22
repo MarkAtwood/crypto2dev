@@ -6,10 +6,8 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T21:40:42Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T21:40:42Z",
   "updated_at": "2026-04-17T21:41:54Z",
-  "closed_at": "2026-04-17T21:41:54Z",
-  "close_reason": "Magic byte changed to \\xC2 (all ioctl defs now use macro); tombstone comment replaced with 'available for future assignment'; no-flags exception documented in file header."
+  "closed_at": "2026-04-17T21:41:54Z"
 }

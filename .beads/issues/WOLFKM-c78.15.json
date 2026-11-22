@@ -5,23 +5,16 @@
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T00:15:41Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:15:41Z",
   "updated_at": "2026-04-20T00:27:21Z",
   "closed_at": "2026-04-20T00:27:21Z",
-  "close_reason": "Review converged. SEC7: running out of real complaints. P0=0 P1=0. Efficiency findings .6/.9 are marginal (no correctness impact). DECISION records noted.",
-  "labels": [
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-c78.15",
       "depends_on_id": "WOLFKM-c78",
-      "type": "parent-child",
-      "created_at": "2026-04-19T17:15:40Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T17:15:40Z"
     }
   ]
 }

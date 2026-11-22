@@ -1,18 +1,13 @@
 {
   "id": "WOLFKM-w40",
   "title": "CI: add ARM64/Graviton target",
-  "description": "Catches struct padding and alignment bugs that x86-64 hides. AWS Graviton 3 (c7g instances). ARCH=arm64 native build. pahole struct layout check is the main motivation — 32-bit/ARM alignment rules differ from x86-64.",
+  "description": "Catches struct padding and alignment bugs that x86-64 hides. AWS Graviton 3 (c7g instances). ARCH=arm64 native build. pahole struct layout check is the main motivation \u2014 32-bit/ARM alignment rules differ from x86-64.",
   "status": "closed",
   "priority": 3,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-19T02:57:48Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T02:57:48Z",
   "updated_at": "2026-04-19T03:56:23Z",
-  "closed_at": "2026-04-19T03:56:23Z",
-  "close_reason": "ARM64/Graviton 3: 19 PASS, 0 FAIL on Ubuntu 22.04 arm64 kernel 6.8.0-1051-aws (c7g.2xlarge). Fixed ARCH=x86_64→arm64 in wolfSSL make, wolfkm make, kernel test make. Removed --enable-intelasm for ARM64.",
-  "labels": [
-    "distrotest"
-  ]
+  "closed_at": "2026-04-19T03:56:23Z"
 }

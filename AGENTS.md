@@ -5,12 +5,6 @@ work on this project.
 
 ---
 
-## Enable Agent Teams
-
-```bash
-export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
-```
-
 Set this at the start of every non-trivial session. Without it, subagent
 parallelism is unavailable and context pressure degrades output quality.
 
@@ -282,3 +276,23 @@ bd close <id>             # mark complete when done
 - Use `bd` for ALL task tracking. Never use TodoWrite, markdown TODOs, or in-memory lists.
 - Use `bd remember "..."` for persistent facts. Never write MEMORY.md files.
 - Run `bd prime` for the full session protocol.
+
+## Beads Issue Tracker
+
+This project uses **bd (beads)** for issue tracking. Run `bd prime` for full workflow context.
+
+```bash
+bd ready              # Find available work
+bd show <id>          # View issue details
+bd update <id> --claim  # Claim work atomically
+bd close <id>         # Complete work
+```
+
+**Beads is the only task and planning tool.** Do NOT use:
+- TodoWrite / markdown TODO lists
+- Scratchpad or audit files (`audit-*.md`, `plan-scratch.md`, or any similar throwaway planning file)
+- MEMORY.md or any other markdown file as a knowledge store
+
+The only permitted markdown planning artifact is a crate's `PLAN.md`, which is a permanent
+design document checked into the repo — not a scratchpad. Use `bd remember` for persistent
+knowledge and `bd create` for all task tracking.

@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-4l7.2",
-  "title": "Observability: set_tag taglen \u003c 12 FIPS check is silent",
-  "description": "ioctl_set_tag returns -EINVAL when op.taglen \u003c 12 (FIPS SP 800-38D §5.2.1.2 minimum 96-bit tag) with no log. The comment at line 1134 documents the FIPS requirement, but there is no pr_info or pr_err emitted. A support engineer handed a ring buffer where SET_TAG returns -EINVAL cannot tell whether this is a FIPS constraint violation (taglen too small), a wrong taglen value (taglen \u003e CRYPTO2DEV_TAG_MAXLEN), or an invalid ioctl argument. Trigger: call SET_TAG with taglen \u003c 12. Bad outcome: -EINVAL with no log, support engineer cannot diagnose FIPS compliance failure vs argument error. Fix: add pr_info_ratelimited logging taglen, algo, provider before the -EINVAL return. Location: crypto2dev_fd.c line 1135.",
+  "title": "Observability: set_tag taglen < 12 FIPS check is silent",
+  "description": "ioctl_set_tag returns -EINVAL when op.taglen < 12 (FIPS SP 800-38D \u00a75.2.1.2 minimum 96-bit tag) with no log. The comment at line 1134 documents the FIPS requirement, but there is no pr_info or pr_err emitted. A support engineer handed a ring buffer where SET_TAG returns -EINVAL cannot tell whether this is a FIPS constraint violation (taglen too small), a wrong taglen value (taglen > CRYPTO2DEV_TAG_MAXLEN), or an invalid ioctl argument. Trigger: call SET_TAG with taglen < 12. Bad outcome: -EINVAL with no log, support engineer cannot diagnose FIPS compliance failure vs argument error. Fix: add pr_info_ratelimited logging taglen, algo, provider before the -EINVAL return. Location: crypto2dev_fd.c line 1135.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T11:46:41Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T11:46:41Z",
   "updated_at": "2026-04-20T11:51:22Z",
   "closed_at": "2026-04-20T11:51:22Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "fips",
-    "observability",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-4l7.2",
       "depends_on_id": "WOLFKM-4l7",
-      "type": "parent-child",
-      "created_at": "2026-04-20T04:46:40Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-20T04:46:40Z"
     }
   ]
 }

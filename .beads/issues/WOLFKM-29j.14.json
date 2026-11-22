@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-29j.14",
   "title": "FIPS counter inside write_lock: correct ordering",
-  "description": "atomic_t fips_provider_count is incremented/decremented inside write_lock(\u0026provider_lock), not outside it. This ensures readers who hold read_lock see a consistent count+provider-list pair. Moving the atomic_inc/dec outside the lock would create a window where fips_provider_count says 1 but the FIPS provider is not yet visible in the list (or vice versa on unregister). Do not move the counter update outside the lock on grounds of 'atomics don't need locks.'",
+  "description": "atomic_t fips_provider_count is incremented/decremented inside write_lock(&provider_lock), not outside it. This ensures readers who hold read_lock see a consistent count+provider-list pair. Moving the atomic_inc/dec outside the lock would create a window where fips_provider_count says 1 but the FIPS provider is not yet visible in the list (or vice versa on unregister). Do not move the counter update outside the lock on grounds of 'atomics don't need locks.'",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T04:51:57Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T04:51:57Z",
   "updated_at": "2026-04-20T05:07:58Z",
   "closed_at": "2026-04-20T05:07:58Z",
-  "close_reason": "Decision recorded. FIPS counter correctly incremented/decremented inside write_lock — no code change needed.",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-29j.14",
       "depends_on_id": "WOLFKM-29j",
-      "type": "parent-child",
-      "created_at": "2026-04-19T21:51:57Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T21:51:57Z"
     }
   ]
 }

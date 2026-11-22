@@ -2,82 +2,63 @@
   "id": "WOLFKM-kgh",
   "title": "tests/kernel/run_kernel_tests.sh: kernel test orchestrator",
   "description": "Shell script that orchestrates loading and running all kernel test modules. Usage: sudo ./run_kernel_tests.sh /path/to/wolfcrypt.ko /path/to/wolfkm.ko. Procedure: (1) insmod wolfcrypt.ko, insmod wolfkm.ko; (2) for each test_*.ko: build if needed, insmod, sleep 2, capture dmesg since load, grep for PASS/FAIL lines, rmmod; (3) collect pass/fail counts; (4) rmmod wolfkm.ko, rmmod wolfcrypt.ko; (5) exit nonzero if any FAIL.",
-  "design": "Color output: green PASS, red FAIL, yellow SKIP. 30-second timeout per test module (kill and fail if exceeded). dmesg filtering: capture lines with 'wolfkm_test' prefix to distinguish from unrelated kernel messages. After all tests, check dmesg for 'BUG:' or 'Oops:' — fail the run if found. Used by tests/ci/test-on-aws.sh.",
-  "acceptance_criteria": "Script runs all 7 test modules, reports pass/fail per module, exits 0 only if all pass. Handles missing wolfcrypt.ko with clear error. Works on bash 4.x and 5.x. 30s timeout kills hung modules.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T06:55:35Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-16T06:55:35Z",
+  "updated_at": "2026-04-18T19:12:52Z",
   "closed_at": "2026-04-18T19:12:52Z",
-  "close_reason": "run_kernel_tests.sh written: loads wolfcrypt+crypto2dev, runs 7 test modules with 30s timeout, captures dmesg PASS/FAIL, checks for BUG/Oops, color output, nonzero exit on failure",
+  "design": "Color output: green PASS, red FAIL, yellow SKIP. 30-second timeout per test module (kill and fail if exceeded). dmesg filtering: capture lines with 'wolfkm_test' prefix to distinguish from unrelated kernel messages. After all tests, check dmesg for 'BUG:' or 'Oops:' \u2014 fail the run if found. Used by tests/ci/test-on-aws.sh.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-kgh",
-      "depends_on_id": "WOLFKM-0xu",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:24Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-kgh",
       "depends_on_id": "WOLFKM-0gm",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:25Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:25Z"
     },
     {
-      "issue_id": "WOLFKM-kgh",
-      "depends_on_id": "WOLFKM-8lq",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:22Z",
+      "depends_on_id": "WOLFKM-0xu",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:24Z"
     },
     {
-      "issue_id": "WOLFKM-kgh",
-      "depends_on_id": "WOLFKM-bix",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:25Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-kgh",
-      "depends_on_id": "WOLFKM-bzr",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:23Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-kgh",
       "depends_on_id": "WOLFKM-4d2",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:24Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:24Z"
     },
     {
-      "issue_id": "WOLFKM-kgh",
+      "depends_on_id": "WOLFKM-8lq",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:22Z"
+    },
+    {
       "depends_on_id": "WOLFKM-bdn",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:23Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:23Z"
     },
     {
-      "issue_id": "WOLFKM-kgh",
-      "depends_on_id": "WOLFKM-ns8",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:26Z",
+      "depends_on_id": "WOLFKM-bix",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:25Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-bzr",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:23Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-ns8",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-15T23:59:26Z"
     }
   ]
 }

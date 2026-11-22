@@ -6,26 +6,16 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T04:47:40Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T04:47:40Z",
   "updated_at": "2026-04-20T05:06:08Z",
   "closed_at": "2026-04-20T05:06:08Z",
-  "close_reason": "Added pr_info_ratelimited after successful kdf() call, matching the provider attribution pattern used by ioctl_init and ioctl_key_import",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-29j.4",
       "depends_on_id": "WOLFKM-29j",
-      "type": "parent-child",
-      "created_at": "2026-04-19T21:47:39Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T21:47:39Z"
     }
   ]
 }

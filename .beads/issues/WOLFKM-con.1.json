@@ -6,26 +6,16 @@
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:35:51Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:35:51Z",
   "updated_at": "2026-04-19T21:23:27Z",
   "closed_at": "2026-04-19T21:23:27Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "correctness",
-    "fips",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.1",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:35:50Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:35:50Z"
     }
   ]
 }

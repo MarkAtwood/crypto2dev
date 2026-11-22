@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-ms3.24",
   "title": "Kernel discipline: GEN_IV sets iv_set=true before copy_to_user succeeds",
-  "description": "ioctl_gen_iv() (crypto2dev_fd.c:760-769) calls ops-\u003eset_iv() and sets state-\u003eiv_set=true at line 764 before the copy_to_user at line 768. If copy_to_user fails (-EFAULT), the function returns -EFAULT to the caller but the provider session already has the IV programmed and iv_set=true. The caller never received the IV bytes, so the session is in a state where: (a) encryption will produce ciphertext with an unknown IV the caller cannot transmit, (b) the caller cannot recover the IV without RESET which destroys the session. The UAPI comment states -EFAULT from write() means the call may be retried, implying atomicity; GEN_IV violates this for the copy_to_user failure case. Fix: perform copy_to_user before set_iv (so iv_set is only set after the user has the IV), or on copy_to_user failure, clear iv_set and call set_iv with zeros to invalidate the programmed IV.",
+  "description": "ioctl_gen_iv() (crypto2dev_fd.c:760-769) calls ops->set_iv() and sets state->iv_set=true at line 764 before the copy_to_user at line 768. If copy_to_user fails (-EFAULT), the function returns -EFAULT to the caller but the provider session already has the IV programmed and iv_set=true. The caller never received the IV bytes, so the session is in a state where: (a) encryption will produce ciphertext with an unknown IV the caller cannot transmit, (b) the caller cannot recover the IV without RESET which destroys the session. The UAPI comment states -EFAULT from write() means the call may be retried, implying atomicity; GEN_IV violates this for the copy_to_user failure case. Fix: perform copy_to_user before set_iv (so iv_set is only set after the user has the IV), or on copy_to_user failure, clear iv_set and call set_iv with zeros to invalidate the programmed IV.",
   "status": "closed",
   "priority": 1,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:04:22Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:04:22Z",
   "updated_at": "2026-04-18T03:22:11Z",
   "closed_at": "2026-04-18T03:22:11Z",
-  "close_reason": "Fixed in this session",
-  "labels": [
-    "audit",
-    "correctness",
-    "kernel",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-ms3.24",
       "depends_on_id": "WOLFKM-ms3",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:04:21Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:04:21Z"
     }
   ]
 }

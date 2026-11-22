@@ -1,19 +1,13 @@
 {
   "id": "WOLFKM-yjf",
   "title": "Review: P0/P1 fixes + P3 doc/tool/CI wave (f1cdf08..030dd16)",
-  "notes": "Maintainer risk: LOW — the two bugs found are: (1) a new regression we introduced (WARN vs pr_warn) that only fires on hardened kernels with CONFIG_BUG_ON_WARN, and (2) a stub-mode-only invariant violation with no production impact. The benchmark, scripts, CI files, and docs are clean. No new public API surfaces were added.\nConfidence: 10% chance of missed bug. Uncertainty driven by: not running the code on a CONFIG_BUG_ON_WARN kernel to confirm the WARN() behavior; not exercising the stub-mode RSA import path in tests. Would raise confidence if: tests/userspace/test_asym covers the wrong-key-size path in stub mode; CI runs on a hardened kernel config.",
   "status": "closed",
   "priority": 1,
   "issue_type": "epic",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:14:46Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-18T23:14:46Z",
+  "updated_at": "2026-04-18T23:31:31Z",
   "closed_at": "2026-04-18T23:31:31Z",
-  "close_reason": "all steps complete",
-  "labels": [
-    "my-oss",
-    "review"
-  ]
+  "notes": "Maintainer risk: LOW \u2014 the two bugs found are: (1) a new regression we introduced (WARN vs pr_warn) that only fires on hardened kernels with CONFIG_BUG_ON_WARN, and (2) a stub-mode-only invariant violation with no production impact. The benchmark, scripts, CI files, and docs are clean. No new public API surfaces were added.\nConfidence: 10% chance of missed bug. Uncertainty driven by: not running the code on a CONFIG_BUG_ON_WARN kernel to confirm the WARN() behavior; not exercising the stub-mode RSA import path in tests. Would raise confidence if: tests/userspace/test_asym covers the wrong-key-size path in stub mode; CI runs on a hardened kernel config."
 }

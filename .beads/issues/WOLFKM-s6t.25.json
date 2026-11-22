@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-s6t.25",
-  "title": "iv_set flag set AFTER copy_to_user in ioctl_gen_iv — IV must be in caller's hands before session proceeds",
-  "description": "In ioctl_gen_iv(), state-\u003eiv_set is set to true only after copy_to_user() succeeds (line 930 in crypto2dev_fd.c). If copy_to_user() fails, iv_set remains false and subsequent write() returns -EINVAL (IV required but not set). This is correct: if the IV bytes were never delivered to the caller, they cannot transmit the IV alongside the ciphertext. A session that proceeds with an IV the caller never received produces ciphertext that cannot be decrypted — a silent data loss. Setting iv_set before the copy would allow write() to proceed and produce ciphertext, then the caller discovers the ioctl failed, has no IV, and the data is irrecoverably lost. A reviewer might suggest 'set iv_set before the copy for symmetry with set_iv' — that ordering error would allow silent production of undecryptable ciphertext.",
+  "title": "iv_set flag set AFTER copy_to_user in ioctl_gen_iv \u2014 IV must be in caller's hands before session proceeds",
+  "description": "In ioctl_gen_iv(), state->iv_set is set to true only after copy_to_user() succeeds (line 930 in crypto2dev_fd.c). If copy_to_user() fails, iv_set remains false and subsequent write() returns -EINVAL (IV required but not set). This is correct: if the IV bytes were never delivered to the caller, they cannot transmit the IV alongside the ciphertext. A session that proceeds with an IV the caller never received produces ciphertext that cannot be decrypted \u2014 a silent data loss. Setting iv_set before the copy would allow write() to proceed and produce ciphertext, then the caller discovers the ioctl failed, has no IV, and the data is irrecoverably lost. A reviewer might suggest 'set iv_set before the copy for symmetry with set_iv' \u2014 that ordering error would allow silent production of undecryptable ciphertext.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T03:22:48Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:22:48Z",
   "updated_at": "2026-04-20T04:23:14Z",
   "closed_at": "2026-04-20T04:23:14Z",
-  "close_reason": "Defend decision confirmed correct: iv_set is set after copy_to_user succeeds. If copy_to_user fails, iv_set stays false, preventing write() from proceeding — avoids producing ciphertext with an IV the caller never received. Setting iv_set before the copy would be an ordering bug.",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-s6t.25",
       "depends_on_id": "WOLFKM-s6t",
-      "type": "parent-child",
-      "created_at": "2026-04-19T20:22:48Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T20:22:48Z"
     }
   ]
 }

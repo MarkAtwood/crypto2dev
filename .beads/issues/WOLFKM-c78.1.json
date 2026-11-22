@@ -1,27 +1,20 @@
 {
   "id": "WOLFKM-c78.1",
   "title": "[SEC0] No correctness issues found",
-  "description": "Reviewed ioctl_do_kdf ikm_fd path (crypto2dev_fd.c lines 1715-1987), UAPI comment (crypto2dev_ioctl.h lines 671-704), DESIGN.md Fd Lifecycle section, and test_kdf.c new tests. Verified:\n\n- Lock ordering: ks-\u003elock acquired/released before state-\u003elock (no ABBA deadlock)\n- IKM zeroization: ikm_buf zeroed with memzero_explicit on all exit paths\n- ikm_buf double-free: prevented by NULL check after first free\n- Dual-source check: inside state-\u003elock (atomic with concurrent write)\n- fget refcount: fput called at line 1826, before state-\u003elock acquired\n- PBKDF2 restriction: ikm_fd rejected for pbkdf2 at line 1780 (pre-lock)\n- FIPS gate: called at line 1877 before ops-\u003ekdf invocation\n- Test vector: ikm_fd_stage2_okm (0xb3 74 dc 3a...) matches OpenSSL oracle\n- Test coverage: EBADF (operation fd, invalid fd), EINVAL (pbkdf2, dual-source)\n\nNo correctness bugs found.",
+  "description": "Reviewed ioctl_do_kdf ikm_fd path (crypto2dev_fd.c lines 1715-1987), UAPI comment (crypto2dev_ioctl.h lines 671-704), DESIGN.md Fd Lifecycle section, and test_kdf.c new tests. Verified:\n\n- Lock ordering: ks->lock acquired/released before state->lock (no ABBA deadlock)\n- IKM zeroization: ikm_buf zeroed with memzero_explicit on all exit paths\n- ikm_buf double-free: prevented by NULL check after first free\n- Dual-source check: inside state->lock (atomic with concurrent write)\n- fget refcount: fput called at line 1826, before state->lock acquired\n- PBKDF2 restriction: ikm_fd rejected for pbkdf2 at line 1780 (pre-lock)\n- FIPS gate: called at line 1877 before ops->kdf invocation\n- Test vector: ikm_fd_stage2_okm (0xb3 74 dc 3a...) matches OpenSSL oracle\n- Test coverage: EBADF (operation fd, invalid fd), EINVAL (pbkdf2, dual-source)\n\nNo correctness bugs found.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T00:14:43Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:14:43Z",
   "updated_at": "2026-04-20T00:26:55Z",
   "closed_at": "2026-04-20T00:26:55Z",
-  "close_reason": "Review converged. SEC7: running out of real complaints. P0=0 P1=0. Efficiency findings .6/.9 are marginal (no correctness impact). DECISION records noted.",
-  "labels": [
-    "correctness"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-c78.1",
       "depends_on_id": "WOLFKM-c78",
-      "type": "parent-child",
-      "created_at": "2026-04-19T17:14:42Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T17:14:42Z"
     }
   ]
 }

@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-tp5.1",
   "title": "ioctl_reset allows reset after error without FINALIZE",
-  "description": "ioctl_reset() checks 'if (\\!state-\u003efinalized) return -EINVAL' but the DESIGN.md comment says RESET is for error recovery as well. When state-\u003eerror==true and state-\u003efinalized==false (e.g. update() failed mid-stream), there is no way to recover via RESET — the fd is permanently dead even though the session key material is intact. The UAPI header says 'Call CRYPTO2DEV_IOC_RESET to recover the fd for a new operation (same key)' after errors, but ioctl_reset() refuses if \\!finalized. Trigger: INIT → SET_IV → write() returns -EIO (error=true, finalized=false) → RESET → returns -EINVAL → fd is unrecoverable despite the documented contract.",
+  "description": "ioctl_reset() checks 'if (\\!state->finalized) return -EINVAL' but the DESIGN.md comment says RESET is for error recovery as well. When state->error==true and state->finalized==false (e.g. update() failed mid-stream), there is no way to recover via RESET \u2014 the fd is permanently dead even though the session key material is intact. The UAPI header says 'Call CRYPTO2DEV_IOC_RESET to recover the fd for a new operation (same key)' after errors, but ioctl_reset() refuses if \\!finalized. Trigger: INIT \u2192 SET_IV \u2192 write() returns -EIO (error=true, finalized=false) \u2192 RESET \u2192 returns -EINVAL \u2192 fd is unrecoverable despite the documented contract.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:38:15Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:38:15Z",
   "updated_at": "2026-04-18T04:02:45Z",
   "closed_at": "2026-04-18T04:02:45Z",
-  "close_reason": "fixed: changed \\!state-\u003efinalized to \\!state-\u003efinalized \u0026\u0026 \\!state-\u003eerror in ioctl_reset",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.1",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:38:15Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:38:15Z"
     }
   ]
 }

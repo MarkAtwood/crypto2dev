@@ -6,26 +6,16 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T15:00:43Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:00:43Z",
   "updated_at": "2026-04-20T15:21:46Z",
   "closed_at": "2026-04-20T15:21:46Z",
-  "close_reason": "Fixed: replaced __u8 _pad[4] with __u32 outbuf_cap in struct crypto2dev_fd_state_info (crypto2dev_ioctl.h). No struct size change, no ioctl number change. Populated in ioctl_get_state for both OPERATION and KEY fd cases. Max value is CRYPTO2DEV_OUTBUF_MAX = 1MB, fits in __u32. Cast (u32)state-\u003eoutbuf_cap is safe.",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-w4c.5",
       "depends_on_id": "WOLFKM-w4c",
-      "type": "parent-child",
-      "created_at": "2026-04-20T08:00:42Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-20T08:00:42Z"
     }
   ]
 }

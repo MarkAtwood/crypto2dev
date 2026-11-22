@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-ms3.27",
-  "title": "memzero_explicit throughout — do not replace with memset",
-  "description": "Every sensitive buffer (inline key in ioctl_init's op struct, gen_iv stack IV, agree okm on both success and error paths, inbuf key material, outbuf on release, key export kbuf) is zeroed with memzero_explicit rather than memset. FIPS 140-3 requires key material to be destroyed before memory is released; the compiler is permitted to elide a plain memset when the buffer goes out of scope, which memzero_explicit (a compiler barrier) prevents. A reviewer who suggests 'use memset — it is cleaner' is wrong. The current calls are correct and must not be changed.",
+  "title": "memzero_explicit throughout \u2014 do not replace with memset",
+  "description": "Every sensitive buffer (inline key in ioctl_init's op struct, gen_iv stack IV, agree okm on both success and error paths, inbuf key material, outbuf on release, key export kbuf) is zeroed with memzero_explicit rather than memset. FIPS 140-3 requires key material to be destroyed before memory is released; the compiler is permitted to elide a plain memset when the buffer goes out of scope, which memzero_explicit (a compiler barrier) prevents. A reviewer who suggests 'use memset \u2014 it is cleaner' is wrong. The current calls are correct and must not be changed.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:04:28Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:04:28Z",
   "updated_at": "2026-04-18T03:27:21Z",
   "closed_at": "2026-04-18T03:27:21Z",
-  "close_reason": "Acknowledged: already implemented correctly, no code change required",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-ms3.27",
       "depends_on_id": "WOLFKM-ms3",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:04:27Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:04:27Z"
     }
   ]
 }

@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-dfn.17",
   "title": "Observability: session error -EIO swallows original failure context",
-  "description": "write() calls ops-\u003eupdate() at src/cdev/crypto2dev_fd.c:372. On failure, line 376 sets state-\u003eerror=true and returns ret. Subsequent read() at line 487 checks state-\u003eerror and returns -EIO, discarding the original error. No pr_err is emitted at error flag set time. A support engineer debugging 'read() returns -EIO' has no kernel log showing which operation failed, what the original error was, or which session transitioned to error state. write() should log (algo, provider, original error code) when setting state-\u003eerror.",
+  "description": "write() calls ops->update() at src/cdev/crypto2dev_fd.c:372. On failure, line 376 sets state->error=true and returns ret. Subsequent read() at line 487 checks state->error and returns -EIO, discarding the original error. No pr_err is emitted at error flag set time. A support engineer debugging 'read() returns -EIO' has no kernel log showing which operation failed, what the original error was, or which session transitioned to error state. write() should log (algo, provider, original error code) when setting state->error.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T00:04:19Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:04:19Z",
   "updated_at": "2026-04-18T01:02:39Z",
   "closed_at": "2026-04-18T01:02:39Z",
-  "close_reason": "Added pr_err_ratelimited at update() and finalize() failure points before state-\u003eerror=true; error code preserved in log",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-dfn.17",
       "depends_on_id": "WOLFKM-dfn",
-      "type": "parent-child",
-      "created_at": "2026-04-17T17:04:18Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T17:04:18Z"
     }
   ]
 }

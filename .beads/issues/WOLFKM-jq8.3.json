@@ -1,41 +1,33 @@
 {
   "id": "WOLFKM-jq8.3",
   "title": "Update fd.c: remove asym from INIT, add do_sign/do_verify/do_agree/reset handlers",
-  "description": "In src/cdev/crypto2dev_fd.c: remove OP_SIGN/OP_VERIFY/OP_AGREE validation from ioctl_init key-type checking; remove ioctl_set_sig and ioctl_get_sig handlers; add ioctl_do_sign (looks up key_fd internally, calls ops-\u003esign); add ioctl_do_verify (looks up key_fd, calls ops-\u003everify, maps -EBADMSG); add ioctl_do_agree (looks up key_fd, calls ops-\u003eagree); add ioctl_reset (checks finalized==true, calls ops-\u003esess_reset, clears outbuf state); update dispatch switch to handle new ioctl numbers and drop slots 6/7.",
+  "description": "In src/cdev/crypto2dev_fd.c: remove OP_SIGN/OP_VERIFY/OP_AGREE validation from ioctl_init key-type checking; remove ioctl_set_sig and ioctl_get_sig handlers; add ioctl_do_sign (looks up key_fd internally, calls ops->sign); add ioctl_do_verify (looks up key_fd, calls ops->verify, maps -EBADMSG); add ioctl_do_agree (looks up key_fd, calls ops->agree); add ioctl_reset (checks finalized==true, calls ops->sess_reset, clears outbuf state); update dispatch switch to handle new ioctl numbers and drop slots 6/7.",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T18:01:37Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-17T18:01:37Z",
+  "updated_at": "2026-04-17T18:22:31Z",
   "closed_at": "2026-04-17T18:22:31Z",
-  "close_reason": "Closed",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-jq8.3",
-      "depends_on_id": "WOLFKM-jq8.1",
-      "type": "blocks",
-      "created_at": "2026-04-17T11:01:52Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-jq8.3",
       "depends_on_id": "WOLFKM-jq8",
-      "type": "parent-child",
-      "created_at": "2026-04-17T11:01:36Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T11:01:36Z"
     },
     {
-      "issue_id": "WOLFKM-jq8.3",
-      "depends_on_id": "WOLFKM-jq8.2",
-      "type": "blocks",
-      "created_at": "2026-04-17T11:01:56Z",
+      "depends_on_id": "WOLFKM-jq8.1",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T11:01:52Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-jq8.2",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:01:56Z"
     }
   ]
 }

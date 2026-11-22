@@ -6,13 +6,8 @@
   "priority": 3,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-19T02:57:40Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T02:57:40Z",
   "updated_at": "2026-04-19T03:11:57Z",
-  "closed_at": "2026-04-19T03:11:57Z",
-  "close_reason": "Ubuntu 24.04 (kernel 6.17) passes 19/0. Fixed AMI pattern: hvm-ssd-gp3 (Noble moved away from hvm-ssd).",
-  "labels": [
-    "distrotest"
-  ]
+  "closed_at": "2026-04-19T03:11:57Z"
 }

@@ -1,16 +1,13 @@
 {
   "id": "WOLFKM-dl8",
   "title": "PBKDF2 completeness: SHA384/SHA512 tests + kcapi",
-  "description": "Fix two gaps in PBKDF2 support:\n\n1. wolfssl already implements pbkdf2(sha384) and pbkdf2(sha512) via wc_PBKDF2(WC_SHA384/WC_SHA512) but there are no test vectors and no test_kdf.c test cases for them. Only pbkdf2(sha256) is tested.\n\n2. kcapi_kdf.c has no PBKDF2 implementation despite DESIGN.md claiming kcapi=yes for all three pbkdf2 variants. The file header comment also lists pbkdf2 as a supported algorithm. This is an implementation gap.\n\nWhat needs to be done:\n1. Add PBKDF2-SHA384 and PBKDF2-SHA512 known-answer vectors to tests/vectors/ (from OpenSSL or pyca/cryptography)\n2. Add pbkdf2(sha384) and pbkdf2(sha512) test cases to tests/userspace/test_kdf.c, including validation rejection tests (iterations \u003c 1000, salt too short)\n3. Implement kcapi PBKDF2 in kcapi_kdf.c using crypto_alloc_shash(\"hmac(sha384)\") etc., manually iterating the PRF — same approach as the manual HKDF implementation\n4. Update DESIGN.md algorithm coverage table to accurately reflect kcapi PBKDF2 status (or mark as — if kernel API research shows it is not feasible on all target kernels)",
-  "acceptance_criteria": "pbkdf2(sha384) and pbkdf2(sha512) pass known-answer tests. kcapi PBKDF2 compiles and is registered. DESIGN.md is accurate. make produces zero errors and zero new warnings.",
+  "description": "Fix two gaps in PBKDF2 support:\n\n1. wolfssl already implements pbkdf2(sha384) and pbkdf2(sha512) via wc_PBKDF2(WC_SHA384/WC_SHA512) but there are no test vectors and no test_kdf.c test cases for them. Only pbkdf2(sha256) is tested.\n\n2. kcapi_kdf.c has no PBKDF2 implementation despite DESIGN.md claiming kcapi=yes for all three pbkdf2 variants. The file header comment also lists pbkdf2 as a supported algorithm. This is an implementation gap.\n\nWhat needs to be done:\n1. Add PBKDF2-SHA384 and PBKDF2-SHA512 known-answer vectors to tests/vectors/ (from OpenSSL or pyca/cryptography)\n2. Add pbkdf2(sha384) and pbkdf2(sha512) test cases to tests/userspace/test_kdf.c, including validation rejection tests (iterations < 1000, salt too short)\n3. Implement kcapi PBKDF2 in kcapi_kdf.c using crypto_alloc_shash(\"hmac(sha384)\") etc., manually iterating the PRF \u2014 same approach as the manual HKDF implementation\n4. Update DESIGN.md algorithm coverage table to accurately reflect kcapi PBKDF2 status (or mark as \u2014 if kernel API research shows it is not feasible on all target kernels)",
   "status": "closed",
   "priority": 2,
   "issue_type": "epic",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T00:56:15Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:56:15Z",
   "updated_at": "2026-04-20T01:10:26Z",
-  "closed_at": "2026-04-20T01:10:26Z",
-  "close_reason": "PBKDF2 completeness done: kcapi implements sha256/384/512, wolfssl sha384/sha512 have KAT vectors, test_kdf.c covers all variants with KAT+rejection tests, DESIGN.md accurate"
+  "closed_at": "2026-04-20T01:10:26Z"
 }

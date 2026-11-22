@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-u2s.6",
   "title": "ioctl_init/KEY_IMPORT/KEY_GENERATE: pr_info on hot path should be pr_debug",
-  "notes": "Three success-path pr_info calls in crypto2dev_fd.c emit an unconditional printk on every successful INIT, KEY_IMPORT, and KEY_GENERATE ioctl:\n  - Line 802: 'crypto2dev: init dispatched to provider' (every INIT)\n  - Line 1702: 'crypto2dev: KEY_IMPORT dispatched to provider'\n  - Line 1991: 'crypto2dev: KEY_GENERATE dispatched to provider'\nprintk acquires a spinlock on the log buffer. For a TLS server at 1000 sessions/sec, this is 1000 printk calls/sec to dmesg — noisy and adds latency. These should be pr_debug(), which compiles to a no-op unless dynamic debug is enabled (CONFIG_DYNAMIC_DEBUG). The error paths (algo not found, etc.) correctly use pr_info_ratelimited, which is fine — those are exceptional. Only the success-path 'dispatched to' messages need to move to pr_debug.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-19T21:33:51Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:33:51Z",
   "updated_at": "2026-04-19T21:43:49Z",
   "closed_at": "2026-04-19T21:43:49Z",
-  "close_reason": "Closed",
-  "labels": [
-    "efficiency",
-    "review",
-    "wolfkm"
-  ],
+  "notes": "Three success-path pr_info calls in crypto2dev_fd.c emit an unconditional printk on every successful INIT, KEY_IMPORT, and KEY_GENERATE ioctl:\n  - Line 802: 'crypto2dev: init dispatched to provider' (every INIT)\n  - Line 1702: 'crypto2dev: KEY_IMPORT dispatched to provider'\n  - Line 1991: 'crypto2dev: KEY_GENERATE dispatched to provider'\nprintk acquires a spinlock on the log buffer. For a TLS server at 1000 sessions/sec, this is 1000 printk calls/sec to dmesg \u2014 noisy and adds latency. These should be pr_debug(), which compiles to a no-op unless dynamic debug is enabled (CONFIG_DYNAMIC_DEBUG). The error paths (algo not found, etc.) correctly use pr_info_ratelimited, which is fine \u2014 those are exceptional. Only the success-path 'dispatched to' messages need to move to pr_debug.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-u2s.6",
       "depends_on_id": "WOLFKM-u2s",
-      "type": "parent-child",
-      "created_at": "2026-04-19T14:33:51Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T14:33:51Z"
     }
   ]
 }

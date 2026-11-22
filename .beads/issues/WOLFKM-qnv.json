@@ -2,19 +2,13 @@
   "id": "WOLFKM-qnv",
   "title": "Review: KDF UAPI, tests, tools, provider audit fixes",
   "description": "Pre-merge review of last two commits: 37df9b1 (fix: audit: zeroization, UAPI, observability) and 179f504 (feat: KDF UAPI, tests, tools, provider audit fixes). 2284 insertions across 20 files.",
-  "notes": "Maintainer risk: HIGH — Two issues warrant blocking: (1) DO_KDF in UAPI with no implementation is a broken API promise that ships in the header; (2) AEAD auth failure emitting pr_err will spam production dmesg under any attack scenario.\nConfidence: 15% chance of missed bug. Uncertainty driven by: (1) KDF implementation is missing — couldn't review code that doesn't exist; (2) test_af_alg.c and test_chardev.c are new (340+513 lines) and weren't fully reviewed for test oracle independence; (3) wolfssl provider interactions with FIPS mode and WC_RNG state under concurrent reset were not traced end-to-end. Would raise confidence if: DO_KDF is implemented and reviewable; test vectors in tests/ are verified against an external oracle (OpenSSL, NIST ACVTS); RESET → INIT cycle is tested under concurrent load.",
   "status": "closed",
   "priority": 1,
   "issue_type": "epic",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T06:13:58Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-18T06:13:58Z",
+  "updated_at": "2026-04-18T06:19:56Z",
   "closed_at": "2026-04-18T06:19:56Z",
-  "close_reason": "all steps complete",
-  "labels": [
-    "my-oss",
-    "review"
-  ]
+  "notes": "Maintainer risk: HIGH \u2014 Two issues warrant blocking: (1) DO_KDF in UAPI with no implementation is a broken API promise that ships in the header; (2) AEAD auth failure emitting pr_err will spam production dmesg under any attack scenario.\nConfidence: 15% chance of missed bug. Uncertainty driven by: (1) KDF implementation is missing \u2014 couldn't review code that doesn't exist; (2) test_af_alg.c and test_chardev.c are new (340+513 lines) and weren't fully reviewed for test oracle independence; (3) wolfssl provider interactions with FIPS mode and WC_RNG state under concurrent reset were not traced end-to-end. Would raise confidence if: DO_KDF is implemented and reviewable; test vectors in tests/ are verified against an external oracle (OpenSSL, NIST ACVTS); RESET \u2192 INIT cycle is tested under concurrent load."
 }

@@ -1,30 +1,20 @@
 {
   "id": "WOLFKM-76h.7",
   "title": "FIPS mode lookup rejection log omits which non-FIPS provider was skipped",
-  "description": "fd.c:738-740: when FIPS enforcement is active and a lookup for e.g. ctr(aes) or xts(aes) fails because the only matching provider (kcapi) is non-FIPS, the log says 'not found — FIPS mode active; ensure a FIPS provider registers this algo' — but does NOT identify which non-FIPS provider was skipped. The support engineer knows FIPS blocked it but must manually cross-reference the sysfs algorithms file to determine 'kcapi had this algo and was rejected'. crypto2dev_lookup_algo has no mechanism to record skipped-due-to-FIPS matches. Same gap exists in ioctl_key_import (1651-1656), ioctl_do_kdf (1858-1863), ioctl_key_generate (2024-2029). Fix options: (a) add a second pass in lookup_algo that returns the first skipped-but-would-have-matched provider name, include it in the log, or (b) add a pr_debug inside the FIPS-skip branch of lookup_algo that names the provider being skipped.",
+  "description": "fd.c:738-740: when FIPS enforcement is active and a lookup for e.g. ctr(aes) or xts(aes) fails because the only matching provider (kcapi) is non-FIPS, the log says 'not found \u2014 FIPS mode active; ensure a FIPS provider registers this algo' \u2014 but does NOT identify which non-FIPS provider was skipped. The support engineer knows FIPS blocked it but must manually cross-reference the sysfs algorithms file to determine 'kcapi had this algo and was rejected'. crypto2dev_lookup_algo has no mechanism to record skipped-due-to-FIPS matches. Same gap exists in ioctl_key_import (1651-1656), ioctl_do_kdf (1858-1863), ioctl_key_generate (2024-2029). Fix options: (a) add a second pass in lookup_algo that returns the first skipped-but-would-have-matched provider name, include it in the log, or (b) add a pr_debug inside the FIPS-skip branch of lookup_algo that names the provider being skipped.",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T02:05:50Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:05:50Z",
   "updated_at": "2026-04-20T03:14:25Z",
   "closed_at": "2026-04-20T03:14:25Z",
-  "close_reason": "Fixed in WOLFKM-6vs: skipped non-FIPS provider named in lookup rejection log",
-  "labels": [
-    "audit",
-    "fips",
-    "operational",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-76h.7",
       "depends_on_id": "WOLFKM-76h",
-      "type": "parent-child",
-      "created_at": "2026-04-19T19:05:50Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T19:05:50Z"
     }
   ]
 }

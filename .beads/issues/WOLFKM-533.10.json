@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-533.10",
   "title": "Write-before-ioctl for key import avoids stack overflow on PQ keys",
-  "description": "KEY_IMPORT uses write(2)-before-ioctl: raw key bytes are written to the fd's inbuf, then CRYPTO2DEV_IOC_KEY_IMPORT is called with a small metadata struct (algo, provider, key_type, exportable, keylen — no key bytes). The ioctl comment documents the rationale explicitly: RSA-4096 PKCS#8 is ~2.4 KB, ML-DSA-87 is 4896 bytes. Embedding key bytes in the ioctl struct would require a worst-case 8192-byte struct on the kernel stack on every KEY_IMPORT call — violating the ~1 KB kernel stack frame guideline and causing stack overflow on PQ key imports. The write-before-ioctl pattern allocates exactly what the key requires on the heap via inbuf, then zeroizes (memzero_explicit) and frees after import. A reviewer might suggest 'just embed the key in the struct with a large fixed buffer — it's simpler.' That approach cannot be corrected later without an ABI break, and it will overflow the stack for ML-DSA keys today.",
+  "description": "KEY_IMPORT uses write(2)-before-ioctl: raw key bytes are written to the fd's inbuf, then CRYPTO2DEV_IOC_KEY_IMPORT is called with a small metadata struct (algo, provider, key_type, exportable, keylen \u2014 no key bytes). The ioctl comment documents the rationale explicitly: RSA-4096 PKCS#8 is ~2.4 KB, ML-DSA-87 is 4896 bytes. Embedding key bytes in the ioctl struct would require a worst-case 8192-byte struct on the kernel stack on every KEY_IMPORT call \u2014 violating the ~1 KB kernel stack frame guideline and causing stack overflow on PQ key imports. The write-before-ioctl pattern allocates exactly what the key requires on the heap via inbuf, then zeroizes (memzero_explicit) and frees after import. A reviewer might suggest 'just embed the key in the struct with a large fixed buffer \u2014 it's simpler.' That approach cannot be corrected later without an ABI break, and it will overflow the stack for ML-DSA keys today.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T05:28:57Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:28:57Z",
   "updated_at": "2026-04-20T05:49:05Z",
   "closed_at": "2026-04-20T05:49:05Z",
-  "close_reason": "Design decision confirmed by code inspection — no code change required.",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-533.10",
       "depends_on_id": "WOLFKM-533",
-      "type": "parent-child",
-      "created_at": "2026-04-19T22:28:56Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T22:28:56Z"
     }
   ]
 }

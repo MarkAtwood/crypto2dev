@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-7b5.10",
   "title": "Efficiency: provider list iteration on every ioctl_init is O(N*M)",
-  "description": "crypto2dev_registry.c — crypto2dev_lookup_algo iterates the provider_list (providers * algos-per-provider). Currently wolfssl_provider registers 10 algorithms. With one provider the list walk is trivially short. The concern threshold is 200+ entries, which would require 20+ providers each with 10 algorithms, or one provider with 200 algorithms. The current wolfssl-only deployment has 10 entries. A future scenario with wolfssl + kcapi + hwaccel might reach 30-50 entries but is unlikely to reach 200. Per the task instructions, only flag if a realistic path to 200+ entries exists — it does not at this time. Not a real issue at current scale.",
+  "description": "crypto2dev_registry.c \u2014 crypto2dev_lookup_algo iterates the provider_list (providers * algos-per-provider). Currently wolfssl_provider registers 10 algorithms. With one provider the list walk is trivially short. The concern threshold is 200+ entries, which would require 20+ providers each with 10 algorithms, or one provider with 200 algorithms. The current wolfssl-only deployment has 10 entries. A future scenario with wolfssl + kcapi + hwaccel might reach 30-50 entries but is unlikely to reach 200. Per the task instructions, only flag if a realistic path to 200+ entries exists \u2014 it does not at this time. Not a real issue at current scale.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T05:19:42Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:19:42Z",
   "updated_at": "2026-04-18T05:39:54Z",
   "closed_at": "2026-04-18T05:39:54Z",
-  "close_reason": "Confirmed not a real issue at current scale: 10-50 entries, 200+ threshold not realistic",
-  "labels": [
-    "audit",
-    "efficiency",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-7b5.10",
       "depends_on_id": "WOLFKM-7b5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T22:19:42Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T22:19:42Z"
     }
   ]
 }

@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-tp5.33",
-  "title": "is_fips is u32 not bool — correct for UAPI struct ABI",
+  "title": "is_fips is u32 not bool \u2014 correct for UAPI struct ABI",
   "description": "Why it is right: struct crypto2dev_provider.is_fips is u32 (and similarly exportable, has_fips_gate, has_key_ops in UAPI structs are __u32). In C, bool has implementation-defined size (typically 1 byte, but compilers differ). In kernel-UAPI structs and in provider registration structs crossed by module boundaries, u32 provides a fixed width, well-defined alignment, and no padding surprises. Linux UAPI headers consistently use __u32 for boolean-valued fields for this reason. What a reviewer might incorrectly suggest: 'use bool for clarity.' bool in a UAPI struct or cross-module struct creates portability and ABI issues: different compilers and kernel configs can choose different sizes, and padding inserted to align a bool-containing struct can differ between kernel and userspace compilation units.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:41:25Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:41:25Z",
   "updated_at": "2026-04-18T04:09:48Z",
   "closed_at": "2026-04-18T04:09:48Z",
-  "close_reason": "confirmed correct: u32 not bool for is_fips provides fixed width, defined alignment, and no padding surprises in UAPI and cross-module structs",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.33",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:41:24Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:41:24Z"
     }
   ]
 }

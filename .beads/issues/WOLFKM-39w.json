@@ -6,10 +6,8 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T22:13:28Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:13:28Z",
   "updated_at": "2026-04-17T22:14:13Z",
-  "closed_at": "2026-04-17T22:14:13Z",
-  "close_reason": "provider.h sign()/verify() contracts updated: hash_algo is digest algorithm identifier, not a request to hash; added 'The provider MUST NOT hash digest[]'. ioctl.h DO_SIGN/DO_VERIFY comments rewritten: removed pre-hash description, added 'caller is responsible for hashing', clarified hash_algo semantics for RSA DigestInfo."
+  "closed_at": "2026-04-17T22:14:13Z"
 }

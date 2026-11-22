@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-533.4",
   "title": "FIPS counter incremented inside write lock is correct",
-  "description": "In crypto2dev_register_provider() and crypto2dev_unregister_provider(), atomic_inc/atomic_dec_if_positive on fips_provider_count is called while holding the write_lock. This is correct: the read side in crypto2dev_lookup_algo() reads fips_provider_count under the read_lock, so the write side must update it under the write_lock to guarantee that a reader never observes a stale FIPS count relative to the provider list state. A reviewer might argue 'just use atomic_inc outside the lock — atomics are thread-safe.' That would be wrong: the issue is not atomicity of the counter increment in isolation, it is ordering relative to the list operation. If atomic_inc is called after write_unlock, a concurrent reader can see the new provider in the list but still read the old (pre-increment) fips_provider_count, causing a FIPS-only lookup to dispatch to a non-FIPS provider for one window. The write_lock serializes both the list mutation and the counter update as a single unit.",
+  "description": "In crypto2dev_register_provider() and crypto2dev_unregister_provider(), atomic_inc/atomic_dec_if_positive on fips_provider_count is called while holding the write_lock. This is correct: the read side in crypto2dev_lookup_algo() reads fips_provider_count under the read_lock, so the write side must update it under the write_lock to guarantee that a reader never observes a stale FIPS count relative to the provider list state. A reviewer might argue 'just use atomic_inc outside the lock \u2014 atomics are thread-safe.' That would be wrong: the issue is not atomicity of the counter increment in isolation, it is ordering relative to the list operation. If atomic_inc is called after write_unlock, a concurrent reader can see the new provider in the list but still read the old (pre-increment) fips_provider_count, causing a FIPS-only lookup to dispatch to a non-FIPS provider for one window. The write_lock serializes both the list mutation and the counter update as a single unit.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T05:28:28Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T05:28:28Z",
   "updated_at": "2026-04-20T05:49:29Z",
   "closed_at": "2026-04-20T05:49:29Z",
-  "close_reason": "Design decision confirmed by code inspection — no code change required.",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-533.4",
       "depends_on_id": "WOLFKM-533",
-      "type": "parent-child",
-      "created_at": "2026-04-19T22:28:28Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T22:28:28Z"
     }
   ]
 }

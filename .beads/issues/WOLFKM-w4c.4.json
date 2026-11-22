@@ -6,26 +6,16 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T15:00:37Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T15:00:37Z",
   "updated_at": "2026-04-20T15:21:43Z",
   "closed_at": "2026-04-20T15:21:43Z",
-  "close_reason": "Fixed: added actual_provider to the DO_KDF FIPS gate failure pr_err_ratelimited at crypto2dev_fd.c line 2043. Format is now: DO_KDF('\u003calgo\u003e'-\u003e'\u003cout_algo\u003e'/\u003cprovider\u003e): FIPS not operational (\u003cret\u003e)",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-w4c.4",
       "depends_on_id": "WOLFKM-w4c",
-      "type": "parent-child",
-      "created_at": "2026-04-20T08:00:36Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-20T08:00:36Z"
     }
   ]
 }

@@ -6,27 +6,16 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T00:04:31Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:04:31Z",
   "updated_at": "2026-04-18T01:00:15Z",
   "closed_at": "2026-04-18T01:00:15Z",
-  "close_reason": "Addressed by dfn.14 fix: pr_err_ratelimited in wolfssl_fips_gate identifies the failing provider",
-  "labels": [
-    "audit",
-    "fips",
-    "observability",
-    "operational",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-dfn.19",
       "depends_on_id": "WOLFKM-dfn",
-      "type": "parent-child",
-      "created_at": "2026-04-17T17:04:30Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T17:04:30Z"
     }
   ]
 }

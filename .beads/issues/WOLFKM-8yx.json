@@ -1,33 +1,27 @@
 {
   "id": "WOLFKM-8yx",
   "title": "Tests: PBKDF2 vectors from RFC 6070",
-  "description": "Write kernel test module and userspace test exercising PBKDF2 via CRYPTO2DEV_IOC_DO_KDF. Use test vectors from RFC 6070 (at minimum Test Cases 1, 2, 5 — covers short password, long password, large iteration count with SHA-1 PRF). For SHA-256 PBKDF2 vectors, use NIST SP 800-132 Appendix B if available. Hardcode as static const u8[] arrays. Test: open /dev/crypto2dev, write() password, call DO_KDF ioctl with algo='pbkdf2(sha1)' or 'pbkdf2(sha256)', export resulting KEY fd (exportable=1) and compare against expected DK. Verify iterations \u003c 1000 is rejected with -EINVAL. Depends on framework (WOLFKM-6zx) and wolfssl PBKDF2 (wolfssl-pbkdf2 issue) being complete.",
+  "description": "Write kernel test module and userspace test exercising PBKDF2 via CRYPTO2DEV_IOC_DO_KDF. Use test vectors from RFC 6070 (at minimum Test Cases 1, 2, 5 \u2014 covers short password, long password, large iteration count with SHA-1 PRF). For SHA-256 PBKDF2 vectors, use NIST SP 800-132 Appendix B if available. Hardcode as static const u8[] arrays. Test: open /dev/crypto2dev, write() password, call DO_KDF ioctl with algo='pbkdf2(sha1)' or 'pbkdf2(sha256)', export resulting KEY fd (exportable=1) and compare against expected DK. Verify iterations < 1000 is rejected with -EINVAL. Depends on framework (WOLFKM-6zx) and wolfssl PBKDF2 (wolfssl-pbkdf2 issue) being complete.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T22:25:51Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:25:51Z",
   "updated_at": "2026-04-18T17:16:13Z",
   "closed_at": "2026-04-18T17:16:13Z",
-  "close_reason": "Closed",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-8yx",
-      "depends_on_id": "WOLFKM-7zq",
-      "type": "blocks",
-      "created_at": "2026-04-17T15:26:15Z",
+      "depends_on_id": "WOLFKM-6zx",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T15:26:15Z"
     },
     {
-      "issue_id": "WOLFKM-8yx",
-      "depends_on_id": "WOLFKM-6zx",
-      "type": "blocks",
-      "created_at": "2026-04-17T15:26:15Z",
+      "depends_on_id": "WOLFKM-7zq",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T15:26:15Z"
     }
   ]
 }

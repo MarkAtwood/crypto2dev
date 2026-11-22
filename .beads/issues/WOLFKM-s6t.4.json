@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-s6t.4",
   "title": "Observability: raw wolfCrypt error code not logged before errno translation",
-  "description": "The provider contract (crypto2dev_provider.h) requires providers to translate wolfCrypt error codes to kernel errno before returning. The framework logs the translated ret value only. If a provider silently maps wolfCrypt BAD_FUNC_ARG (-173) or KEY_NO_DEVICE_E to -EINVAL without first emitting pr_err with the original code, the raw wolfCrypt error is lost. A support engineer cannot distinguish a FIPS-operational refusal (which should map to -EACCES) from a parameter error (-EINVAL) from a wolfCrypt internal error — all appear identical in dmesg. The provider interface contract should require providers to log the raw wolfCrypt error code before returning, or the framework should accept a separate out-param for the raw error.",
+  "description": "The provider contract (crypto2dev_provider.h) requires providers to translate wolfCrypt error codes to kernel errno before returning. The framework logs the translated ret value only. If a provider silently maps wolfCrypt BAD_FUNC_ARG (-173) or KEY_NO_DEVICE_E to -EINVAL without first emitting pr_err with the original code, the raw wolfCrypt error is lost. A support engineer cannot distinguish a FIPS-operational refusal (which should map to -EACCES) from a parameter error (-EINVAL) from a wolfCrypt internal error \u2014 all appear identical in dmesg. The provider interface contract should require providers to log the raw wolfCrypt error code before returning, or the framework should accept a separate out-param for the raw error.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T03:21:30Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:21:30Z",
   "updated_at": "2026-04-20T04:28:49Z",
   "closed_at": "2026-04-20T04:28:49Z",
-  "close_reason": "Audited all 9 provider files. Only one genuinely silent path found: wolfssl_hmac.c wc_HmacInit failure in hmac_sess_init. Fixed with pr_err_ratelimited. RSA/EC key import/generate and all other paths already had per-call pr_err_ratelimited before xlat_err. kcapi providers use kernel errno directly with inline logs.",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-s6t.4",
       "depends_on_id": "WOLFKM-s6t",
-      "type": "parent-child",
-      "created_at": "2026-04-19T20:21:30Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T20:21:30Z"
     }
   ]
 }

@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-76h.1",
   "title": "ikm_buf double-free in ioctl_do_kdf when ikm_fd set and post-lock check fails",
-  "description": "Trigger: open fd, call INIT (makes it OPERATION), then call DO_KDF with valid ikm_fd pointing to a KEY fd and zeroed _pad. Inside ioctl_do_kdf: ikm_buf is kmalloc'd and filled (lines 1785-1827), _pad check passes, mutex_lock acquired, then line 1837 sees fd_type \\!= FDTYPE_UNSET → goto out_inbuf_clear → falls through to out_free_okm which kfree(ikm_buf) WITHOUT setting ikm_buf=NULL → mutex_unlock → goto out_zero → out_zero sees non-NULL ikm_buf → second kfree() on already-freed memory. Bad outcome: kernel heap double-free + use-after-free (memzero_explicit writes 64 bytes into freed slab). All goto-out_inbuf_clear paths trigger this when ikm_fd \\!= -1: fd not UNSET (line 1837), inbuf_len \u003e 0 (1845), lookup failure (1864), no kdf callback (1873), fips_gate fail (1883), iterations below min (1893), salt_len below min (1903), okm_buf kmalloc fail (1910). Fix: add ikm_buf = NULL after kfree in out_free_okm.",
+  "description": "Trigger: open fd, call INIT (makes it OPERATION), then call DO_KDF with valid ikm_fd pointing to a KEY fd and zeroed _pad. Inside ioctl_do_kdf: ikm_buf is kmalloc'd and filled (lines 1785-1827), _pad check passes, mutex_lock acquired, then line 1837 sees fd_type \\!= FDTYPE_UNSET \u2192 goto out_inbuf_clear \u2192 falls through to out_free_okm which kfree(ikm_buf) WITHOUT setting ikm_buf=NULL \u2192 mutex_unlock \u2192 goto out_zero \u2192 out_zero sees non-NULL ikm_buf \u2192 second kfree() on already-freed memory. Bad outcome: kernel heap double-free + use-after-free (memzero_explicit writes 64 bytes into freed slab). All goto-out_inbuf_clear paths trigger this when ikm_fd \\!= -1: fd not UNSET (line 1837), inbuf_len > 0 (1845), lookup failure (1864), no kdf callback (1873), fips_gate fail (1883), iterations below min (1893), salt_len below min (1903), okm_buf kmalloc fail (1910). Fix: add ikm_buf = NULL after kfree in out_free_okm.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T02:05:04Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:05:04Z",
   "updated_at": "2026-04-20T03:14:07Z",
   "closed_at": "2026-04-20T03:14:07Z",
-  "close_reason": "Fixed in WOLFKM-643: added ikm_buf=NULL after kfree in out_free_okm",
-  "labels": [
-    "audit",
-    "correctness",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-76h.1",
       "depends_on_id": "WOLFKM-76h",
-      "type": "parent-child",
-      "created_at": "2026-04-19T19:05:03Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T19:05:03Z"
     }
   ]
 }

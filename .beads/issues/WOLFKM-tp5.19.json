@@ -6,26 +6,16 @@
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:40:35Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:40:35Z",
   "updated_at": "2026-04-18T03:59:51Z",
   "closed_at": "2026-04-18T03:59:51Z",
-  "close_reason": "false positive: memzero_explicit(ctx, sizeof(*ctx)) already present unconditionally outside HAVE_CMAC_FREE guard in sess_free; sess_init error path also already correct",
-  "labels": [
-    "audit",
-    "crypto",
-    "fips",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.19",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:40:34Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:40:34Z"
     }
   ]
 }

@@ -1,27 +1,20 @@
 {
   "id": "WOLFKM-c78.2",
   "title": "[DECISION] Lock ordering discipline in ikm_fd extraction prevents deadlock",
-  "description": "src/cdev/crypto2dev_fd.c lines 1771-1826: ioctl_do_kdf acquires ks-\u003elock (key source fd state lock) BEFORE state-\u003elock (calling fd state lock). Lock ordering is explicitly documented and enforced consistently with ioctl_init pattern (lines 682-712). This prevents ABBA deadlock when concurrent threads call INIT on one fd while DO_KDF on another. The pattern ensures ks-\u003elock is acquired and released entirely outside state-\u003elock's critical section. This is non-obvious — naive implementations would acquire state-\u003elock first, then try ks-\u003elock, causing potential deadlock with concurrent INIT(key_fd=...) on a different thread. The explicit comment at line 1771 ('Lock ordering: ks-\u003elock acquired and released BEFORE state-\u003elock') makes the discipline visible.",
+  "description": "src/cdev/crypto2dev_fd.c lines 1771-1826: ioctl_do_kdf acquires ks->lock (key source fd state lock) BEFORE state->lock (calling fd state lock). Lock ordering is explicitly documented and enforced consistently with ioctl_init pattern (lines 682-712). This prevents ABBA deadlock when concurrent threads call INIT on one fd while DO_KDF on another. The pattern ensures ks->lock is acquired and released entirely outside state->lock's critical section. This is non-obvious \u2014 naive implementations would acquire state->lock first, then try ks->lock, causing potential deadlock with concurrent INIT(key_fd=...) on a different thread. The explicit comment at line 1771 ('Lock ordering: ks->lock acquired and released BEFORE state->lock') makes the discipline visible.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T00:14:48Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:14:48Z",
   "updated_at": "2026-04-20T00:26:57Z",
   "closed_at": "2026-04-20T00:26:57Z",
-  "close_reason": "Review converged. SEC7: running out of real complaints. P0=0 P1=0. Efficiency findings .6/.9 are marginal (no correctness impact). DECISION records noted.",
-  "labels": [
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-c78.2",
       "depends_on_id": "WOLFKM-c78",
-      "type": "parent-child",
-      "created_at": "2026-04-19T17:14:47Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T17:14:47Z"
     }
   ]
 }

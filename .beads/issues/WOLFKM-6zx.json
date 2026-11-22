@@ -1,25 +1,21 @@
 {
   "id": "WOLFKM-6zx",
   "title": "Framework (fd.c): CRYPTO2DEV_IOC_DO_KDF handler",
-  "description": "Implement ioctl_do_kdf() in src/cdev/crypto2dev_fd.c.\n\nSteps:\n1. copy_from_user the kdf_op struct\n2. Validate: algo non-empty, out_algo non-empty, out_keylen \u003e 0 and \u003c= 64, salt_len \u003c= SALT_MAXLEN, info_len \u003c= INFO_MAXLEN\n3. For PBKDF2: enforce iterations \u003e= 1000, return -EINVAL if less\n4. Resolve IKM: if ikm_fd \u003e= 0, fget() the KEY fd and extract key bytes; else use state-\u003ewrite_buf (data from prior write() calls)\n5. Look up provider for out_algo (the algorithm the key will be used for)\n6. Allocate out_key[64] on stack (kernel memory only)\n7. Call ops-\u003ekdf(ctx, algo, ikm, ikm_len, salt, salt_len, info, info_len, iterations, out_key, out_keylen)\n8. On success: promote this fd to KEY fd by calling key_import logic with out_key bytes\n9. memzero_explicit(out_key, sizeof(out_key)) unconditionally\n10. Zeroize write_buf if used for IKM/password\n11. Return 0 on success; fd is now a KEY fd\n\nThread safety: hold state-\u003elock throughout. fget/fput key fd outside lock to avoid deadlock.",
+  "description": "Implement ioctl_do_kdf() in src/cdev/crypto2dev_fd.c.\n\nSteps:\n1. copy_from_user the kdf_op struct\n2. Validate: algo non-empty, out_algo non-empty, out_keylen > 0 and <= 64, salt_len <= SALT_MAXLEN, info_len <= INFO_MAXLEN\n3. For PBKDF2: enforce iterations >= 1000, return -EINVAL if less\n4. Resolve IKM: if ikm_fd >= 0, fget() the KEY fd and extract key bytes; else use state->write_buf (data from prior write() calls)\n5. Look up provider for out_algo (the algorithm the key will be used for)\n6. Allocate out_key[64] on stack (kernel memory only)\n7. Call ops->kdf(ctx, algo, ikm, ikm_len, salt, salt_len, info, info_len, iterations, out_key, out_keylen)\n8. On success: promote this fd to KEY fd by calling key_import logic with out_key bytes\n9. memzero_explicit(out_key, sizeof(out_key)) unconditionally\n10. Zeroize write_buf if used for IKM/password\n11. Return 0 on success; fd is now a KEY fd\n\nThread safety: hold state->lock throughout. fget/fput key fd outside lock to avoid deadlock.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T22:23:01Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-17T22:23:01Z",
+  "updated_at": "2026-04-18T06:52:02Z",
   "closed_at": "2026-04-18T06:52:02Z",
-  "close_reason": "Implemented: wolfssl_kdf.c (HKDF+PBKDF2), kcapi_kdf.c (HKDF), ioctl_do_kdf in fd.c, ioctl_init key_fd\u003e=0 path, struct crypto2dev_sym_key, kdf callback in provider.h, CRYPTO2DEV_KEY_SYMMETRIC constant",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-6zx",
       "depends_on_id": "WOLFKM-ely",
-      "type": "blocks",
-      "created_at": "2026-04-17T15:26:10Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T15:26:10Z"
     }
   ]
 }

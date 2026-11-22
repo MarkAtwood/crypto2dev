@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-4l7.4",
   "title": "iv_set is set ONLY after successful copy_to_user in gen_iv",
-  "description": "In ioctl_gen_iv, the iv_set flag is set to true ONLY after copy_to_user succeeds (crypto2dev_fd.c line 985-987 pattern: generate IV → attempt copy_to_user → set iv_set only on success). If copy_to_user fails after the IV is generated, iv_set remains false, preventing the caller from proceeding to write() with an IV they never received. A reviewer might refactor to set iv_set before copy_to_user for simplicity. That would allow a caller whose buffer write failed to proceed to encrypt with an IV they do not possess — producing ciphertext undecryptable by the intended receiver and undetectable by the module.",
+  "description": "In ioctl_gen_iv, the iv_set flag is set to true ONLY after copy_to_user succeeds (crypto2dev_fd.c line 985-987 pattern: generate IV \u2192 attempt copy_to_user \u2192 set iv_set only on success). If copy_to_user fails after the IV is generated, iv_set remains false, preventing the caller from proceeding to write() with an IV they never received. A reviewer might refactor to set iv_set before copy_to_user for simplicity. That would allow a caller whose buffer write failed to proceed to encrypt with an IV they do not possess \u2014 producing ciphertext undecryptable by the intended receiver and undetectable by the module.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T11:46:59Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T11:46:59Z",
   "updated_at": "2026-04-20T11:51:28Z",
   "closed_at": "2026-04-20T11:51:28Z",
-  "close_reason": "Design decision confirmed by code inspection — no code change required.",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-4l7.4",
       "depends_on_id": "WOLFKM-4l7",
-      "type": "parent-child",
-      "created_at": "2026-04-20T04:46:59Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-20T04:46:59Z"
     }
   ]
 }

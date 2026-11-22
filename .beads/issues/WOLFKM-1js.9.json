@@ -1,28 +1,20 @@
 {
   "id": "WOLFKM-1js.9",
   "title": "kcapi_do_hkdf PRK stack buffer sized to 64 (SHA-512) with overflow check",
-  "description": "kcapi_kdf.c: u8 prk[64] on stack with digestsize \u003e sizeof(prk) guard. The buffer is large enough for SHA-512 (64 bytes); the guard is defensive but cannot trigger for the registered sha256/384/512 transforms. A contributor might suggest replacing with kmalloc(digestsize) to 'be safe' — this adds a heap allocation per KDF call inside the hot path and is unnecessary since the transforms are statically known. The stack buffer + guard is the correct tradeoff.",
+  "description": "kcapi_kdf.c: u8 prk[64] on stack with digestsize > sizeof(prk) guard. The buffer is large enough for SHA-512 (64 bytes); the guard is defensive but cannot trigger for the registered sha256/384/512 transforms. A contributor might suggest replacing with kmalloc(digestsize) to 'be safe' \u2014 this adds a heap allocation per KDF call inside the hot path and is unnecessary since the transforms are statically known. The stack buffer + guard is the correct tradeoff.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T15:58:16Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T15:58:16Z",
   "updated_at": "2026-04-18T17:36:25Z",
   "closed_at": "2026-04-18T17:36:25Z",
-  "close_reason": "Code verified correct. Design decisions implemented as described.",
-  "labels": [
-    "my-oss",
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-1js.9",
       "depends_on_id": "WOLFKM-1js",
-      "type": "parent-child",
-      "created_at": "2026-04-18T08:58:15Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T08:58:15Z"
     }
   ]
 }

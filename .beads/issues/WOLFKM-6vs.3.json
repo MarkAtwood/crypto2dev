@@ -6,25 +6,16 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T02:11:32Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:11:32Z",
   "updated_at": "2026-04-20T03:12:56Z",
   "closed_at": "2026-04-20T03:12:56Z",
-  "close_reason": "Closed",
-  "labels": [
-    "fips",
-    "observability",
-    "support"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-6vs.3",
       "depends_on_id": "WOLFKM-6vs",
-      "type": "parent-child",
-      "created_at": "2026-04-19T19:11:32Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T19:11:32Z"
     }
   ]
 }

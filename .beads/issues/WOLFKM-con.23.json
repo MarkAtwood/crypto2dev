@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-con.23",
   "title": "outbuf deferred until first write: correct per-session allocation discipline",
-  "description": "src/cdev/crypto2dev_fd.c — outbuf is NULL at open() and at OPERATION fd init. First allocation happens in outbuf_grow() called from write() or finalize(), starting at CRYPTO2DEV_OUTBUF_INIT (4096 bytes) and doubling up to 1MB. Sessions doing only hash never allocate more than 4096 bytes. Sessions opened but never initialized allocate nothing. Pre-allocating 1MB at open() would use 1 GB for 1000 concurrent sessions. A reviewer might suggest pre-allocating for predictability; that makes crypto2dev unusable in services holding many sessions.",
+  "description": "src/cdev/crypto2dev_fd.c \u2014 outbuf is NULL at open() and at OPERATION fd init. First allocation happens in outbuf_grow() called from write() or finalize(), starting at CRYPTO2DEV_OUTBUF_INIT (4096 bytes) and doubling up to 1MB. Sessions doing only hash never allocate more than 4096 bytes. Sessions opened but never initialized allocate nothing. Pre-allocating 1MB at open() would use 1 GB for 1000 concurrent sessions. A reviewer might suggest pre-allocating for predictability; that makes crypto2dev unusable in services holding many sessions.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:37:51Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:37:51Z",
   "updated_at": "2026-04-19T21:31:17Z",
   "closed_at": "2026-04-19T21:31:17Z",
-  "close_reason": "Closed",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.23",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:37:51Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:37:51Z"
     }
   ]
 }

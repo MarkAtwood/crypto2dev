@@ -1,41 +1,33 @@
 {
   "id": "WOLFKM-x7v",
   "title": "Tests: HKDF vectors from RFC 5869 Appendix A",
-  "description": "Write kernel test module and userspace test exercising HKDF via CRYPTO2DEV_IOC_DO_KDF. Use the three test vectors from RFC 5869 Appendix A (Test Cases 1, 2, 3 — SHA-256 with and without optional fields). Each vector specifies: IKM, salt, info, L (output length), and expected OKM. Hardcode as static const u8[] arrays. Test: open /dev/crypto2dev, write() IKM, call DO_KDF ioctl, export resulting KEY fd (if exportable=1) and compare against expected OKM. Tests must be fully offline — no network calls. Depends on framework (WOLFKM-6zx) and wolfssl HKDF (WOLFKM-d52) being complete.",
+  "description": "Write kernel test module and userspace test exercising HKDF via CRYPTO2DEV_IOC_DO_KDF. Use the three test vectors from RFC 5869 Appendix A (Test Cases 1, 2, 3 \u2014 SHA-256 with and without optional fields). Each vector specifies: IKM, salt, info, L (output length), and expected OKM. Hardcode as static const u8[] arrays. Test: open /dev/crypto2dev, write() IKM, call DO_KDF ioctl, export resulting KEY fd (if exportable=1) and compare against expected OKM. Tests must be fully offline \u2014 no network calls. Depends on framework (WOLFKM-6zx) and wolfssl HKDF (WOLFKM-d52) being complete.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T22:25:47Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T22:25:47Z",
   "updated_at": "2026-04-18T17:16:13Z",
   "closed_at": "2026-04-18T17:16:13Z",
-  "close_reason": "Closed",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-x7v",
-      "depends_on_id": "WOLFKM-6zx",
-      "type": "blocks",
-      "created_at": "2026-04-17T15:26:13Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-x7v",
-      "depends_on_id": "WOLFKM-d52",
-      "type": "blocks",
-      "created_at": "2026-04-17T15:26:14Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-x7v",
       "depends_on_id": "WOLFKM-0zo",
-      "type": "blocks",
-      "created_at": "2026-04-17T15:26:14Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T15:26:14Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-6zx",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T15:26:13Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-d52",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T15:26:14Z"
     }
   ]
 }

@@ -1,56 +1,44 @@
 {
   "id": "WOLFKM-l4o.5",
   "title": "Add RESET handler to fd.c",
-  "description": "In src/cdev/crypto2dev_fd.c: add ioctl_reset(state) handler. Checks fd_type==OPERATION. Checks finalized==true (return -EINVAL if not — reset before finalize is pointless). Calls state-\u003eops-\u003esess_reset(state-\u003ectx); returns -EOPNOTSUPP if ops-\u003esess_reset is NULL. On success: clears finalized=false, outbuf_len=0, outbuf_drained=0, bytes_written=0, bytes_read=0. Does NOT free outbuf (keep allocation for reuse). Add CRYPTO2DEV_IOC_RESET to dispatch switch at slot 19.",
+  "description": "In src/cdev/crypto2dev_fd.c: add ioctl_reset(state) handler. Checks fd_type==OPERATION. Checks finalized==true (return -EINVAL if not \u2014 reset before finalize is pointless). Calls state->ops->sess_reset(state->ctx); returns -EOPNOTSUPP if ops->sess_reset is NULL. On success: clears finalized=false, outbuf_len=0, outbuf_drained=0, bytes_written=0, bytes_read=0. Does NOT free outbuf (keep allocation for reuse). Add CRYPTO2DEV_IOC_RESET to dispatch switch at slot 19.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T18:02:22Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:22Z",
   "updated_at": "2026-04-17T18:30:54Z",
   "closed_at": "2026-04-17T18:30:54Z",
-  "close_reason": "ioctl_reset() was implemented in fd.c during jq8.3 work (line 919)",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-l4o.5",
-      "depends_on_id": "WOLFKM-l4o.3",
-      "type": "blocks",
-      "created_at": "2026-04-17T11:02:47Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-l4o.5",
-      "depends_on_id": "WOLFKM-l4o.1",
-      "type": "blocks",
-      "created_at": "2026-04-17T11:02:38Z",
-      "created_by": "Mark Atwood",
-      "metadata": "{}"
-    },
-    {
-      "issue_id": "WOLFKM-l4o.5",
       "depends_on_id": "WOLFKM-l4o",
-      "type": "parent-child",
-      "created_at": "2026-04-17T11:02:22Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T11:02:22Z"
     },
     {
-      "issue_id": "WOLFKM-l4o.5",
-      "depends_on_id": "WOLFKM-l4o.4",
-      "type": "blocks",
-      "created_at": "2026-04-17T11:02:50Z",
+      "depends_on_id": "WOLFKM-l4o.1",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T11:02:38Z"
     },
     {
-      "issue_id": "WOLFKM-l4o.5",
       "depends_on_id": "WOLFKM-l4o.2",
-      "type": "blocks",
-      "created_at": "2026-04-17T11:02:45Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T11:02:45Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-l4o.3",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:47Z"
+    },
+    {
+      "depends_on_id": "WOLFKM-l4o.4",
+      "dep_type": "parent_child",
+      "created_by": "Mark Atwood",
+      "created_at": "2026-04-17T11:02:50Z"
     }
   ]
 }

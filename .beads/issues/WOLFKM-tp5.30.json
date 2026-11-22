@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-tp5.30",
   "title": "write-before-ioctl for KEY_IMPORT avoids large on-stack allocation",
-  "description": "Why it is right: KEY_IMPORT does not embed key bytes in the ioctl struct. Instead the caller writes raw key bytes to the fd, then the ioctl reads op.keylen bytes from inbuf. The alternative — a struct with an 8192-byte key[] array — would land that 8KB allocation on the kernel stack on every KEY_IMPORT call regardless of actual key size (EC P-256 is 32 bytes). The kernel stack frame guideline is ~1KB; an 8192-byte stack frame is a hard violation that can silently corrupt adjacent frames on stack-limited configs (4KB stacks on some embedded targets) or under deep call chains. inbuf is heap-allocated to exactly what the key requires, zeroed, and freed after import. What a reviewer might incorrectly suggest: 'just embed key[] in the ioctl struct for simplicity; 8KB is fine.' The kernel disagrees: scripts/checkpatch.pl warns on stack frames \u003e 512 bytes, and some architectures enforce 4KB total stack depth.",
+  "description": "Why it is right: KEY_IMPORT does not embed key bytes in the ioctl struct. Instead the caller writes raw key bytes to the fd, then the ioctl reads op.keylen bytes from inbuf. The alternative \u2014 a struct with an 8192-byte key[] array \u2014 would land that 8KB allocation on the kernel stack on every KEY_IMPORT call regardless of actual key size (EC P-256 is 32 bytes). The kernel stack frame guideline is ~1KB; an 8192-byte stack frame is a hard violation that can silently corrupt adjacent frames on stack-limited configs (4KB stacks on some embedded targets) or under deep call chains. inbuf is heap-allocated to exactly what the key requires, zeroed, and freed after import. What a reviewer might incorrectly suggest: 'just embed key[] in the ioctl struct for simplicity; 8KB is fine.' The kernel disagrees: scripts/checkpatch.pl warns on stack frames > 512 bytes, and some architectures enforce 4KB total stack depth.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:41:16Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:41:16Z",
   "updated_at": "2026-04-18T04:09:44Z",
   "closed_at": "2026-04-18T04:09:44Z",
-  "close_reason": "confirmed correct: write-before-ioctl avoids 8KB stack allocation for KEY_IMPORT; heap allocation sized to actual key, not worst-case PQ key maximum",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.30",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:41:16Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:41:16Z"
     }
   ]
 }

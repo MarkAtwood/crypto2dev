@@ -1,25 +1,21 @@
 {
   "id": "WOLFKM-7tv",
-  "title": "Provider: wolfssl_aes_gcm — true streaming update()",
-  "description": "Fix src/providers/wolfssl/wolfssl_aes_gcm.c to encrypt and authenticate complete blocks in update() instead of accumulating all input.\n\nCurrent (batch) behavior:\n- update() appends to ctx-\u003einbuf\n- finalize() calls wc_AesGcmEncrypt/Decrypt on the full accumulated buffer\n\nRequired (streaming) behavior:\n- For encrypt: update() calls wc_AesGcmEncrypt incrementally (check wolfCrypt docs for streaming GCM API — wc_AesGcmInit + wc_AesGcmEncryptUpdate + wc_AesGcmEncryptFinal if available; fall back to accumulate-just-the-last-block if wolfCrypt does not expose incremental GCM)\n- finalize() for encrypt: flush any remaining input, call GcmFinal to produce auth tag\n- finalize() for decrypt: verify tag; return -EBADMSG on failure BEFORE returning any plaintext\n- ctx-\u003einbuf removed if wolfCrypt supports incremental GCM; kept minimal (last block only) if not\n\nIMPORTANT: For GCM decrypt, plaintext must NOT be returned to userspace until the tag has been verified. If the wolfCrypt API requires accumulating ciphertext for batch decryption to enforce this, that is acceptable — document the constraint. Do not return unauthenticated plaintext.\n\nCheck wolfCrypt headers for wc_AesGcmEncryptUpdate / wc_AesGcmEncryptFinal or equivalent before choosing implementation strategy.",
+  "title": "Provider: wolfssl_aes_gcm \u2014 true streaming update()",
+  "description": "Fix src/providers/wolfssl/wolfssl_aes_gcm.c to encrypt and authenticate complete blocks in update() instead of accumulating all input.\n\nCurrent (batch) behavior:\n- update() appends to ctx->inbuf\n- finalize() calls wc_AesGcmEncrypt/Decrypt on the full accumulated buffer\n\nRequired (streaming) behavior:\n- For encrypt: update() calls wc_AesGcmEncrypt incrementally (check wolfCrypt docs for streaming GCM API \u2014 wc_AesGcmInit + wc_AesGcmEncryptUpdate + wc_AesGcmEncryptFinal if available; fall back to accumulate-just-the-last-block if wolfCrypt does not expose incremental GCM)\n- finalize() for encrypt: flush any remaining input, call GcmFinal to produce auth tag\n- finalize() for decrypt: verify tag; return -EBADMSG on failure BEFORE returning any plaintext\n- ctx->inbuf removed if wolfCrypt supports incremental GCM; kept minimal (last block only) if not\n\nIMPORTANT: For GCM decrypt, plaintext must NOT be returned to userspace until the tag has been verified. If the wolfCrypt API requires accumulating ciphertext for batch decryption to enforce this, that is acceptable \u2014 document the constraint. Do not return unauthenticated plaintext.\n\nCheck wolfCrypt headers for wc_AesGcmEncryptUpdate / wc_AesGcmEncryptFinal or equivalent before choosing implementation strategy.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T20:30:46Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-17T20:30:46Z",
+  "updated_at": "2026-04-18T01:51:12Z",
   "closed_at": "2026-04-18T01:51:12Z",
-  "close_reason": "wolfssl_aes_gcm: ENCRYPT path converted to streaming via wc_AesGcmEncryptInit/Update/Final; DECRYPT path keeps batch accumulation (required: cannot release unauthenticated plaintext before tag verify)",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-7tv",
       "depends_on_id": "WOLFKM-n3j",
-      "type": "blocks",
-      "created_at": "2026-04-17T13:31:21Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T13:31:21Z"
     }
   ]
 }

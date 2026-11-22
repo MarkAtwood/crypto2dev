@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-s6t.5",
   "title": "atomic_dec_if_positive prevents FIPS enforcement silent-disable on double-unregister",
-  "description": "crypto2dev_unregister_provider() uses atomic_dec_if_positive() with WARN on underflow, not atomic_dec(). If two FIPS providers are loaded and one double-unregisters, atomic_dec() would take count from 2 to 1 to 0, silently disabling FIPS enforcement while the second FIPS provider is still loaded. atomic_dec_if_positive() stops at 0 and fires WARN, making the bug visible without silently clearing FIPS mode. A reviewer might suggest 'use atomic_dec, it is simpler' — that change would allow a double-unregister bug to silently disable the FIPS-only dispatch path, which is a CMVP certification failure. The inline comment explains this; do not simplify it away.",
+  "description": "crypto2dev_unregister_provider() uses atomic_dec_if_positive() with WARN on underflow, not atomic_dec(). If two FIPS providers are loaded and one double-unregisters, atomic_dec() would take count from 2 to 1 to 0, silently disabling FIPS enforcement while the second FIPS provider is still loaded. atomic_dec_if_positive() stops at 0 and fires WARN, making the bug visible without silently clearing FIPS mode. A reviewer might suggest 'use atomic_dec, it is simpler' \u2014 that change would allow a double-unregister bug to silently disable the FIPS-only dispatch path, which is a CMVP certification failure. The inline comment explains this; do not simplify it away.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T03:21:34Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T03:21:34Z",
   "updated_at": "2026-04-20T04:30:01Z",
   "closed_at": "2026-04-20T04:30:01Z",
-  "close_reason": "Correct design: atomic_dec_if_positive in unregister_provider prevents double-decrement if a provider accidentally unregisters twice. WARN() fires on underflow. This is the correct defensive pattern for reference counting in kernel code.",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-s6t.5",
       "depends_on_id": "WOLFKM-s6t",
-      "type": "parent-child",
-      "created_at": "2026-04-19T20:21:33Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T20:21:33Z"
     }
   ]
 }

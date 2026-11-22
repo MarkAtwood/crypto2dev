@@ -1,27 +1,20 @@
 {
   "id": "WOLFKM-c78.14",
   "title": "[DECISION] Pre-lock validation of ikm_fd and iterations enables early error return",
-  "description": "src/cdev/crypto2dev_fd.c lines 1738-1768 and 1773-1800: Critical ikm_fd checks (iterations != 0 for HKDF, PBKDF2 with ikm_fd != -1) and the full ikm_fd extraction (fget, lock ks, read key, unlock, fput) happen BEFORE state-\u003elock is acquired at line 1835. This means if ikm_fd is invalid or conflicting with the algorithm, the error is returned immediately without holding any locks. If these checks happened after acquiring state-\u003elock, an error would hold the lock longer than necessary. More importantly, if ikm_fd points to a slow or unresponsive fd (e.g., a socket that blocks), the early validation prevents the calling fd from being blocked on its own lock. The pattern separates pure validation (algorithm-specific checks) from resource acquisition (locking state). This is a non-obvious discipline: less careful code might acquire state-\u003elock first, then do validation inside the lock, increasing lock contention and error latency.",
+  "description": "src/cdev/crypto2dev_fd.c lines 1738-1768 and 1773-1800: Critical ikm_fd checks (iterations != 0 for HKDF, PBKDF2 with ikm_fd != -1) and the full ikm_fd extraction (fget, lock ks, read key, unlock, fput) happen BEFORE state->lock is acquired at line 1835. This means if ikm_fd is invalid or conflicting with the algorithm, the error is returned immediately without holding any locks. If these checks happened after acquiring state->lock, an error would hold the lock longer than necessary. More importantly, if ikm_fd points to a slow or unresponsive fd (e.g., a socket that blocks), the early validation prevents the calling fd from being blocked on its own lock. The pattern separates pure validation (algorithm-specific checks) from resource acquisition (locking state). This is a non-obvious discipline: less careful code might acquire state->lock first, then do validation inside the lock, increasing lock contention and error latency.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T00:15:35Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:15:35Z",
   "updated_at": "2026-04-20T00:27:20Z",
   "closed_at": "2026-04-20T00:27:20Z",
-  "close_reason": "Review converged. SEC7: running out of real complaints. P0=0 P1=0. Efficiency findings .6/.9 are marginal (no correctness impact). DECISION records noted.",
-  "labels": [
-    "review"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-c78.14",
       "depends_on_id": "WOLFKM-c78",
-      "type": "parent-child",
-      "created_at": "2026-04-19T17:15:35Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T17:15:35Z"
     }
   ]
 }

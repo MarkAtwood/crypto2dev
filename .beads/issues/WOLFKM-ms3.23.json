@@ -1,29 +1,20 @@
 {
   "id": "WOLFKM-ms3.23",
   "title": "FIPS counter under rwlock prevents lookup race",
-  "description": "fips_provider_count is an atomic_t but is always read/written while holding provider_lock (write_lock on register/unregister, read_lock on lookup). This ensures the fips_mode snapshot taken at the start of crypto2dev_lookup_algo is coherent with the provider list being traversed — no TOCTOU window exists between 'FIPS mode on?' and 'which providers are visible?'. A reviewer might suggest removing the rwlock from the fips_mode read (since it is an atomic) — that would reintroduce the race: a FIPS provider could be added between the atomic read and the first list_for_each_entry, making a non-FIPS provider visible in the window. Do not move the atomic_read outside the read_lock.",
+  "description": "fips_provider_count is an atomic_t but is always read/written while holding provider_lock (write_lock on register/unregister, read_lock on lookup). This ensures the fips_mode snapshot taken at the start of crypto2dev_lookup_algo is coherent with the provider list being traversed \u2014 no TOCTOU window exists between 'FIPS mode on?' and 'which providers are visible?'. A reviewer might suggest removing the rwlock from the fips_mode read (since it is an atomic) \u2014 that would reintroduce the race: a FIPS provider could be added between the atomic read and the first list_for_each_entry, making a non-FIPS provider visible in the window. Do not move the atomic_read outside the read_lock.",
   "status": "closed",
   "priority": 3,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:04:21Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:04:21Z",
   "updated_at": "2026-04-18T03:27:25Z",
   "closed_at": "2026-04-18T03:27:25Z",
-  "close_reason": "Acknowledged: already implemented correctly, no code change required",
-  "labels": [
-    "audit",
-    "defend",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-ms3.23",
       "depends_on_id": "WOLFKM-ms3",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:04:21Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:04:21Z"
     }
   ]
 }

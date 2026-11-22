@@ -6,13 +6,8 @@
   "priority": 3,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-19T02:57:47Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T02:57:47Z",
   "updated_at": "2026-04-19T20:19:36Z",
-  "closed_at": "2026-04-19T20:19:36Z",
-  "close_reason": "23/23 PASS on 5.15.199-kasan (x86_64). Zero KASAN/lockdep splats. Root issues fixed: CONFIG_BLK_DEV_NVME=y + CONFIG_NVME_CORE=y for EC2 initrdless boot; GRUB entry ID matching; CONFIG_PANIC_TIMEOUT=30. CONFIG_DEBUG_INFO_NONE added for future runs (saves ~45 min).",
-  "labels": [
-    "distrotest"
-  ]
+  "closed_at": "2026-04-19T20:19:36Z"
 }

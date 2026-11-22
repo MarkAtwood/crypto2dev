@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-dfn.6",
   "title": "FIPS gate missing: wolfssl aes_gcm update",
-  "description": "wolfssl_aes_gcm_update() at src/providers/wolfssl/wolfssl_aes_gcm.c:320 is a gated callback but contains no fips_gate() call. First executable statement at line 329 is an argument check, not the gate. Trigger: user calls write() on an AES-GCM session while wolfCrypt FIPS boundary is degraded. Outcome: GCM buffering proceeds without FIPS status check — FIPS compliance violation.",
+  "description": "wolfssl_aes_gcm_update() at src/providers/wolfssl/wolfssl_aes_gcm.c:320 is a gated callback but contains no fips_gate() call. First executable statement at line 329 is an argument check, not the gate. Trigger: user calls write() on an AES-GCM session while wolfCrypt FIPS boundary is degraded. Outcome: GCM buffering proceeds without FIPS status check \u2014 FIPS compliance violation.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T00:03:20Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T00:03:20Z",
   "updated_at": "2026-04-18T00:53:15Z",
   "closed_at": "2026-04-18T00:53:15Z",
-  "close_reason": "Added wolfssl_fips_gate() as first statement in update() callbacks per FIPS 140-3 requirement",
-  "labels": [
-    "audit",
-    "correctness",
-    "fips",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-dfn.6",
       "depends_on_id": "WOLFKM-dfn",
-      "type": "parent-child",
-      "created_at": "2026-04-17T17:03:19Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T17:03:19Z"
     }
   ]
 }

@@ -1,15 +1,13 @@
 {
   "id": "WOLFKM-dae",
-  "title": "fix: WARN() → pr_warn() in PBKDF2 backstop in crypto2dev_registry.c",
-  "description": "The PBKDF2 backstop in crypto2dev_register_provider() uses WARN() to flag providers that declare min_iterations\u003c1000 or min_salt_len\u003c16. On kernels built with CONFIG_BUG_ON_WARN=y (common on hardened and FIPS kernels), WARN() can halt execution at insmod time, causing the provider to fail loading entirely. The backstop is defense-in-depth only — the framework already enforces the limits in ioctl_do_kdf. A misconfigured provider should warn and load, not crash the module.\n\nFix: replace the two WARN() calls with pr_warn() and restructure as explicit if-statements.\n\nLocation: src/provider/crypto2dev_registry.c:73-80\n\nFound in review WOLFKM-yjf.1.",
+  "title": "fix: WARN() \u2192 pr_warn() in PBKDF2 backstop in crypto2dev_registry.c",
+  "description": "The PBKDF2 backstop in crypto2dev_register_provider() uses WARN() to flag providers that declare min_iterations<1000 or min_salt_len<16. On kernels built with CONFIG_BUG_ON_WARN=y (common on hardened and FIPS kernels), WARN() can halt execution at insmod time, causing the provider to fail loading entirely. The backstop is defense-in-depth only \u2014 the framework already enforces the limits in ioctl_do_kdf. A misconfigured provider should warn and load, not crash the module.\n\nFix: replace the two WARN() calls with pr_warn() and restructure as explicit if-statements.\n\nLocation: src/provider/crypto2dev_registry.c:73-80\n\nFound in review WOLFKM-yjf.1.",
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:28:35Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:28:35Z",
   "updated_at": "2026-04-18T23:29:37Z",
-  "closed_at": "2026-04-18T23:29:37Z",
-  "close_reason": "Replaced WARN() with pr_warn() + explicit if-statements; added comment explaining why WARN() was wrong here"
+  "closed_at": "2026-04-18T23:29:37Z"
 }

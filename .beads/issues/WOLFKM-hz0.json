@@ -6,10 +6,8 @@
   "priority": 1,
   "issue_type": "feature",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T16:08:17Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-16T16:08:17Z",
   "updated_at": "2026-04-16T16:11:21Z",
-  "closed_at": "2026-04-16T16:11:21Z",
-  "close_reason": "All kcapi provider files written: kcapi_provider.h, kcapi_provider.c, kcapi_skcipher.c (cbc/ctr/xts), kcapi_hash.c (sha256/384/512/sha3-256/hmac-sha256/384/512/cmac), kcapi_aead.c (gcm). Kbuild updated to build crypto2dev_kcapi.ko unconditionally."
+  "closed_at": "2026-04-16T16:11:21Z"
 }

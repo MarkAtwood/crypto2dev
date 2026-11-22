@@ -1,25 +1,21 @@
 {
   "id": "WOLFKM-325.1",
   "title": "Provider name mismatch silently falls through to wrong provider",
-  "description": "In src/provider/crypto2dev_registry.c, crypto2dev_lookup_algo(): when provider is non-empty and no registered provider matches the name, the function currently falls through and returns the first provider that matches the algo name regardless of provider. Fix: if filter_provider is true and no entry matched both name and algo, return NULL. This causes ENOENT at the INIT/KEY_IMPORT call sites, which is the correct behaviour — the caller asked for wolfssl and there is no wolfssl, so fail explicitly rather than silently using kcapi.",
+  "description": "In src/provider/crypto2dev_registry.c, crypto2dev_lookup_algo(): when provider is non-empty and no registered provider matches the name, the function currently falls through and returns the first provider that matches the algo name regardless of provider. Fix: if filter_provider is true and no entry matched both name and algo, return NULL. This causes ENOENT at the INIT/KEY_IMPORT call sites, which is the correct behaviour \u2014 the caller asked for wolfssl and there is no wolfssl, so fail explicitly rather than silently using kcapi.",
   "status": "closed",
   "priority": 1,
   "issue_type": "bug",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T18:02:14Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-17T18:02:14Z",
   "updated_at": "2026-04-17T18:16:38Z",
   "closed_at": "2026-04-17T18:16:38Z",
-  "close_reason": "Closed",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-325.1",
       "depends_on_id": "WOLFKM-325",
-      "type": "parent-child",
-      "created_at": "2026-04-17T11:02:14Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T11:02:14Z"
     }
   ]
 }

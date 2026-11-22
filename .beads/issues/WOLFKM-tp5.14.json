@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-tp5.14",
   "title": "UAPI stability: GET_STATE omits pending byte counts for OPERATION and UNSET fds",
-  "description": "crypto2dev_fd_state_info exposes bytes_written and bytes_read but not the pending bytes available in the internal buffers. For OPERATION fds, outbuf_len - outbuf_drained (bytes available to read right now) is missing. For UNSET fds, inbuf_len (bytes written but not yet consumed by KEY_IMPORT) is absent — a debugger cannot diagnose 'why did KEY_IMPORT return -EINVAL' (insufficient inbuf data) from GET_STATE alone. These fields cannot be added later without an ABI-breaking struct resize.",
+  "description": "crypto2dev_fd_state_info exposes bytes_written and bytes_read but not the pending bytes available in the internal buffers. For OPERATION fds, outbuf_len - outbuf_drained (bytes available to read right now) is missing. For UNSET fds, inbuf_len (bytes written but not yet consumed by KEY_IMPORT) is absent \u2014 a debugger cannot diagnose 'why did KEY_IMPORT return -EINVAL' (insufficient inbuf data) from GET_STATE alone. These fields cannot be added later without an ABI-breaking struct resize.",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T03:40:17Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T03:40:17Z",
   "updated_at": "2026-04-18T04:12:51Z",
   "closed_at": "2026-04-18T04:12:51Z",
-  "close_reason": "fixed: added __u64 outbuf_pending and inbuf_pending to crypto2dev_fd_state_info (168B total); populated in both OPERATION and KEY branches of ioctl_get_state",
-  "labels": [
-    "abi",
-    "audit",
-    "uapi",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-tp5.14",
       "depends_on_id": "WOLFKM-tp5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T20:40:17Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T20:40:17Z"
     }
   ]
 }

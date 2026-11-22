@@ -1,30 +1,21 @@
 {
   "id": "WOLFKM-6vs.6",
   "title": "Sysfs: add fips_enforcement attribute to document rmmod-only deactivation",
-  "description": "The fact that FIPS enforcement (fips_provider_count \u003e 0) can only be deactivated by unloading all FIPS provider modules is documented in registry.c:37-43 as a code comment only. No running-system observable. CRYPTO2DEV_IOC_STATUS exposes fips_state but no deactivation explanation.\n\nFix: add a read-only sysfs attribute fips_enforcement to the crypto2dev misc device in src/cdev/crypto2dev_cdev.c. Readable at /sys/class/misc/crypto2dev/fips_enforcement. Output: 'active (deactivate with: rmmod \u003cprovider_name\u003e)' listing each loaded FIPS provider, or 'inactive' when fips_provider_count == 0. Implement as a simple device_attribute using the existing sysfs infrastructure already present in crypto2dev_cdev.c (alongside the algorithms attribute).",
+  "description": "The fact that FIPS enforcement (fips_provider_count > 0) can only be deactivated by unloading all FIPS provider modules is documented in registry.c:37-43 as a code comment only. No running-system observable. CRYPTO2DEV_IOC_STATUS exposes fips_state but no deactivation explanation.\n\nFix: add a read-only sysfs attribute fips_enforcement to the crypto2dev misc device in src/cdev/crypto2dev_cdev.c. Readable at /sys/class/misc/crypto2dev/fips_enforcement. Output: 'active (deactivate with: rmmod <provider_name>)' listing each loaded FIPS provider, or 'inactive' when fips_provider_count == 0. Implement as a simple device_attribute using the existing sysfs infrastructure already present in crypto2dev_cdev.c (alongside the algorithms attribute).",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T02:11:58Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:11:58Z",
   "updated_at": "2026-04-20T03:12:59Z",
   "closed_at": "2026-04-20T03:12:59Z",
-  "close_reason": "Closed",
-  "labels": [
-    "fips",
-    "observability",
-    "support"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-6vs.6",
       "depends_on_id": "WOLFKM-6vs",
-      "type": "parent-child",
-      "created_at": "2026-04-19T19:11:57Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T19:11:57Z"
     }
   ]
 }

@@ -1,33 +1,27 @@
 {
   "id": "WOLFKM-rki.3",
-  "title": "Refactor crypto2dev_fd_state: union -\u003e void *ctx + ops ptr",
-  "description": "Replace the wolfCrypt-specific union in crypto2dev_fd_state with provider-agnostic fields.\n\nBefore: union { Aes aes; wc_Sha256 sha256; RsaKey rsa; ... } wc;\nAfter: const struct crypto2dev_algo_ops *ops; void *ctx;\n\nUpdate sess lifecycle:\n- open(): zero state, ops=NULL, ctx=NULL\n- INIT ioctl: lookup_algo(), call ops-\u003esess_init() which allocates ctx\n- release(): if ops \u0026\u0026 ctx: ops-\u003esess_free(ctx), memzero_explicit the state\n\nDepends on: provider header issue",
+  "title": "Refactor crypto2dev_fd_state: union -> void *ctx + ops ptr",
+  "description": "Replace the wolfCrypt-specific union in crypto2dev_fd_state with provider-agnostic fields.\n\nBefore: union { Aes aes; wc_Sha256 sha256; RsaKey rsa; ... } wc;\nAfter: const struct crypto2dev_algo_ops *ops; void *ctx;\n\nUpdate sess lifecycle:\n- open(): zero state, ops=NULL, ctx=NULL\n- INIT ioctl: lookup_algo(), call ops->sess_init() which allocates ctx\n- release(): if ops && ctx: ops->sess_free(ctx), memzero_explicit the state\n\nDepends on: provider header issue",
   "status": "closed",
   "priority": 0,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T15:20:28Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-16T15:20:28Z",
+  "updated_at": "2026-04-16T15:37:01Z",
   "closed_at": "2026-04-16T15:37:01Z",
-  "close_reason": "Closed",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-rki.3",
       "depends_on_id": "WOLFKM-rki",
-      "type": "parent-child",
-      "created_at": "2026-04-16T08:20:28Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-16T08:20:28Z"
     },
     {
-      "issue_id": "WOLFKM-rki.3",
       "depends_on_id": "WOLFKM-rki.1",
-      "type": "blocks",
-      "created_at": "2026-04-16T08:20:50Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-16T08:20:50Z"
     }
   ]
 }

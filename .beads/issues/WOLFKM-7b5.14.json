@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-7b5.14",
   "title": "Observability: KEY_IMPORT and KEY_GENERATE lookup/init failures emit no log",
-  "description": "ioctl_key_import (crypto2dev_fd.c:1495-1522) and ioctl_key_generate (crypto2dev_fd.c:1572-1598) silently return errors for three failure cases with no log: (1) crypto2dev_lookup_algo returns NULL (no provider found for algo) — returns -ENOENT with no message; (2) ops-\u003ekey_import or ops-\u003ekey_generate is NULL (algo found but does not support key ops) — returns -EOPNOTSUPP with no message; (3) ops-\u003ekey_import/key_generate returns an error — only emits a WARN if key_ctx is non-NULL (the leak case), not a normal pr_err for the common path. Compare ioctl_init which emits distinct pr_info messages for all three analogous failures. A support engineer debugging a failed KEY_IMPORT or KEY_GENERATE gets only an errno from the ioctl return with nothing in the ring buffer identifying the algo, provider, or error code.",
+  "description": "ioctl_key_import (crypto2dev_fd.c:1495-1522) and ioctl_key_generate (crypto2dev_fd.c:1572-1598) silently return errors for three failure cases with no log: (1) crypto2dev_lookup_algo returns NULL (no provider found for algo) \u2014 returns -ENOENT with no message; (2) ops->key_import or ops->key_generate is NULL (algo found but does not support key ops) \u2014 returns -EOPNOTSUPP with no message; (3) ops->key_import/key_generate returns an error \u2014 only emits a WARN if key_ctx is non-NULL (the leak case), not a normal pr_err for the common path. Compare ioctl_init which emits distinct pr_info messages for all three analogous failures. A support engineer debugging a failed KEY_IMPORT or KEY_GENERATE gets only an errno from the ioctl return with nothing in the ring buffer identifying the algo, provider, or error code.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T05:19:54Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:19:54Z",
   "updated_at": "2026-04-18T05:33:00Z",
   "closed_at": "2026-04-18T05:33:00Z",
-  "close_reason": "Fixed in fd.c, wolfssl_aes_gcm.c, kcapi_aead.c",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-7b5.14",
       "depends_on_id": "WOLFKM-7b5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T22:19:53Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T22:19:53Z"
     }
   ]
 }

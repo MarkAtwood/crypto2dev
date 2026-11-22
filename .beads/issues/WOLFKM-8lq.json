@@ -2,26 +2,21 @@
   "id": "WOLFKM-8lq",
   "title": "tests/kernel/Makefile: build all kernel test modules",
   "description": "Makefile for tests/kernel/ that builds all seven test modules (test_skcipher.ko, test_aead.ko, test_shash.ko, test_akcipher.ko, test_kpp.ko, test_rng.ko, test_fips_gate.ko) as separate kernel modules. Each test module has KBUILD_EXTRA_SYMBOLS pointing to both wolfSSL's Module.symvers and wolfkm's Module.symvers. Supports the same WOLFCRYPT_DIR, KBUILD_EXTRA_SYMBOLS, and CC variables as the top-level Makefile.",
-  "design": "Each test_*.c becomes a separate obj-m entry. All test modules must compile in stub mode (WOLFKM_HAVE_WOLFCRYPT=0) for CI builds without wolfCrypt. Use subdir-m or explicit obj-m list. The Makefile must work when called from run_kernel_tests.sh with absolute paths.",
-  "acceptance_criteria": "make -C /lib/modules/$(uname -r)/build M=$(pwd) from tests/kernel/ builds all seven .ko files with zero warnings.",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-16T06:55:27Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-16T06:55:27Z",
+  "updated_at": "2026-04-18T06:00:21Z",
   "closed_at": "2026-04-18T06:00:21Z",
-  "close_reason": "Closed",
+  "design": "Each test_*.c becomes a separate obj-m entry. All test modules must compile in stub mode (WOLFKM_HAVE_WOLFCRYPT=0) for CI builds without wolfCrypt. Use subdir-m or explicit obj-m list. The Makefile must work when called from run_kernel_tests.sh with absolute paths.",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-8lq",
       "depends_on_id": "WOLFKM-bl1",
-      "type": "blocks",
-      "created_at": "2026-04-15T23:59:11Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-15T23:59:11Z"
     }
   ]
 }

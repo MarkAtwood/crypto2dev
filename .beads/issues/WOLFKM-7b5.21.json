@@ -6,26 +6,16 @@
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T05:20:26Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T05:20:26Z",
   "updated_at": "2026-04-18T05:32:52Z",
   "closed_at": "2026-04-18T05:32:52Z",
-  "close_reason": "Fixed in fd.c, wolfssl_aes_gcm.c, kcapi_aead.c",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-7b5.21",
       "depends_on_id": "WOLFKM-7b5",
-      "type": "parent-child",
-      "created_at": "2026-04-17T22:20:25Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T22:20:25Z"
     }
   ]
 }

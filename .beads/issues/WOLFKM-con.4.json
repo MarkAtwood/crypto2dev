@@ -5,26 +5,16 @@
   "status": "closed",
   "priority": 0,
   "issue_type": "bug",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:36:12Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:36:12Z",
   "updated_at": "2026-04-18T23:36:17Z",
   "closed_at": "2026-04-18T23:36:17Z",
-  "close_reason": "Not a violation: kcapi callbacks correctly contain no gate calls. Filed in error as tracking of negative audit finding.",
-  "labels": [
-    "audit",
-    "correctness",
-    "fips",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.4",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:36:12Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:36:12Z"
     }
   ]
 }

@@ -1,33 +1,27 @@
 {
   "id": "WOLFKM-0zo",
   "title": "kcapi provider: HKDF via kernel crypto shash",
-  "description": "Implement the KDF provider callback for HKDF in the kcapi provider. The kernel crypto API exposes HKDF via the shash interface on kernels \u003e= 5.15. Check for CONFIG_CRYPTO_HKDF availability. If available, use crypto_shash to drive HKDF with HMAC-SHA256 / HMAC-SHA384 / HMAC-SHA512. If not available, fall back to -ENOTSUP (wolfssl provider handles it). Provider must: (1) read IKM from inbuf or ikm_fd reference, (2) extract+expand with salt and info from crypto2dev_kdf_op, (3) write OKM directly to key_ctx, (4) zeroize transient buffers. Depends on WOLFKM-ely (UAPI struct) and WOLFKM-nid (design/callback contract).",
+  "description": "Implement the KDF provider callback for HKDF in the kcapi provider. The kernel crypto API exposes HKDF via the shash interface on kernels >= 5.15. Check for CONFIG_CRYPTO_HKDF availability. If available, use crypto_shash to drive HKDF with HMAC-SHA256 / HMAC-SHA384 / HMAC-SHA512. If not available, fall back to -ENOTSUP (wolfssl provider handles it). Provider must: (1) read IKM from inbuf or ikm_fd reference, (2) extract+expand with salt and info from crypto2dev_kdf_op, (3) write OKM directly to key_ctx, (4) zeroize transient buffers. Depends on WOLFKM-ely (UAPI struct) and WOLFKM-nid (design/callback contract).",
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T22:25:36Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
+  "created_at": "2026-04-17T22:25:36Z",
+  "updated_at": "2026-04-18T06:52:01Z",
   "closed_at": "2026-04-18T06:52:01Z",
-  "close_reason": "Implemented: wolfssl_kdf.c (HKDF+PBKDF2), kcapi_kdf.c (HKDF), ioctl_do_kdf in fd.c, ioctl_init key_fd\u003e=0 path, struct crypto2dev_sym_key, kdf callback in provider.h, CRYPTO2DEV_KEY_SYMMETRIC constant",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-0zo",
-      "depends_on_id": "WOLFKM-nid",
-      "type": "blocks",
-      "created_at": "2026-04-17T15:26:13Z",
+      "depends_on_id": "WOLFKM-ely",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T15:26:12Z"
     },
     {
-      "issue_id": "WOLFKM-0zo",
-      "depends_on_id": "WOLFKM-ely",
-      "type": "blocks",
-      "created_at": "2026-04-17T15:26:12Z",
+      "depends_on_id": "WOLFKM-nid",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-17T15:26:13Z"
     }
   ]
 }

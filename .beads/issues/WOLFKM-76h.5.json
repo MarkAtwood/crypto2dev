@@ -5,26 +5,16 @@
   "status": "closed",
   "priority": 2,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T02:05:34Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T02:05:34Z",
   "updated_at": "2026-04-20T03:14:19Z",
   "closed_at": "2026-04-20T03:14:19Z",
-  "close_reason": "Fixed in WOLFKM-6vs: provider selection promoted to pr_info_ratelimited",
-  "labels": [
-    "audit",
-    "observability",
-    "support",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-76h.5",
       "depends_on_id": "WOLFKM-76h",
-      "type": "parent-child",
-      "created_at": "2026-04-19T19:05:34Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T19:05:34Z"
     }
   ]
 }

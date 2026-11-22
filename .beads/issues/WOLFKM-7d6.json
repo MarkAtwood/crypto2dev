@@ -1,15 +1,12 @@
 {
   "id": "WOLFKM-7d6",
   "title": "Document design decisions from review",
-  "description": "Three design decisions produce documentation obligations with no code changes: ECDH AGREE returns raw Z and the caller must apply a KDF per SP 800-56A before using the output as keying material; GCM nonce reuse is catastrophic and the interface does not prevent it — GEN_IV is the safe path; KEY_EXPORT_PRIVATE returns plaintext and this is a FIPS 140-3 Level 2+ finding.",
-  "acceptance_criteria": "Programmers guide has a clear warning box for AGREE raw Z with SP 800-56A citation. GCM nonce reuse section expanded with concrete failure consequence and explicit GEN_IV recommendation. KEY_EXPORT_PRIVATE section has FIPS level callout. DESIGN.md updated with the decisions and their rationale.",
+  "description": "Three design decisions produce documentation obligations with no code changes: ECDH AGREE returns raw Z and the caller must apply a KDF per SP 800-56A before using the output as keying material; GCM nonce reuse is catastrophic and the interface does not prevent it \u2014 GEN_IV is the safe path; KEY_EXPORT_PRIVATE returns plaintext and this is a FIPS 140-3 Level 2+ finding.",
   "status": "closed",
   "priority": 3,
   "issue_type": "epic",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-17T18:02:26Z",
   "created_by": "Mark Atwood",
-  "updated_at": "2026-06-26T20:29:29Z",
-  "closed_at": "2026-04-18T22:40:42Z",
-  "close_reason": "all steps complete"
+  "created_at": "2026-04-17T18:02:26Z",
+  "updated_at": "2026-04-18T22:40:42Z",
+  "closed_at": "2026-04-18T22:40:42Z"
 }

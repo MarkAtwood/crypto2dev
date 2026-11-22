@@ -1,31 +1,21 @@
 {
   "id": "WOLFKM-con.31",
   "title": "Mechanical inbuf_clear goto audit",
-  "description": "Write a coccinelle script or structured grep that enumerates every goto and early-return in crypto2dev_fd.c that occurs after the session mutex is acquired and key/IKM material may be in state-\u003einbuf, and verify each path passes through inbuf_clear before returning. The static audit found 3 confirmed bypass paths (ioctl_key_generate error path, 7 ioctl_do_kdf pre-lock exits, ioctl_init copy_from_user early return on op.key). This task closes the question of whether there are additional paths. Acceptance: mechanical enumeration produces a complete list; each path is either confirmed to call inbuf_clear or is filed as a new bug.",
+  "description": "Write a coccinelle script or structured grep that enumerates every goto and early-return in crypto2dev_fd.c that occurs after the session mutex is acquired and key/IKM material may be in state->inbuf, and verify each path passes through inbuf_clear before returning. The static audit found 3 confirmed bypass paths (ioctl_key_generate error path, 7 ioctl_do_kdf pre-lock exits, ioctl_init copy_from_user early return on op.key). This task closes the question of whether there are additional paths. Acceptance: mechanical enumeration produces a complete list; each path is either confirmed to call inbuf_clear or is filed as a new bug.",
   "status": "closed",
   "priority": 1,
   "issue_type": "task",
   "assignee": "Mark Atwood",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-18T23:44:39Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-18T23:44:39Z",
   "updated_at": "2026-04-19T00:01:02Z",
   "closed_at": "2026-04-19T00:01:02Z",
-  "close_reason": "audit_inbuf_clear.py written and verified: 25 functions analyzed, 0 unclassified bypasses, 5 BYPASS exits all known WOLFKM-con.18, 5 INTENTIONAL exits documented. No new bugs found.",
-  "labels": [
-    "audit",
-    "correctness",
-    "derisk",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-con.31",
       "depends_on_id": "WOLFKM-con",
-      "type": "parent-child",
-      "created_at": "2026-04-18T16:44:38Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-18T16:44:38Z"
     }
   ]
 }

@@ -1,24 +1,20 @@
 {
   "id": "WOLFKM-3yg.1",
   "title": "SEC0: No correctness bugs found",
-  "description": "All correctness checks passed:\n\n1. FIPS gate: All entry points (sess_init, update, finalize, sess_reset) call wolfssl_fips_gate() first. SHA3-384 and SHA3-512 inherit gate via shared functions.\n\n2. wolfCrypt return code convention: All checks use 'if (ret != 0)', never 'if (ret \u003c 0)'. Lines 164, 264, 369, 433 in wolfssl_sha.c verified.\n\n3. Paired Init/Free: \n   - sha_sess_init(): Lines 154, 157 initialize sha3-384/512\n   - wolfssl_sha_sess_reset(): Lines 253-254, 257-258 properly Free then re-Init\n   - wolfssl_sha_sess_free(): Lines 305-309 call Free for all types\n   \n4. Zeroization: Line 317 memzero_explicit(ctx) after all Free calls.\n\n5. num_algos accuracy:\n   - wolfssl_algo_list: 24 entries (line 85) - correct\n   - kcapi_algo_list: 17 entries (line 48 kcapi_provider.c) - correct\n   \n6. Test vector byte counts:\n   - SHA3-384: 48 bytes (6 rows × 8) - verified lines 81-88, 95-102, 123-130\n   - SHA3-512: 64 bytes (8 rows × 8) - verified lines 152-161, 168-177, 198-207\n   - 200-byte 0xa3 inputs present in both canonical vectors\n   \n7. Test digest reads:\n   - test_chardev.c SHA3-384: Line 627 reads exactly 48 bytes\n   - test_chardev.c SHA3-512: Line 708 reads exactly 64 bytes\n   \n8. Union field reuse: All switch statements (init, reset, update, finalize, free) use ctx-\u003ewc.sha3 consistently for SHA3 variants. No separate sha3_384 or sha3_512 fields.",
+  "description": "All correctness checks passed:\n\n1. FIPS gate: All entry points (sess_init, update, finalize, sess_reset) call wolfssl_fips_gate() first. SHA3-384 and SHA3-512 inherit gate via shared functions.\n\n2. wolfCrypt return code convention: All checks use 'if (ret != 0)', never 'if (ret < 0)'. Lines 164, 264, 369, 433 in wolfssl_sha.c verified.\n\n3. Paired Init/Free: \n   - sha_sess_init(): Lines 154, 157 initialize sha3-384/512\n   - wolfssl_sha_sess_reset(): Lines 253-254, 257-258 properly Free then re-Init\n   - wolfssl_sha_sess_free(): Lines 305-309 call Free for all types\n   \n4. Zeroization: Line 317 memzero_explicit(ctx) after all Free calls.\n\n5. num_algos accuracy:\n   - wolfssl_algo_list: 24 entries (line 85) - correct\n   - kcapi_algo_list: 17 entries (line 48 kcapi_provider.c) - correct\n   \n6. Test vector byte counts:\n   - SHA3-384: 48 bytes (6 rows \u00d7 8) - verified lines 81-88, 95-102, 123-130\n   - SHA3-512: 64 bytes (8 rows \u00d7 8) - verified lines 152-161, 168-177, 198-207\n   - 200-byte 0xa3 inputs present in both canonical vectors\n   \n7. Test digest reads:\n   - test_chardev.c SHA3-384: Line 627 reads exactly 48 bytes\n   - test_chardev.c SHA3-512: Line 708 reads exactly 64 bytes\n   \n8. Union field reuse: All switch statements (init, reset, update, finalize, free) use ctx->wc.sha3 consistently for SHA3 variants. No separate sha3_384 or sha3_512 fields.",
   "status": "closed",
   "priority": 4,
   "issue_type": "task",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-20T00:45:19Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-20T00:45:19Z",
   "updated_at": "2026-04-20T00:48:36Z",
   "closed_at": "2026-04-20T00:48:36Z",
-  "close_reason": "Closed",
   "dependencies": [
     {
-      "issue_id": "WOLFKM-3yg.1",
       "depends_on_id": "WOLFKM-3yg",
-      "type": "parent-child",
-      "created_at": "2026-04-19T17:45:18Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T17:45:18Z"
     }
   ]
 }

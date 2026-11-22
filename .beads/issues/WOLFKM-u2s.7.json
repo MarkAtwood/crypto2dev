@@ -1,28 +1,19 @@
 {
   "id": "WOLFKM-u2s.7",
-  "title": "HKDF self-implemented via shash API; not via \u003ccrypto/hkdf.h\u003e which is a private fscrypt header",
+  "title": "HKDF self-implemented via shash API; not via <crypto/hkdf.h> which is a private fscrypt header",
   "status": "closed",
   "priority": 2,
   "issue_type": "decision",
-  "owner": "mark@wolfssl.com",
-  "created_at": "2026-04-19T21:33:54Z",
   "created_by": "Mark Atwood",
+  "created_at": "2026-04-19T21:33:54Z",
   "updated_at": "2026-04-19T23:28:33Z",
   "closed_at": "2026-04-19T23:28:33Z",
-  "close_reason": "Decision record — no-action-needed, design intentional",
-  "labels": [
-    "no-action-needed",
-    "review",
-    "wolfkm"
-  ],
   "dependencies": [
     {
-      "issue_id": "WOLFKM-u2s.7",
       "depends_on_id": "WOLFKM-u2s",
-      "type": "parent-child",
-      "created_at": "2026-04-19T14:33:53Z",
+      "dep_type": "parent_child",
       "created_by": "Mark Atwood",
-      "metadata": "{}"
+      "created_at": "2026-04-19T14:33:53Z"
     }
   ]
 }
